@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生字筆順練習 · 闖關遊戲</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-ui: "Noto Sans TC", -apple-system, BlinkMacSystemFont, "PingFang TC", "Microsoft JhengHei", sans-serif;
+    --font-char: "標楷體", "DFKai-SB", "BiauKai", "Kaiti TC", "Noto Serif CJK TC", "PMingLiU", serif;
+    --font-display: "Noto Serif TC", "Source Han Serif TC", "Songti TC", "PingFang TC", serif;
+
+    --bg-1: #FBF6EC;
+    --bg-2: #F5ECD9;
+    --paper: #FFFFFF;
+    --paper-tint: #FDF8EF;
+
+    --ink: #2B2620;
+    --ink-soft: #595247;
+    --ink-mute: #938871;
+
+    --primary: #B23A2F;
+    --primary-dark: #8B2A22;
+    --primary-soft: #D45444;
+    --primary-tint: #FCEAE5;
+
+    --gold: #BE9552;
+    --gold-dark: #9B7937;
+    --gold-tint: #F5E8CF;
+
+    --sage: #5F8463;
+    --sage-tint: #DCE8DC;
+
+    --indigo: #3F5B89;
+
+    --line: rgba(43, 38, 32, 0.08);
+    --line-soft: rgba(43, 38, 32, 0.04);
+
+    --sh-xs: 0 1px 2px rgba(43, 38, 32, 0.04);
+    --sh-sm: 0 2px 6px rgba(43, 38, 32, 0.06), 0 1px 2px rgba(43, 38, 32, 0.04);
+    --sh-md: 0 6px 18px rgba(43, 38, 32, 0.08), 0 2px 4px rgba(43, 38, 32, 0.04);
+    --sh-lg: 0 14px 36px rgba(43, 38, 32, 0.10), 0 4px 8px rgba(43, 38, 32, 0.04);
+
+    --r-sm: 10px;
+    --r-md: 14px;
+    --r-lg: 20px;
+    --r-xl: 28px;
+    --r-pill: 999px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-ui);
+    background:
+      radial-gradient(circle at 10% 0%, var(--gold-tint) 0, transparent 40%),
+      radial-gradient(circle at 90% 100%, var(--primary-tint) 0, transparent 50%),
+      linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 24px 16px 60px;
+    line-height: 1.5;
+  }
+  .container { max-width: 1040px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 28px; }
+  .ornament {
+    display: inline-flex; align-items: center; gap: 14px;
+    margin-bottom: 8px; color: var(--gold-dark);
+  }
+  .ornament::before, .ornament::after {
+    content: ''; width: 36px; height: 1px;
+    background: currentColor; opacity: 0.6;
+  }
+  .ornament span { font-size: 11px; letter-spacing: 6px; font-weight: 500; text-transform: uppercase; }
+  h1 {
+    color: var(--primary);
+    font-size: 34px; font-weight: 900;
+    letter-spacing: 6px; margin: 2px 0 4px;
+    font-family: var(--font-char);
+  }
+  .subtitle { color: var(--ink-mute); font-size: 13px; letter-spacing: 2px; font-weight: 400; }
+
+  .tabs-wrap { text-align: center; margin-bottom: 28px; }
+  .tabs {
+    display: inline-flex; gap: 4px; padding: 5px;
+    background: var(--paper); border-radius: var(--r-pill);
+    box-shadow: var(--sh-sm);
+  }
+  .tab {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 22px; background: transparent; border: none;
+    border-radius: var(--r-pill); font-family: var(--font-ui);
+    font-size: 15px; font-weight: 500; cursor: pointer;
+    color: var(--ink-soft); transition: all 0.2s ease;
+  }
+  .tab .ico { font-size: 16px; }
+  .tab:hover { color: var(--primary); }
+  .tab.active {
+    background: var(--primary); color: white; font-weight: 700;
+    box-shadow: 0 2px 8px rgba(178, 58, 47, 0.25);
+  }
+
+  .search-bar { position: relative; max-width: 380px; margin: 0 auto 28px; }
+  .search-bar input {
+    width: 100%; padding: 14px 56px 14px 22px; font-size: 20px;
+    border: 1.5px solid var(--line); border-radius: var(--r-pill);
+    outline: none; text-align: center; font-family: var(--font-char);
+    background: var(--paper); color: var(--ink);
+    box-shadow: var(--sh-sm); transition: all 0.2s;
+  }
+  .search-bar input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-tint), var(--sh-sm);
+  }
+  .search-bar input::placeholder {
+    font-family: var(--font-ui); font-size: 15px;
+    color: var(--ink-mute); font-weight: 400;
+  }
+  .search-bar button {
+    position: absolute; right: 5px; top: 50%;
+    transform: translateY(-50%); width: 42px; height: 42px; padding: 0;
+    background: var(--primary); color: white; border: none;
+    border-radius: 50%; cursor: pointer; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .search-bar button:hover { background: var(--primary-dark); transform: translateY(-50%) scale(1.05); }
+
+  .selector {
+    background: var(--paper); border-radius: var(--r-lg);
+    box-shadow: var(--sh-sm); padding: 20px 22px;
+    border: 1px solid var(--line-soft); margin-bottom: 22px;
+  }
+  .selector-row {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 14px; align-items: center;
+  }
+  .selector-row:last-child { margin-bottom: 0; }
+  .selector-label {
+    font-weight: 700; color: var(--ink); min-width: 50px;
+    font-size: 13px; letter-spacing: 1px; opacity: 0.7;
+  }
+  .btn-row { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+  .btn {
+    padding: 8px 16px; background: var(--paper-tint);
+    border: 1.5px solid var(--line); border-radius: var(--r-pill);
+    cursor: pointer; font-family: var(--font-ui);
+    font-size: 14px; font-weight: 500; color: var(--ink-soft);
+    transition: all 0.15s;
+  }
+  .btn:hover {
+    background: var(--primary-tint); border-color: var(--primary-soft);
+    color: var(--primary);
+  }
+  .btn.active {
+    background: var(--primary); color: white; border-color: var(--primary);
+    font-weight: 700; box-shadow: 0 2px 6px rgba(178, 58, 47, 0.22);
+  }
+
+  .lessons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
+    gap: 14px;
+  }
+  .lesson-card {
+    background: var(--paper); padding: 18px 20px;
+    border-radius: var(--r-lg); cursor: pointer;
+    border: 1px solid var(--line-soft); transition: all 0.2s ease;
+    box-shadow: var(--sh-xs); position: relative; overflow: hidden;
+  }
+  .lesson-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--gold); opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .lesson-card:hover {
+    border-color: transparent; transform: translateY(-3px);
+    box-shadow: var(--sh-md);
+  }
+  .lesson-card:hover::before { opacity: 1; }
+  .lesson-meta {
+    color: var(--gold-dark); font-size: 11px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .lesson-meta::after {
+    content: ''; flex: 1; height: 1px;
+    background: var(--gold-tint); opacity: 0.6;
+  }
+  .lesson-name {
+    font-size: 20px; margin: 10px 0 12px;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    line-height: 1.35;
+  }
+  .lesson-count {
+    font-size: 12px; color: var(--ink-mute);
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; background: var(--paper-tint);
+    border-radius: var(--r-pill); font-weight: 500;
+  }
+
+  .char-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+    gap: 10px;
+  }
+  .char-item {
+    aspect-ratio: 1; background: var(--paper);
+    border: 1px solid var(--line); border-radius: var(--r-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px; cursor: pointer; transition: all 0.15s ease;
+    user-select: none; font-family: var(--font-char);
+    color: var(--ink); box-shadow: var(--sh-xs);
+  }
+  .char-item:hover {
+    border-color: var(--primary); background: var(--primary-tint);
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: var(--sh-md); color: var(--primary-dark);
+  }
+
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 18px; background: var(--paper);
+    border: 1.5px solid var(--line); color: var(--ink-soft);
+    border-radius: var(--r-pill); cursor: pointer;
+    font-family: var(--font-ui); font-size: 14px; font-weight: 500;
+    margin-bottom: 18px; transition: all 0.15s; box-shadow: var(--sh-xs);
+  }
+  .back-btn:hover {
+    border-color: var(--primary); color: var(--primary);
+    background: var(--primary-tint);
+  }
+
+  .page-title {
+    color: var(--ink); font-size: 20px; font-weight: 700;
+    margin-bottom: 18px;
+    display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  }
+  .page-title .crumb {
+    color: var(--gold-dark); font-size: 12px;
+    letter-spacing: 1.5px; font-weight: 700; text-transform: uppercase;
+  }
+  .page-title .name-part {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--primary);
+    letter-spacing: 1.5px;
+  }
+
+  .char-detail { text-align: center; padding-top: 4px; }
+  .char-info {
+    font-size: 16px; color: var(--ink-soft);
+    margin-bottom: 4px;
+    font-family: var(--font-display);
+    letter-spacing: 1px;
+  }
+  .char-info .idx {
+    color: var(--primary); font-weight: 700; font-family: var(--font-ui);
+  }
+  .char-zhuyin-display {
+    font-size: 18px; color: var(--ink-mute); margin-bottom: 20px;
+    letter-spacing: 1px; font-family: var(--font-char);
+  }
+  .char-zhuyin-display .label {
+    font-family: var(--font-ui); font-size: 12px; letter-spacing: 1.5px;
+    color: var(--gold-dark); font-weight: 700;
+    margin-right: 6px; text-transform: uppercase;
+  }
+  .writer-wrap {
+    display: inline-block; background: var(--paper);
+    padding: 20px; border-radius: var(--r-xl);
+    box-shadow: var(--sh-lg); margin-bottom: 24px;
+    border: 1px solid var(--line-soft);
+  }
+  #writer-target, #game-writer-target {
+    display: block; margin: 0 auto; border-radius: var(--r-md);
+  }
+
+  .controls {
+    display: flex; gap: 10px; justify-content: center;
+    flex-wrap: wrap; margin-bottom: 14px;
+  }
+  .control-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 12px 24px; font-size: 15px; font-weight: 700;
+    border: none; border-radius: var(--r-pill);
+    cursor: pointer; font-family: var(--font-ui);
+    color: white; transition: all 0.15s; box-shadow: var(--sh-sm);
+  }
+  .control-btn:hover { transform: translateY(-2px); box-shadow: var(--sh-md); }
+  .control-btn:active { transform: translateY(0); }
+  .btn-play { background: linear-gradient(135deg, var(--sage) 0%, #7AAB7F 100%); }
+  .btn-quiz { background: linear-gradient(135deg, var(--gold) 0%, #D4AC6B 100%); }
+  .btn-reset { background: linear-gradient(135deg, var(--indigo) 0%, #5878A6 100%); }
+  .btn-skip { background: linear-gradient(135deg, #95a5a6 0%, #AFB8B9 100%); }
+  .btn-hint { background: linear-gradient(135deg, #8E6BA6 0%, #A784BE 100%); }
+
+  .hint {
+    text-align: center; color: var(--ink-mute);
+    margin: 0 auto 12px; font-size: 13px;
+    max-width: 480px; line-height: 1.6;
+  }
+  .nav-bar {
+    display: flex; justify-content: center; gap: 10px;
+    margin-top: 20px; max-width: 420px;
+    margin-left: auto; margin-right: auto;
+  }
+  .nav-btn {
+    flex: 1; padding: 12px 20px; background: var(--paper);
+    border: 1.5px solid var(--line); color: var(--ink-soft);
+    border-radius: var(--r-pill); cursor: pointer;
+    font-family: var(--font-ui); font-size: 14px; font-weight: 500;
+    transition: all 0.15s; box-shadow: var(--sh-xs);
+  }
+  .nav-btn:hover {
+    border-color: var(--primary); color: var(--primary);
+    background: var(--primary-tint);
+  }
+  .nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .nav-btn:disabled:hover {
+    border-color: var(--line); color: var(--ink-soft); background: var(--paper);
+  }
+
+  .view { display: none; }
+  .view.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .game-setup {
+    background: var(--paper); padding: 32px 30px;
+    border-radius: var(--r-xl); box-shadow: var(--sh-md);
+    max-width: 700px; margin: 0 auto;
+    border: 1px solid var(--line-soft);
+  }
+  .game-setup h2 {
+    color: var(--primary); font-size: 22px;
+    margin-bottom: 4px; text-align: center;
+    font-weight: 700; letter-spacing: 2px;
+  }
+  .game-setup-sub {
+    color: var(--ink-mute); font-size: 13px;
+    text-align: center; margin-bottom: 28px; letter-spacing: 1px;
+  }
+  .setup-section {
+    margin-bottom: 22px; padding-bottom: 22px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .setup-section:last-of-type { border-bottom: none; padding-bottom: 0; }
+  .setup-label {
+    font-weight: 700; color: var(--ink);
+    margin-bottom: 12px; font-size: 13px;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .setup-label .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; background: var(--gold-tint);
+    color: var(--gold-dark); border-radius: 50%;
+    font-size: 11px; font-weight: 900;
+  }
+  .setup-hint-text {
+    font-size: 11px; color: var(--ink-mute);
+    font-weight: 400; margin-left: 4px;
+    letter-spacing: 0.5px; text-transform: none;
+  }
+  .pool-info {
+    text-align: center; color: var(--ink-soft); font-size: 13px;
+    margin: 20px 0 16px; padding: 12px 16px;
+    background: var(--gold-tint); border-radius: var(--r-md);
+    font-weight: 500; letter-spacing: 0.5px;
+  }
+  .pool-info strong {
+    color: var(--gold-dark); font-size: 16px;
+    font-weight: 900; margin: 0 4px;
+  }
+  .start-btn {
+    display: block; width: 100%; padding: 18px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-soft) 100%);
+    color: white; border: none; border-radius: var(--r-pill);
+    font-size: 18px; font-weight: 700; font-family: var(--font-ui);
+    cursor: pointer; letter-spacing: 3px;
+    box-shadow: 0 6px 20px rgba(178,58,47,0.25);
+    transition: all 0.2s;
+  }
+  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(178,58,47,0.35); }
+  .start-btn:disabled {
+    background: #cfcfcf; cursor: not-allowed;
+    transform: none; box-shadow: none; letter-spacing: 1px;
+  }
+
+  .game-play { text-align: center; padding-top: 4px; max-width: 560px; margin: 0 auto; }
+  .game-topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    margin: 0 auto 14px; gap: 14px;
+  }
+  .progress-box {
+    background: var(--paper); padding: 10px 20px;
+    border-radius: var(--r-pill); box-shadow: var(--sh-sm);
+    font-weight: 500; font-size: 13px;
+    color: var(--ink-soft); letter-spacing: 0.5px;
+  }
+  .progress-box .num {
+    color: var(--primary); font-weight: 900;
+    font-size: 18px; margin: 0 3px; font-family: var(--font-ui);
+  }
+  .score-box {
+    background: linear-gradient(135deg, var(--sage) 0%, #7AAB7F 100%);
+    color: white; padding: 10px 22px; border-radius: var(--r-pill);
+    font-weight: 700; font-size: 13px; letter-spacing: 1px;
+    box-shadow: 0 3px 10px rgba(95, 132, 99, 0.25);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .score-box .score-num { font-size: 18px; margin: 0 2px; font-weight: 900; }
+
+  .progress-track {
+    height: 6px; background: var(--paper);
+    border-radius: var(--r-pill); overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold) 0%, var(--primary-soft) 100%);
+    border-radius: var(--r-pill); transition: width 0.4s ease;
+  }
+
+  .zhuyin-card {
+    background: linear-gradient(135deg, var(--paper) 0%, var(--paper-tint) 100%);
+    padding: 24px 20px 20px; border-radius: var(--r-lg);
+    box-shadow: var(--sh-md); margin-bottom: 20px;
+    border: 1px solid var(--line-soft);
+  }
+  .zhuyin-card .label {
+    color: var(--gold-dark); font-size: 11px;
+    letter-spacing: 3px; font-weight: 700; margin-bottom: 10px;
+  }
+  .zhuyin-clue {
+    font-family: var(--font-char); font-size: 54px;
+    color: var(--primary); font-weight: 700;
+    letter-spacing: 10px; line-height: 1.1;
+  }
+  .clue-hint {
+    color: var(--ink-mute); font-size: 13px;
+    margin-top: 12px; letter-spacing: 1px;
+  }
+
+  .game-result {
+    background: var(--paper); padding: 40px 30px 30px;
+    border-radius: var(--r-xl); box-shadow: var(--sh-lg);
+    max-width: 720px; margin: 0 auto; text-align: center;
+    border: 1px solid var(--line-soft);
+  }
+  .result-emoji {
+    font-size: 72px; margin-bottom: 8px;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.08));
+  }
+  .result-title {
+    font-size: 26px; font-weight: 900; color: var(--ink);
+    margin-bottom: 8px; letter-spacing: 2px;
+  }
+  .result-score { font-size: 16px; color: var(--ink-soft); margin-bottom: 8px; }
+  .result-score .big {
+    font-size: 60px; font-weight: 900;
+    background: linear-gradient(135deg, var(--sage) 0%, #7AAB7F 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 4px; font-family: var(--font-ui);
+    line-height: 1; display: inline-block; vertical-align: middle;
+  }
+  .result-percentage {
+    font-size: 13px; color: var(--ink-mute); letter-spacing: 1px;
+    margin: 12px 0 24px; padding: 10px;
+    background: var(--paper-tint); border-radius: var(--r-md);
+    display: inline-block; min-width: 280px;
+  }
+  .result-divider {
+    text-align: center; color: var(--ink-mute); font-size: 12px;
+    letter-spacing: 3px; margin: 4px 0 18px;
+    font-weight: 700; position: relative;
+  }
+  .result-divider::before, .result-divider::after {
+    content: ''; position: absolute; top: 50%;
+    width: 60px; height: 1px; background: var(--line);
+  }
+  .result-divider::before { left: calc(50% - 130px); }
+  .result-divider::after { right: calc(50% - 130px); }
+  .result-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 10px; margin-bottom: 28px;
+  }
+  .result-item {
+    aspect-ratio: 1; border-radius: var(--r-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 34px; font-family: var(--font-char);
+    position: relative; border: 2px solid; transition: transform 0.15s;
+  }
+  .result-item:hover { transform: scale(1.08); }
+  .result-item.ok { background: var(--sage-tint); border-color: var(--sage); color: #2D5733; }
+  .result-item.wrong { background: #FBE2DE; border-color: #D86352; color: #7D2015; }
+  .result-item.skip { background: #F0ECE2; border-color: var(--ink-mute); color: var(--ink-soft); }
+  .result-item .badge {
+    position: absolute; top: -6px; right: -6px;
+    min-width: 22px; height: 22px; padding: 0 4px;
+    border-radius: var(--r-pill);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: white; font-weight: 700;
+    font-family: var(--font-ui); box-shadow: var(--sh-sm);
+  }
+  .result-item.ok .badge { background: var(--sage); }
+  .result-item.wrong .badge { background: #D86352; }
+  .result-item.skip .badge { background: var(--ink-mute); }
+
+  .result-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+  .celebration {
+    position: fixed; top: 40%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--paper); padding: 24px 42px;
+    border-radius: var(--r-xl);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2), 0 6px 20px rgba(0,0,0,0.08);
+    font-size: 28px; color: var(--sage);
+    text-align: center; z-index: 100; display: none;
+    font-weight: 700; letter-spacing: 2px;
+    border: 1px solid var(--line-soft);
+  }
+  .celebration.show { display: block; animation: pop 0.5s ease; }
+  @keyframes pop {
+    0% { transform: translate(-50%, -50%) scale(0.5) rotate(-6deg); opacity: 0; }
+    60% { transform: translate(-50%, -50%) scale(1.1) rotate(2deg); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1) rotate(0); opacity: 1; }
+  }
+
+  .error-msg {
+    text-align: center; color: var(--primary); padding: 24px;
+    font-size: 14px; background: var(--primary-tint);
+    border-radius: var(--r-md); line-height: 1.6;
+  }
+
+  /* SVG icon */
+  .ico {
+    display: inline-block;
+    width: 1.1em; height: 1.1em;
+    vertical-align: -0.2em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .ico-fill { fill: currentColor; stroke: none; }
+  .ico-sm { width: 0.95em; height: 0.95em; vertical-align: -0.15em; }
+  .control-btn .ico { margin-right: 2px; }
+
+  /* 結果印章 */
+  .result-seal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 112px; height: 112px;
+    border-radius: 50%;
+    position: relative;
+    margin-bottom: 14px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+  }
+  .result-seal::before {
+    content: '';
+    position: absolute; inset: 7px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.5);
+  }
+  .result-seal .seal-char {
+    font-family: var(--font-char);
+    font-weight: 700;
+    font-size: 58px;
+    line-height: 1;
+    color: white;
+    letter-spacing: -2px;
+    position: relative; z-index: 1;
+  }
+  .seal-top { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); }
+  .seal-excellent { background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%); }
+  .seal-good { background: linear-gradient(135deg, #4A7050 0%, var(--sage) 100%); }
+  .seal-ok { background: linear-gradient(135deg, var(--indigo) 0%, #5B7AB0 100%); }
+  .seal-practice { background: linear-gradient(135deg, var(--ink-soft) 0%, var(--ink-mute) 100%); }
+
+  .result-item .badge {
+    font-family: var(--font-char);
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 22px; height: 22px; padding: 0 5px;
+  }
+
+  .lesson-count .dot {
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    margin-right: 4px;
+    vertical-align: 2px;
+  }
+
+  @media (max-width: 560px) {
+    body { padding: 18px 12px 50px; }
+    h1 { font-size: 26px; letter-spacing: 3px; }
+    .subtitle { font-size: 11px; }
+    .tab { padding: 8px 16px; font-size: 13px; }
+    .tab .ico { font-size: 14px; }
+    .search-bar input { font-size: 18px; padding: 12px 50px 12px 18px; }
+    .search-bar button { width: 36px; height: 36px; font-size: 15px; }
+    .selector { padding: 16px; }
+    .selector-label { min-width: auto; width: 100%; margin-bottom: 4px; }
+    .lessons { grid-template-columns: 1fr; }
+    .lesson-name { font-size: 18px; }
+    .char-item { font-size: 30px; }
+    .char-grid { grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); }
+    .zhuyin-clue { font-size: 40px; letter-spacing: 5px; }
+    .zhuyin-card { padding: 18px 14px; }
+    .game-setup { padding: 24px 18px; }
+    .result-emoji { font-size: 56px; }
+    .result-title { font-size: 20px; }
+    .result-score .big { font-size: 46px; }
+    .result-item { font-size: 26px; }
+    .result-list { grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); }
+    .control-btn { padding: 10px 18px; font-size: 14px; }
+    .result-divider::before, .result-divider::after { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="ornament"><span>Chinese Characters</span></div>
+    <h1>生字筆順練習</h1>
+    <p class="subtitle">看動畫 · 自己寫 · 闖關遊戲</p>
+  </header>
+
+  <div class="tabs-wrap">
+    <div class="tabs">
+      <button class="tab active" data-mode="browse" onclick="switchMode('browse')">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v16H6.5a2.5 2.5 0 0 0 0 5H20"/><path d="M8 7h8M8 11h6"/></svg>
+        瀏覽練習
+      </button>
+      <button class="tab" data-mode="game" onclick="switchMode('game')">
+        <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="12" rx="3"/><path d="M8 11v2M7 12h2M15 12h.01M17 14h.01"/></svg>
+        闖關遊戲
+      </button>
+    </div>
+  </div>
+
+  <div id="mode-browse" class="mode-view">
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="搜尋任何中文字" maxlength="1" onkeyup="if(event.key==='Enter')searchChar()">
+      <button onclick="searchChar()" aria-label="搜尋">
+        <svg class="ico" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:middle;"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      </button>
+    </div>
+
+    <div id="browse-view" class="view active">
+      <div class="selector">
+        <div class="selector-row">
+          <span class="selector-label">版本</span>
+          <div id="pub-buttons" class="btn-row"></div>
+        </div>
+        <div class="selector-row">
+          <span class="selector-label">年級</span>
+          <div id="grade-buttons" class="btn-row"></div>
+        </div>
+      </div>
+      <div id="lessons" class="lessons"></div>
+    </div>
+
+    <div id="chars-view" class="view">
+      <button class="back-btn" onclick="switchView('browse-view')">
+        <svg class="ico ico-sm" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        返回課別
+      </button>
+      <h2 id="chars-title" class="page-title"></h2>
+      <div id="char-grid" class="char-grid"></div>
+    </div>
+
+    <div id="char-view" class="view">
+      <button class="back-btn" onclick="backToChars()">
+        <svg class="ico ico-sm" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        返回生字
+      </button>
+      <div class="char-detail">
+        <div class="char-info" id="char-info"></div>
+        <div class="char-zhuyin-display" id="char-zhuyin-display"></div>
+        <div class="writer-wrap">
+          <div id="writer-target"></div>
+        </div>
+        <div class="controls">
+          <button class="control-btn btn-play" onclick="playAnimation()">
+            <svg class="ico ico-fill" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            看筆順
+          </button>
+          <button class="control-btn btn-quiz" onclick="startQuiz()">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M17 3l4 4-11 11-5 1 1-5z"/><path d="M14 6l4 4"/></svg>
+            自己寫
+          </button>
+          <button class="control-btn btn-reset" onclick="resetChar()">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15.5-6.3L21 8"/><polyline points="21 3 21 8 16 8"/><path d="M21 12a9 9 0 0 1-15.5 6.3L3 16"/><polyline points="3 21 3 16 8 16"/></svg>
+            重來
+          </button>
+        </div>
+        <div class="hint">「看筆順」:動畫示範寫法 · 「自己寫」:照筆順用手指或滑鼠描</div>
+        <div class="nav-bar">
+          <button class="nav-btn" id="prev-btn" onclick="prevChar()">
+            <svg class="ico ico-sm" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            上一字
+          </button>
+          <button class="nav-btn" id="next-btn" onclick="nextChar()">
+            下一字
+            <svg class="ico ico-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="mode-game" class="mode-view" style="display:none;">
+    <div id="game-setup-view" class="view active">
+      <div class="game-setup">
+        <h2>闖&nbsp;&nbsp;關&nbsp;&nbsp;設&nbsp;&nbsp;定</h2>
+        <div class="game-setup-sub">選好條件,系統隨機出題</div>
+
+        <div class="setup-section">
+          <div class="setup-label"><span class="num">1</span>版本 <span class="setup-hint-text">(可複選)</span></div>
+          <div id="g-pub-buttons" class="btn-row"></div>
+        </div>
+
+        <div class="setup-section">
+          <div class="setup-label"><span class="num">2</span>年級 <span class="setup-hint-text">(可複選)</span></div>
+          <div id="g-grade-buttons" class="btn-row"></div>
+        </div>
+
+        <div class="setup-section">
+          <div class="setup-label"><span class="num">3</span>課別範圍</div>
+          <div id="g-lesson-buttons" class="btn-row"></div>
+        </div>
+
+        <div class="setup-section">
+          <div class="setup-label"><span class="num">4</span>題數</div>
+          <div class="btn-row" id="g-count-buttons">
+            <button class="btn count-btn active" data-count="5">5 題</button>
+            <button class="btn count-btn" data-count="10">10 題</button>
+            <button class="btn count-btn" data-count="20">20 題</button>
+            <button class="btn count-btn" data-count="30">30 題</button>
+          </div>
+        </div>
+
+        <div class="pool-info" id="g-pool-info">
+          符合條件的生字 <strong id="g-pool-count">—</strong> 個
+        </div>
+
+        <button class="start-btn" id="g-start-btn" onclick="startGame()">開始闖關</button>
+      </div>
+    </div>
+
+    <div id="game-play-view" class="view">
+      <div class="game-play">
+        <div class="game-topbar">
+          <div class="progress-box">第 <span class="num" id="g-current">1</span>/<span id="g-total">10</span> 題</div>
+          <div class="score-box">答對 <span class="score-num" id="g-score">0</span> 題</div>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="g-progress-fill" style="width:0%;"></div></div>
+
+        <div class="zhuyin-card">
+          <div class="label">題目 · ZHUYIN</div>
+          <div class="zhuyin-clue" id="g-zhuyin">ㄓㄥˋ</div>
+          <div class="clue-hint">請照注音寫出這個字的筆順</div>
+        </div>
+
+        <div class="writer-wrap">
+          <div id="game-writer-target"></div>
+        </div>
+        <div class="controls">
+          <button class="control-btn btn-hint" onclick="peekAnswer()">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-4 12.6c.6.5 1 1.3 1 2.1V18h6v-1.3c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/><path d="M9 21h6M10 24h4"/></svg>
+            看一下答案
+          </button>
+          <button class="control-btn btn-skip" onclick="skipQuestion()">
+            <svg class="ico ico-fill" viewBox="0 0 24 24"><path d="M5 5l9 7-9 7z"/><rect x="16" y="5" width="3" height="14" rx="0.5"/></svg>
+            跳過
+          </button>
+        </div>
+        <div class="hint">錯 3 次會自動提示下一筆的位置</div>
+      </div>
+    </div>
+
+    <div id="game-result-view" class="view">
+      <div class="game-result">
+        <div class="result-seal seal-good" id="g-seal"><span class="seal-char" id="g-seal-char">良</span></div>
+        <div class="result-title" id="g-result-title">完成了</div>
+        <div class="result-score">答對 <span class="big" id="g-correct">0</span> / <span id="g-of">0</span> 題</div>
+        <div class="result-percentage" id="g-percentage">答對率 0%</div>
+        <div class="result-divider">各題結果</div>
+        <div class="result-list" id="g-result-list"></div>
+        <div class="result-actions">
+          <button class="control-btn btn-reset" onclick="restartGame()">
+            <svg class="ico" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15.5-6.3L21 8"/><polyline points="21 3 21 8 16 8"/><path d="M21 12a9 9 0 0 1-15.5 6.3L3 16"/><polyline points="3 21 3 16 8 16"/></svg>
+            再玩一次
+          </button>
+          <button class="control-btn btn-skip" onclick="backToSetup()">
+            <svg class="ico ico-sm" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            重新設定
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="celebration" class="celebration">答 對 了</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<script>
+const DATA = {"南一":{"國小3年級":[{"book":5,"sem":"上","lesson":1,"name":"你好，新朋友","chars":["剛","泥","化","雀","羽","衣","留","髮","旅","行","平","朗","足"]},{"book":5,"sem":"上","lesson":2,"name":"我們的約定","chars":["廊","訂","班","級","約","贊","持","記","錄","聊","烈","些","提","愁","畢"]},{"book":5,"sem":"上","lesson":3,"name":"下課十分鐘","chars":["短","鐘","期","鬼","鬧","準","表","暢","無","總","響","形","盡","責","盯"]},{"book":5,"sem":"上","lesson":4,"name":"留住今天的太陽","chars":["躲","夕","賽","緊","速","店","逗","露","贏","專","量","勝","利","悅","乖"]},{"book":5,"sem":"上","lesson":5,"name":"火大了","chars":["龍","沖","菱","兄","吐","歪","防","警","鈴","注","員","傷","死","諒","脾"]},{"book":5,"sem":"上","lesson":6,"name":"我該怎麼辦？","chars":["幕","杯","流","溼","透","雙","胸","負","慌","逃","辦","處","題","灰","剪"]},{"book":5,"sem":"上","lesson":7,"name":"最年輕的奶奶","chars":["背","斑","皺","紋","懂","凡","梳","夾","藏","捏","摺","藝","術","雖","創"]},{"book":5,"sem":"上","lesson":8,"name":"魔「髮」哥哥","chars":["魔","圍","巾","視","框","投","哦","愉","桶","刀","密","曾","機","鏡","齊"]},{"book":5,"sem":"上","lesson":9,"name":"穿白袍的醫生伯伯","chars":["醫","伯","袍","戴","筒","啄","備","幹","敲","毒","體","蹈","淘","蘋","藥"]},{"book":5,"sem":"上","lesson":10,"name":"唉呀！誤會大了","chars":["誤","極","雪","腦","實","根","反","射","膚","豬","詞","良","憶","滾","解"]},{"book":5,"sem":"上","lesson":11,"name":"石虎的告白","chars":["額","虎","貓","臺","灣","獨","萬","祖","捉","及","類","占","雞","肉","威"]},{"book":5,"sem":"上","lesson":12,"name":"昆蟲的保命妙招","chars":["昆","型","攻","擊","演","保","命","翅","敵","竹","節","逼","技","退","屁"]},{"book":6,"sem":"下","lesson":1,"name":"最美的模樣","chars":["模","撐","首","符","膀","鼻","搗","亂","恐","尖","嘴","吼"]},{"book":6,"sem":"下","lesson":2,"name":"玩玩具","chars":["鐵","環","碗","另","鉤","推","羨","慕","娃","捲","躺","裙","擺","參","服"]},{"book":6,"sem":"下","lesson":3,"name":"愛玉的變身術","chars":["炎","玉","凍","薄","暑","品","籽","晒","摸","刺","器","綁","搓","或","糖"]},{"book":6,"sem":"下","lesson":4,"name":"楊修猜字","chars":["名","丞","曹","楊","修","智","應","官","府","思","報","闊","酪","驚","揚"]},{"book":6,"sem":"下","lesson":5,"name":"唱反調","chars":["鞠","躬","弄","文","厲","鬥","千","普","睜","閉","錢","偏","察","偷","胡"]},{"book":6,"sem":"下","lesson":6,"name":"一飛沖天","chars":["村","猴","抖","決","造","展","簧","摔","巨","引","觀","咦","松","鼠","混"]},{"book":6,"sem":"下","lesson":7,"name":"井仔腳鹽田","chars":["盤","擠","燦","爛","鹽","耙","攪","抹","塔","棋","幢","堂","雕","霞","霄"]},{"book":6,"sem":"下","lesson":8,"name":"和魚一起游泳","chars":["叔","潛","島","浮","珊","瑚","船","航","母","圈","丑","岸","郵","寄","底"]},{"book":6,"sem":"下","lesson":9,"name":"三峽老街樂藍染","chars":["峽","隧","古","窄","拱","騎","樓","燈","籠","治","寬","示","施","獎","傻"]},{"book":6,"sem":"下","lesson":10,"name":"地球的眼淚","chars":["鹹","之","川","蒸","度","降","凝","斷","刷","岩","將","積","累","納"]},{"book":6,"sem":"下","lesson":11,"name":"枯木是大飯店","chars":["枯","孤","零","義","柴","代","適","譬","築","巢","菇","飯","腐","沉","僅"]},{"book":6,"sem":"下","lesson":12,"name":"騎樓","chars":["淋","易","側","吞","旗","砂","砌","館","建","令","華","社","區","擋","商"]}],"國小4年級":[{"book":7,"sem":"上","lesson":1,"name":"窗口邊的臺灣欒樹","chars":["戶","漫","季","素","嫩","繁","墨","姿","簇","週","淡","穫","迎","幅","伴"]},{"book":7,"sem":"上","lesson":2,"name":"奶奶的排骨粥","chars":["汽","煮","骨","粥","燙","換","即","菜","齒","餐","矯","餓","彷","彿","濃"]},{"book":7,"sem":"上","lesson":3,"name":"充滿希望的五味屋","chars":["蓮","式","士","拆","民","志","酸","辣","存","靠","獲","態","與","支","未"]},{"book":7,"sem":"上","lesson":4,"name":"玉山之歌","chars":["淺","固","搧","針","縫","永","恆","峰","領","拂","頑","奏","溪","聆","翻"]},{"book":7,"sem":"上","lesson":5,"name":"高舉臺灣之光","chars":["克","舉","挑","戰","爭","佩","斤","紀","震","棄","程","捐","驕","傲"]},{"book":7,"sem":"上","lesson":6,"name":"臺灣的驕傲","chars":["尺","亞","洲","橋","跨","護","層","鈔","仍","標","融","仰","內","俯","煙"]},{"book":7,"sem":"上","lesson":7,"name":"到此「藝」遊","chars":["育","陶","目","芒","返","劇","斗","鋼","索","禁","渡","念","麵","統","值"]},{"book":7,"sem":"上","lesson":8,"name":"四季的頭髮","chars":["陣","披","嚇","眶","乘","龐","絲","板","辮","踮","挺","散","里"]},{"book":7,"sem":"上","lesson":9,"name":"阿白觀察記","chars":["促","振","碎","者","偶","褐","巧","塑","凶","繞","衝","雷","牌","豐","擾"]},{"book":7,"sem":"上","lesson":10,"name":"老鼠嫁女兒","chars":["妞","郎","丈","哄","眾","羞","強","嫁","架","捨","初","丟","既","隊","伍"]},{"book":7,"sem":"上","lesson":11,"name":"豆粥婆婆","chars":["婆","頰","陰","血","哀","蓆","栗","橫","蟹","紛","缸","漆","黏","痛","拚"]},{"book":7,"sem":"上","lesson":12,"name":"戴斗笠的地藏","chars":["貧","妻","嘗","茫","算","祈","繼","續","宜","耐","離","傍","隱","託","漸"]},{"book":8,"sem":"下","lesson":1,"name":"＃龍慶元宵","chars":["慶","懷","祥","儀","序","毫","挨","吉","潮","炸","旺","爆","梭","徵","依"]},{"book":8,"sem":"下","lesson":2,"name":"看戲","chars":["驗","拳","谷","扮","勢","芳","則","搭","配","達","製","效","兵","優","需"]},{"book":8,"sem":"下","lesson":3,"name":"舞吧！小飛魚","chars":["甩","褲","童","識","族","尤","勵","飾","較","甚","顧","慮","肯","邀","豪"]},{"book":8,"sem":"下","lesson":4,"name":"蝶之生","chars":["蛹","蟻","移","蛻","煉","絕","曉","殼","奮","晾","翩"]},{"book":8,"sem":"下","lesson":5,"name":"活出生命奇蹟","chars":["健","肢","激","蹦","父","扎","渴","弓","異","豚","嘆","執","限","蹟"]},{"book":8,"sem":"下","lesson":6,"name":"走過就知道","chars":["裂","通","付","關","糊","坦","危","吊","壯","膽","腿","軟","扛","晰","懼"]},{"book":8,"sem":"下","lesson":7,"name":"不一樣的母親花","chars":["瓣","絹","束","莖","政","議","致","橙","昏","凋","憂","雅","茶","跪","誠"]},{"book":8,"sem":"下","lesson":8,"name":"屋頂上的野貓","chars":["吵","歲","慰","制","必","須","業","煤","養","替","疼","箱","撒","嬌","善"]},{"book":8,"sem":"下","lesson":9,"name":"用一公斤愛嘉明湖","chars":["泊","拔","澈","湛","夢","幻","登","踏","填","喚","曲","折","浹","喘","隔"]},{"book":8,"sem":"下","lesson":10,"name":"想像與發明","chars":["慧","燃","誕","啟","境","考","材","攜","聯","絡","彼","網","計","鍵"]},{"book":8,"sem":"下","lesson":11,"name":"小事物大驚奇","chars":["譜","欄","煎","廚","尋","靈","縮","組","匠","蔭","悠","構","集","改"]},{"book":8,"sem":"下","lesson":12,"name":"九蛙傳奇","chars":["巫","衰","判","旱","導","災","疊","陷","弱","端","魂","聚","順","寧","詳"]}],"國小1年級":[{"book":1,"sem":"上","lesson":1,"name":"魔法文字","chars":["日","月","山","木","水","人","手","門"]},{"book":1,"sem":"上","lesson":2,"name":"小船","chars":["小","上","走","左","右","向","魚","也","來","加"]},{"book":1,"sem":"上","lesson":3,"name":"印手印","chars":["開","出","招","車","子","地","花","朵","在","笑"]},{"book":1,"sem":"上","lesson":4,"name":"吹泡泡","chars":["泡","玩","大","起","好","多","我","的","你","抱"]},{"book":1,"sem":"上","lesson":5,"name":"你好","chars":["爸","到","青","叫","下","那","和","要","他","朋","友"]},{"book":1,"sem":"上","lesson":6,"name":"外星人","chars":["外","住","個","們","這","裡","有","沒","是","什","麼"]},{"book":1,"sem":"上","lesson":7,"name":"小金魚","chars":["金","說","句","話","兩","都","悄","尾","巴","滿","紅"]},{"book":1,"sem":"上","lesson":8,"name":"紅紅的春","chars":["春","貼","呢","了","請","天","家","把","不","房","福"]},{"book":2,"sem":"下","lesson":1,"name":"太陽是充電機","chars":["太","充","電","雨","過","後","為","冬","土","草","哭","心"]},{"book":2,"sem":"下","lesson":2,"name":"春雨是什麼顏色","chars":["顏","色","著","問","鳥","綠","看","藍","空","媽","彩","中","虹"]},{"book":2,"sem":"下","lesson":3,"name":"山中音樂會","chars":["音","樂","會","坡","忙","布","入","口","河","林","間","風","跑"]},{"book":2,"sem":"下","lesson":4,"name":"書是我的好朋友","chars":["書","打","跳","陪","去","冒","險","海","找","歡","次","誰","跟"]},{"book":2,"sem":"下","lesson":5,"name":"風喜歡和我玩","chars":["喜","帶","球","始","吹","突","然","得","高","樹","給","可","只"]},{"book":2,"sem":"下","lesson":6,"name":"鄰居的小孩","chars":["居","常","發","現","就","頭","回","想","但","怎","知","道","先"]},{"book":2,"sem":"下","lesson":7,"name":"畫畫","chars":["愛","送","寫","祝","張","臉","感","謝","老","師","啊","還","漂","亮"]},{"book":2,"sem":"下","lesson":8,"name":"給松鼠的卡片","chars":["卡","片","秋","採","果","吃","飽","方","進","很","久","嗎","長","敬"]},{"book":2,"sem":"下","lesson":9,"name":"張奶奶的寶貝","chars":["奶","貝","早","校","園","工","作","她","邊","汗","學","您","當","成"]},{"book":2,"sem":"下","lesson":10,"name":"井裡的小青蛙","chars":["隻","除","睡","覺","東","西","拍","肚","唉","幾","世","界","連","裝"]},{"book":2,"sem":"下","lesson":11,"name":"吃星星的小鴨子","chars":["星","面","許","池","波","見","快","告","訴","光","拉","奇","怪","呀"]},{"book":2,"sem":"下","lesson":12,"name":"快樂不止一半","chars":["止","半","羊","田","再","苗","埋","辛","苦","油","能","收","分","享"]}],"國小2年級":[{"book":3,"sem":"上","lesson":1,"name":"打招呼","chars":["呼","白","雲","前","游","噴","柱","試","吸","氣","用","力","哇","又","第","功"]},{"book":3,"sem":"上","lesson":2,"name":"爬梯子","chars":["爬","梯","紙","條","線","像","身","生","站","沿","頂","畫","格","哪","才","最"]},{"book":3,"sem":"上","lesson":3,"name":"勇氣樹","chars":["勇","教","室","棵","葉","努","完","事","怕","倒","時","黑","低","聲","故","瓜"]},{"book":3,"sem":"上","lesson":4,"name":"牙仙子","chars":["牙","仙","夜","袋","男","孩","輕","照","床","失","望","急","終","於","顆","舞"]},{"book":3,"sem":"上","lesson":5,"name":"一天的時間","chars":["塊","芝","麻","餅","咬","做","課","洗","澡","整","理","包","拾","遊","戲","剩"]},{"book":3,"sem":"上","lesson":6,"name":"小書蟲","chars":["蟲","森","動","物","王","坐","午","停","座","原","從","此","管","百","科","全"]},{"book":3,"sem":"上","lesson":7,"name":"從自己開始","chars":["自","己","沙","撿","垃","圾","膠","對","牠","安","吧","如","該","便","減","少"]},{"book":3,"sem":"上","lesson":8,"name":"等兔子來撞樹","chars":["等","兔","農","夫","種","夏","趕","路","幸","運","以","耕","守","晚","北","搖"]},{"book":3,"sem":"上","lesson":9,"name":"角和腳","chars":["角","腳","鹿","喝","影","意","卻","獅","追","被","枝","掙","脫","直","害","救"]},{"book":3,"sem":"上","lesson":10,"name":"出租時間的熊爺爺","chars":["租","熊","爺","窗","呆","弟","法","眼","拿","幫","數","趣","呵","病","因","助"]},{"book":3,"sem":"上","lesson":11,"name":"赤腳國王","chars":["赤","國","熱","宮","涼","踩","暖","轎","壞","難","定","更","隨","主","穿","忘"]},{"book":3,"sem":"上","lesson":12,"name":"去農場玩","chars":["場","麗","群","靜","抬","近","堆","棉","遠","美","景","忽","聽","揮","慢","放"]},{"book":3,"sem":"上","lesson":13,"name":"幸福湯圓","chars":["湯","圓","今","至","妹","升","陽","米","團","粉","南","黃","真","神","接","牛"]},{"book":3,"sem":"上","lesson":14,"name":"到野外上課","chars":["野","本","蜜","蜂","蝴","蝶","飛","活","圖","筆","料","湖","調","迷","逛","兒"]},{"book":4,"sem":"下","lesson":1,"name":"彩色心情","chars":["情","候","溜","滑","傳","深","泳","淚","火","奔","怒","拋","潔","各","同","受"]},{"book":4,"sem":"下","lesson":2,"name":"笑","chars":["盛","晴","興","變","暗","明","烏","遮","讓","溫","冷","歌","清","脆","唱","容"]},{"book":4,"sem":"下","lesson":3,"name":"勇敢超人","chars":["敢","超","假","院","正","破","所","伸","點","重","石","合","掉","乾","淨","哥"]},{"book":4,"sem":"下","lesson":4,"name":"小波氣球飛上天","chars":["綿","已","經","輸","鼓","樣","取","越","竟","飄","抓","啦","喊","踢","結","消"]},{"book":4,"sem":"下","lesson":5,"name":"小水珠，去哪裡","chars":["珠","微","醒","甲","瓢","腰","香","掛","閃","晶","串","項","鍊","禮","探","姐"]},{"book":4,"sem":"下","lesson":6,"name":"生日快樂","chars":["睛","份","牽","步","段","毛","晃","籃","亭","忍","祕","耳","聞","味","浪","寶"]},{"book":4,"sem":"下","lesson":7,"name":"給地球的一封信","chars":["封","信","親","貴","洋","蝦","植","汙","染","使","具","資","源","費","康","復"]},{"book":4,"sem":"下","lesson":8,"name":"傘","chars":["傘","猜","字","謎","語","屋","柺","杖","滴","答","叩","嘻","哈","落","接","案"]},{"book":4,"sem":"下","lesson":9,"name":"老園丁的話","chars":["丁","公","每","認","比","客","相","皮","摘","立","位","新","它","欣","賞","妙"]},{"book":4,"sem":"下","lesson":10,"name":"小小說書人","chars":["排","介","紹","其","賣","帽","蛋","糕","扶","買","休","息","精","采","希","讀"]},{"book":4,"sem":"下","lesson":11,"name":"森林迷宮","chars":["周","牆","困","轉","彎","差","撞","求","指","洞","刻","仔","細","並","言","朝"]},{"book":4,"sem":"下","lesson":12,"name":"點金術","chars":["非","銀","年","幼","女","願","碰","桌","椅","部","食","馬","純","切","狀","珍"]},{"book":4,"sem":"下","lesson":13,"name":"我喜歡你","chars":["敗","操","旁","脖","瞇","件","特","別","待","練","習","彈","琴","講","論","颳"]},{"book":4,"sem":"下","lesson":14,"name":"如果，我的房間……","chars":["壁","鋪","錯","輪","搬","冰","磚","而","且","交","往","鮮","甜","汁","晨","由"]}],"國小6年級":[{"book":11,"sem":"上","lesson":1,"name":"在天晴了的時候","chars":["爽","塵","垢","鳳","頁","曝","涉","霾","暈","跡"]},{"book":11,"sem":"上","lesson":2,"name":"珍珠鳥","chars":["編","舒","茂","藤","蔓","掀","悉","添","隙","鬆","櫃","稿","顫","暮","肩","絨","咂","瀉","賴"]},{"book":11,"sem":"上","lesson":3,"name":"客至","chars":["舍","皆","緣","蓬","飧","兼","樽","酒","舊","醅","籬","簡","陋","鎮","濾","潺","笆","寂","陳"]},{"book":11,"sem":"上","lesson":4,"name":"贏得喝采的輸家","chars":["衫","肌","沸","騰","兀","唯","勺","吶","握","抵","置","頒","屬","榮","搞","黝","襯","惹","摟"]},{"book":11,"sem":"上","lesson":5,"name":"哇！原來如此","chars":["載","益","副","監","噪","避","迅","滅","援","燒","液","蝕","觸","承","陌","攝","檔","撈","註"]},{"book":11,"sem":"上","lesson":6,"name":"登月先鋒","chars":["艇","劃","荒","垠","宇","宙","朽","栽","誌","系","訓","械","艙","駕","凌","隕","奪","億","征"]},{"book":11,"sem":"上","lesson":7,"name":"明智的抉擇","chars":["勞","抉","擇","跆","抽","叢","履","蹣","跚","灶","搔","壤","苞","芽","衡","維","犧","牲"]},{"book":11,"sem":"上","lesson":8,"name":"飢渴好「火」伴","chars":["怨","艾","枕","臂","膝","焰","熄","惱","跌","鬚","剝","竄","瞬","頹","熾","炭","飢","裊","緒"]},{"book":11,"sem":"上","lesson":9,"name":"火燒連環船","chars":["召","懸","寡","勃","棍","糧","顛","簸","獻","艘","鎖","策","否","欠","江","瀰","倉","鞏","鼎"]},{"book":11,"sem":"上","lesson":10,"name":"戲術","chars":["亦","傾","頃","猶","墊","舀","複","蕩","勾","篇","鉅","靡","嘖","述","鑼","俐","詫","莫"]},{"book":11,"sem":"上","lesson":11,"name":"紀念照","chars":["斥","肅","遍","玄","痘","腫","敷","央","瞞","庭","徽","袖","擤","涕","鎂","泛","枇","杷"]},{"book":11,"sem":"上","lesson":12,"name":"少年筆耕","chars":["拮","据","抄","躡","仿","昨","辯","憊","熬","瘦","咳","徒","懊","悔","啜","泣","吁","撫","酣"]},{"book":12,"sem":"下","lesson":1,"name":"風中騎士","chars":["矛","盾","娛","帥","跤","厚","供","諄","誨","竅","嘯","叮","嚀","廟","尿","煞","霎","疤","臊"]},{"book":12,"sem":"下","lesson":2,"name":"達駭黑熊","chars":["獵","尚","括","糞","寮","狩","迫","脅","殺","遵","骸","窩","杉","翼","奄","黎","喉","嚨","吟"]},{"book":12,"sem":"下","lesson":3,"name":"楊氏之子","chars":["梁","氏","詣","乃","梅","曰","禽","姓","尊","選","軼","膾","炙","典","寓","邏","輯","例","捷"]},{"book":12,"sem":"下","lesson":4,"name":"談夢想","chars":["蜿","蜒","荊","棘","嚮","逐","伐","域","楷","憾","岔","契","遐","邇","奠","屹","沮","餒","豫"]},{"book":12,"sem":"下","lesson":5,"name":"蒂烈娜","chars":["畔","巒","鰭","韌","鞭","蒼","恰","倚","胖","搶","頸","勁","洶","湧","湍","猛","濺"]},{"book":12,"sem":"下","lesson":6,"name":"不怕","chars":["賓","紐","匯","遙","赴","竊","查","葡","萄","忐","忑","按","愚","蠢","犯","憤","恨","涯","汰"]},{"book":12,"sem":"下","lesson":7,"name":"打開心中的窗","chars":["扉","狹","寞","疏","潑","憐","循","矩","稔","蝸","兢","攀","繭","懇","敦","咀","殷","彌"]},{"book":12,"sem":"下","lesson":8,"name":"努力愛春華","chars":["權","糾","德","諱","凰","驪","伏","邋","遢","拘","遜","冊","摯","厭","濤","迴","盪","囑"]},{"book":12,"sem":"下","lesson":9,"name":"每一個孩子都有一條自己的小路","chars":["蔚","忠","夥","檻","蒲","曠","綺","誦"]}],"國中1年級":[{"book":1,"sem":"上","lesson":1,"name":"夏夜","chars":["樹","梢","撒","銀","幣","闔","上","朦","朧","山","巒","藤","蔓","溜"]},{"book":1,"sem":"上","lesson":2,"name":"絕句選 （一）登鸛雀樓 （二）黃鶴樓送孟浩然之廣陵 （三）楓橋夜泊","chars":["依","盡","欲","窮","千","里","目","故","人","西","辭","黃","鶴","樓","煙","花","下","揚","州","碧","山","唯","烏","江","楓","漁","火","夜","半","鐘","聲","到","客","船"]},{"book":1,"sem":"上","lesson":3,"name":"紙船印象","chars":["過","眼","雲","煙","倏","忽","熱","鐵","烙","膚","掠","歷","如","繪","眷","戀","不","堪","斑","雜","氣","派","儼","然","甫","千","里","單","騎","比","肩","曹","操","的","戰","艦","首","尾","相","連","蔚","為","壯","觀","粗","糙","繭","年","事","而","立","涎","著","臉"]},{"book":1,"sem":"上","lesson":4,"name":"老師的十二樣見面禮","chars":["姚","頭","丸","凸","落","去","全","陪","甘","醇","首","要","之","務","辜","負","嚷","豐","功","偉","業","雞","婆","不","靈","光","乍","看","恍","然","大","悟","費","周","章"]},{"book":1,"sem":"上","lesson":5,"name":"吃冰的滋味","chars":["黯","然","失","色","五","花","八","門","誠","得","其","所","哉","遜","童","叟","無","欺","障","眼","法","名","聞","遐","邇","舔","垂","涎","三","尺","乾","瞪","道","地","向","隅","軋","俄","頃","瞬","即","沁","涼","剔","透","奪","人","目","萌","生","兜","售","一","哄","而","上","樂","不","可","支","小","蘿","蔔","頭","殆","盡"]},{"book":1,"sem":"上","lesson":6,"name":"牛背上的呀喝","chars":["童","伴","剝","削","風","馳","電","掣","討","饒","騁","慷","慨","精","湛","扎","處","變","不","驚","靈","機","一","動","兩","全","其","美","鼓","噪","告","竅","門"]},{"book":1,"sem":"上","lesson":7,"name":"鮭魚產卵，力爭上游","chars":["棲","息","洄","游","溯","河","綿","延","湍","流","襲","擊","定","論","母","攝","食","筋","疲","力","盡","傷","痕","累","傳","宗","接","代","竭","短","促","乾","涸","愛","迪","生","不","屈","撓"]},{"book":1,"sem":"上","lesson":8,"name":"論語選","chars":["子","曰","時","習","之","不","亦","說","乎","朋","慍","君","為","山","簣","平","地","覆","往","三","人","行","師","焉"]},{"book":1,"sem":"上","lesson":9,"name":"飛翔的舞者","chars":["羅","傑","斯","欒","邊","坡","裹","亨","利","靜","默"]},{"book":1,"sem":"上","lesson":10,"name":"值得記憶的小事：日記","chars":["赤","裸","若","干","借","鏡","扼","要","例","定"]},{"book":2,"sem":"下","lesson":1,"name":"負荷","chars":["絢","麗","逗","留","沉","迷","使","勁","轉","呀","激","越","豪","情","逐","一","阿","公","和","媽","織","就","呵","護"]},{"book":2,"sem":"下","lesson":2,"name":"律詩選 （一）過故人莊 （二）客至","chars":["具","雞","黍","合","郭","斜","開","筵","面","場","圃","把","酒","話","桑","麻","重","陽","就","蓬","門","盤","飧","市","遠","無","兼","味","樽","家","貧","只","舊","醅","餘","杯"]},{"book":2,"sem":"下","lesson":3,"name":"背影","chars":["差","使","交","卸","禍","不","單","行","謀","事","勾","留","浦","口","茶","房","囑","咐","妥","帖","躊","躇","腳","夫","揀","迂","馬","褂","蹣","跚","攙","一","股","腦","兒","箸","大","去","矣"]},{"book":2,"sem":"下","lesson":4,"name":"土芭樂的生存之道","chars":["白","露","熾","烈","喳","落","煞","是","幽","微","枝","椏","盡","釋","前","嫌","浮","升","形","容"]},{"book":2,"sem":"下","lesson":5,"name":"兒時記趣","chars":["張","目","明","察","秋","毫","藐","小","物","外","之","趣","夏","蚊","成","雷","私","擬","心","所","向","昂","首","項","為","強","徐","噴","以","煙","唳","怡","然","叢","草","林","礫","壑","神","遊","龐","蓋","盡","吞","呀","鞭"]},{"book":2,"sem":"下","lesson":6,"name":"溪頭的竹子","chars":["簇","擁","稠","密","盤","踞","罕","見","愕","然","良","久","拚","命","生","氣","勃","行","列","挺","拔","秘","訣","昂","斷","枝","殘","幹","領","域","立","足","風","格","佇","痴"]},{"book":2,"sem":"下","lesson":7,"name":"謝天","chars":["肴","布","尷","尬","滔","天","糟","蹋","偶","像","供","桌","老","爺","也","者","掙","渺","茫","哲","學","混","吃","玩","瀏","覽","亙","古","嶄","新","外","飛","來","一","筆","謙","抑","居","功","於","奔","波","得","之","人","太","多","遺","愛"]},{"book":2,"sem":"下","lesson":8,"name":"視力與偏見","chars":["值","洛","杉","磯","種","族","暴","動","佣","人","舉","譁","然","蒙","辱","良","師","益","友","赫","猶","在"]},{"book":2,"sem":"下","lesson":9,"name":"劉墉寓言作品選","chars":["不","是","滋","味","下","地","獄","腐","化","煎","熬","隔","山","打","牛","拜","師","習","武","應","聲","而","開","至","實","質","定","形","瀾","剛","柔","並","濟","斷","出","手"]},{"book":2,"sem":"下","lesson":10,"name":"跨時空的對望：淺談文言文翻譯","chars":["相","與","中","庭","空","明","藻","荇"]}],"國中2年級":[{"book":3,"sem":"上","lesson":1,"name":"新詩選 （一）傘 （二）風箏","chars":["無","懈","可","擊","荷","蓋","朝","暾","扶","搖","直","上"]},{"book":3,"sem":"上","lesson":2,"name":"聲音鐘","chars":["斗","室","蚵","仔","抑","揚","頓","挫","天","籟","瑰","寶","具","體","而","微","牛","犁","歌","丟","銅","乍","暖","還","寒","粿","羹","歐","巴","桑","不","知","凡","幾","阿","奇","毛","納","悶","慢","條","斯","理"]},{"book":3,"sem":"上","lesson":3,"name":"我所知道的康橋","chars":["水","溶","漠","楞","沃","腴","阜","娉","婷","嫵","媚","參","差","翳","入","了","天","聽","糝","伺","候","怯","怜","窈","窕","爛","縵","路","政","掛","單","恣","傳","呼","快","馬","迎","新","月","卻","上","輕","輿","趁","晚","涼","風","流","夸","父","荒","誕","溫","存","偌","大","迷","眩"]},{"book":3,"sem":"上","lesson":4,"name":"五柳先生傳","chars":["何","許","閑","靜","榮","利","不","求","甚","解","會","意","嗜","造","飲","輒","盡","期","曾","吝","情","去","留","環","堵","蕭","然","短","褐","穿","結","簞","瓢","屢","空","晏","如","忘","懷","贊","黔","婁","戚","汲","極","茲","若","人","之","儔","乎","酣","觴","赋","詩","無","氏","民","歟","葛","天"]},{"book":3,"sem":"上","lesson":5,"name":"差不多先生傳","chars":["同","學","堂","直","隸","省","錢","鋪","夥","計","掌","櫃","的","賠","小","心","從","容","白","瞪","著","眼","不","上","一","命","嗚","呼","格","言","看","得","破","法","號","圓","通","大","師"]},{"book":3,"sem":"上","lesson":6,"name":"張釋之執法","chars":["廷","尉","上","行","中","渭","橋","走","乘","輿","使","騎","捕","屬","治","問","縣","人","蹕","奏","當","賴","令","固","乃","天","子","所","與","下","公","共","也","更","重","之","方","其","時","立","誅","平","皆","為","輕","民","安","錯","手","足","唯","陛","良","久"]},{"book":3,"sem":"上","lesson":7,"name":"蜜蜂的讚美","chars":["哲","理","博","採","濃","郁","體","系","警","語","上","乘","精","粹","稱","道","別","出","心","裁","鍥","而","不","捨","蕩","平","川","桂","冠"]},{"book":3,"sem":"上","lesson":8,"name":"愛蓮說","chars":["蕃","李","唐","淤","泥","濯","清","漣","而","不","妖","中","通","外","直","蔓","枝","益","亭","淨","植","褻","玩","焉","謂","隱","逸","噫","菊","之","愛","鮮","宜","乎"]},{"book":3,"sem":"上","lesson":9,"name":"棒球靈魂學","chars":["喧","囂","舊","約","伯","記","汗","馬","功","勞","失","意","的","二","句","頹","然","五","十","一","名","敗","者","對","壘","壁","應","聲","而","垮","歷","盡","滄","桑","打","點","奔","馳","得","全","神","貫","注","寵","辱","皆","忘"]},{"book":4,"sem":"下","lesson":1,"name":"歲月跟著","chars":["馳","粲","亮","雍","容","天","光","雲","彩","輪","迴","枷","凋","抽","芽"]},{"book":4,"sem":"下","lesson":2,"name":"古詩選 （一）迢迢牽牛星 （二）四月十五夜鐵窗下作","chars":["迢","皎","河","漢","女","纖","擢","札","機","杼","終","日","不","成","章","泣","涕","零","相","去","復","幾","許","盈","脈","萬","念","紛","交","縈","七","旬","孤","負","三","回","明","閨","中","人","桃","李","園","置","酒","張","華","燈","群","季","浩","嘆"]},{"book":4,"sem":"下","lesson":3,"name":"鳥","chars":["蹓","躂","羽","翮","蜷","伏","瞵","視","昂","藏","搏","扶","搖","而","直","上","市","聲","鼎","沸","客","夜","曳","翹","喙","照","眼","斑","斕","乾","癟","豐","腴","穠","纖","合","度","顧","盼","拳","黛","釉","綠","煙","突","鼓","噪"]},{"book":4,"sem":"下","lesson":4,"name":"田園之秋選","chars":["滂","沱","霹","靂","環","起","咫","尺","霎","時","間","攫","孤","伶","序","幕","前","奏","震","懾","氣","脫","委","頓","匍","匐","肆","虐","蘇","醒","纔","勢","萬","鈞","服","立","行","潦","川","流","登"]},{"book":4,"sem":"下","lesson":5,"name":"木蘭詩","chars":["唧","軍","帖","可","汗","阿","爺","市","孃","濺","黑","山","燕","啾","赴","戎","機","關","朔","氣","鐵","衣","明","堂","策","勳","十","二","轉","強","尚","書","郎","駝","扶","將","霍","閣","雲","鬢","火","伴","撲","迷","離","傍","地","走"]},{"book":4,"sem":"下","lesson":6,"name":"深藍的憂鬱","chars":["偃","旗","息","鼓","絮","叨","揶","揄","蟄","伏","陰","霾","行","禮","如","儀"]},{"book":4,"sem":"下","lesson":7,"name":"運動家的風度","chars":["陶","鑄","射","揖","讓","而","升","下","飲","萬","目","睽","不","怨","天","尤","人","公","諸","無","動","於","衷","悻","然","言","必","信","行","果","臨","陣","脫","逃","任","重","道","遠","貫","徹","始","終"]},{"book":4,"sem":"下","lesson":8,"name":"談交友","chars":["拌","嘴","幽","禁","充","軍","快","慰","薰","染","非","難","蔑","視","毀","譽","見","諒","芝","蘭","之","室","鮑","魚","肆","素","如","切","磋","琢","磨","瑕","疵","驕","矜","愚","昧","頑","惡","玉","潤","珠","圓","鞭","辟","入","裡","直","多","聞","諍","友","自","用","同","聲","相","應","氣","求"]},{"book":4,"sem":"下","lesson":9,"name":"為學一首示子姪","chars":["吾","資","之","昏","逮","材","庸","旦","怠","迄","乎","成","倍","人","敏","屏","棄","其","與","無","以","異","也","常","鄙","何","恃","一","瓶","缽","足","矣","買","舟","越","明","年","還","顧"]},{"book":4,"sem":"下","lesson":10,"name":"舌尖上的思路：演講","chars":["抖","各","種","包","袱","代","入","感","戛","然","而","止","攥"]}],"國中3年級":[{"book":5,"sem":"上","lesson":1,"name":"余光中詩選 （一）苗栗明德水庫 （二）飛瀑","chars":["一","泓","天","機","浩","淼","縱","透","徹","斷","然","交","割","獰","怪"]},{"book":5,"sem":"上","lesson":2,"name":"詞選 （一）武陵春 （二）南鄉子登京口北固亭有懷","chars":["住","塵","香","日","晚","物","是","人","非","擬","舴","艋","舟","神","州","悠","年","少","萬","兜","鍪","坐","斷","敵","手","曹","劉","孫","仲","謀"]},{"book":5,"sem":"上","lesson":3,"name":"黑與白――虎鯨","chars":["遲","滯","延","宕","躑","躅","曙","光","潮","界","線","鏢","臺","催","緊","擂","摻","揉","唐","突","矜","持","直","剌","船","舷","恍","惚","呢","喃","駭","人","驟","起","陡","落","撂","壅","塞","溫","潤","擾","攘"]},{"book":5,"sem":"上","lesson":4,"name":"臺北‧淡水","chars":["吐","納","櫛","比","鱗","次","彳","亍","雋","永","啜","瀲","夥","耽","溺","詭","譎","裕","如"]},{"book":5,"sem":"上","lesson":5,"name":"與宋元思書","chars":["風","煙","俱","淨","天","山","共","色","許","縹","急","湍","甚","箭","夾","岸","寒","樹","負","互","相","軒","邈","泠","嚶","轉","鳶","飛","戾","息","心","經","綸","世","務","柯","疏","條","交","映"]},{"book":5,"sem":"上","lesson":6,"name":"我的太魯閣","chars":["磅","礴","靈","秀","磊","哆","嗦","夾","峙","顫","巍","蓊","鬱","青","蔥","獵","寮","騷","動","端","詳","褶","皺","噴","騰","飄","忽","奧","義","紅","塵"]},{"book":5,"sem":"上","lesson":7,"name":"生於憂患死於安樂","chars":["舜","發","於","畎","畝","之","中","傅","說","舉","版","築","間","膠","鬲","魚","鹽","管","夷","吾","士","孫","叔","敖","海","百","里","奚","市","空","乏","其","身","行","拂","亂","所","為","以","動","心","忍","性","曾","益","不","能","過","困","衡","慮","作","徵","色","聲","喻","入","法","家","出"]},{"book":5,"sem":"上","lesson":8,"name":"在錯誤中學習","chars":["沈","君","烈","誤","亦","為","學","地","項","羽","拜","伏","天","之","亡","我","非","戰","罪","力","拔","山","兮","氣","蓋","世","劉","邦","韓","信","求","封","齊","王","關","中","幡","然","改","圖","潛","虛","墨","池","巧","者","不","過","習","門","眾","神","淘","沙"]},{"book":5,"sem":"上","lesson":9,"name":"寄弟墨書","chars":["置","秋","稼","斛","沒","世","四","民","弟","守","先","待","後","見","舉","人","進","士","發","達","小","頭","銳","面","當","束","修","自","好","經","濟","期","抗","懷","千","古","捱","制","器","利","用","賈","搬","有","運","無","佃","地","業","典","產","夫","獨","厭","何","所","措","手","足","乎"]},{"book":5,"sem":"上","lesson":10,"name":"知識與表達的盛宴：專題報告","chars":["開","宗","明","義","邏","輯","累","贅"]},{"book":6,"sem":"下","lesson":1,"name":"一棵開花的樹","chars":["祂","塵","緣","凋","零"]},{"book":6,"sem":"下","lesson":2,"name":"曲選 （一）沉醉東風漁父詞 （二）天淨沙秋思","chars":["刎","頸","交","忘","機","友","點","傲","殺","萬","戶","侯","煙","波","昏","鴉","古","道","西","風","斷","腸"]},{"book":6,"sem":"下","lesson":3,"name":"人間情分","chars":["無","由","亢","奮","望","安","島","將","軍","嶼","窗","櫺","盈","眼","海","底","電","纜","動","容","殘","兵","敗","丟","盔","棄","甲","隱","遁","交","接","照","面","芰","荷","映","水"]},{"book":6,"sem":"下","lesson":4,"name":"項鍊","chars":["布","疋","喏","囁","嚅","忙","不","迭","地","法","郎","別","致","翌","日","匣","子","鬱","端","詳","渾","噩","活","計","謄","清"]},{"book":6,"sem":"下","lesson":5,"name":"水神的指引","chars":["背","離","歸","屬","感","卡","瑪","置","信","彌","足","珍","貴","盹","嗯","上","哇","阿","累","塵","封"]},{"book":6,"sem":"下","lesson":6,"name":"常保好奇心","chars":["拆","船","業","自","陳","設","限","良","知","能","定","向"]}],"國小5年級":[{"book":9,"sem":"上","lesson":1,"name":"幸福筆記本","chars":["灘","某","邁","拖","疲","擁","灌","倦","恩","遇","擦","痕","賠","償","焦","謹","慎","禍"]},{"book":9,"sem":"上","lesson":2,"name":"做人做事做長久","chars":["傅","釘","延","遞","富","穩","井","熟","確","掃","務","讚","碑","績","障","率","涵","預"]},{"book":9,"sem":"上","lesson":3,"name":"孔雀錯了","chars":["評","性","似","卷","楚","綵","橡","塗","拼","眉","秀","妒","忌","屏","惜","慈","慚","愧"]},{"book":9,"sem":"上","lesson":4,"name":"特別的海","chars":["乳","渲","臭","漿","泉","產","質","囪","眺","列","羅","耀","眩","係","漲","殊","呈","貌"]},{"book":9,"sem":"上","lesson":5,"name":"漫遊花東","chars":["傅","陡","峭","蕾","崖","躍","燕","凹","凸","坑","斧","臨","縱","澄","稻","翠","曳","醉"]},{"book":9,"sem":"上","lesson":6,"name":"護送螃蟹過馬路","chars":["綻","暇","螃","乎","溝","緩","印","蹲","腹","浸","陸","殖","愈","喪","悲","顯","阻","歷"]},{"book":9,"sem":"上","lesson":7,"name":"高第的魔法建築","chars":["設","弧","杆","棟","磁","鱗","薑","霜","爪","聖","際","瞪","繪","玻","璃","遺","偉","堅"]},{"book":9,"sem":"上","lesson":8,"name":"嘗嘗我的家鄉味","chars":["鄉","撲","螺","鮭","葵","稠","柔","旋","律","麥","硬","扁","抗","筋","椒","蒜","漢","蓋"]},{"book":9,"sem":"上","lesson":9,"name":"小小力量將世界照亮","chars":["股","藉","訪","購","票","售","協","譯","局","款","挖","賺","雜","鄰","幣","夠","基","諸"]},{"book":9,"sem":"上","lesson":10,"name":"男生說，女生說","chars":["閒","罵","究","營","擔","彆","扭","規","勸","仇","討","郊","鍋","繫","互","誼","訊","磊"]},{"book":9,"sem":"上","lesson":11,"name":"耶誕禮物","chars":["瀑","垂","財","炫","黯","錶","衛","鬍","盈","逝","貨","司","禱","帝","訝","恍","悟","昂"]},{"book":9,"sem":"上","lesson":12,"name":"漫遊詩情","chars":["鳴","澗","桂","詩","幽","繚","描","煩","敏","銳","城","辭","猿","啼","舟","赦","歸","箭"]},{"book":10,"sem":"下","lesson":1,"name":"穿越時空的味道","chars":["廳","盞","灑","壺","菊","閱","附","眸","戀","飲","氛","闔","籤","溶","咖","啡","券","粹"]},{"book":10,"sem":"下","lesson":2,"name":"在黑暗中乘著音樂飛翔","chars":["席","徐","掌","映","冠","軍","逆","盲","扇","遭","盆","階","鑽","轟","隆","途","鑑","繽"]},{"book":10,"sem":"下","lesson":3,"name":"色香味的陽光","chars":["嬤","霧","吻","株","芭","紫","橘","趴","駐","巡","闖","嚴","庫","澀","餘","瞥","狂","歉"]},{"book":10,"sem":"下","lesson":4,"name":"縣官審石頭","chars":["闆","販","攤","賊","冤","枉","辨","惡","武","嫌","疑","押","審","罰","沾","貪","饒","謀"]},{"book":10,"sem":"下","lesson":5,"name":"高明說話術","chars":["俗","寒","燎","焚","默","免","尷","尬","批","啞","增","逞","舌","鋒","隨","若","距","倘"]},{"book":10,"sem":"下","lesson":6,"name":"讀書報告――佐賀的超級阿嬤","chars":["版","姨","勤","儉","繩","廢","攔","蔬","稱","市","慣","鞋","馨","喻","缺","刃","窮","頓"]},{"book":10,"sem":"下","lesson":7,"name":"魔術師爸爸","chars":["徑","渾","痱","魁","梧","眠","枚","絢","湊","癢","任","何","概","爾"]},{"book":10,"sem":"下","lesson":8,"name":"八歲，一個人去旅行","chars":["盒","瞌","癟","嚼","剎","礦","澆","螞","怯","孫","喂","遲","穴","聰","孝","釋","塞","銅"]},{"book":10,"sem":"下","lesson":9,"name":"紅鼻子醫生","chars":["謐","乍","惑","搜","瀏","覽","拜","磨","療","癒","職","證","核","詢","況","症","裁","誇"]},{"book":10,"sem":"下","lesson":10,"name":"沉默的動物園","chars":["絮","斜","傑","滔","廣","漠","燥","博","織","史","辰","曆","址","擎","狗","渺","膜","佳"]},{"book":10,"sem":"下","lesson":11,"name":"地下護衛軍","chars":["秦","俑","皇","君","耗","陵","墓","掘","葬","含","栩","單","煥","堪","巔","撼","研","價"]},{"book":10,"sem":"下","lesson":12,"name":"金字塔之謎","chars":["瞰","埃","蘊","割","橇","潤","劑","摩","號","據","測","礫","妥","脂","裹","諺","雄","矗"]}]},"康軒":{"國小3年級":[{"book":5,"sem":"上","lesson":1,"name":"心的悄悄話","chars":["舟","灑","載","愁","讓","嘆","忌","妒","語","訣"]},{"book":5,"sem":"上","lesson":2,"name":"妙故事點點名","chars":["歪","窗","戶","答","案","專","穫","搭","車","已","慌","傘","似","喊"]},{"book":5,"sem":"上","lesson":3,"name":"繞口令村","chars":["繞","令","由","迷","失","向","岸","撞","扶","急","店","抱","料","實"]},{"book":5,"sem":"上","lesson":4,"name":"有你陪伴","chars":["敲","並","肩","曾","業","尋","密","組","功","總","視","與","未","秒"]},{"book":5,"sem":"上","lesson":5,"name":"小丑魚和海葵","chars":["捉","藏","露","居","準","射","刺","痛","使","毒","欺","負","遇","危"]},{"book":5,"sem":"上","lesson":6,"name":"小女生","chars":["女","關","澡","怕","應","平","朝","毛","肚","摸","柔","副","整","膠"]},{"book":5,"sem":"上","lesson":7,"name":"淡水小鎮","chars":["統","商","阿","婆","鐵","硬","愈","嚼","蒼","坡","憶","夕","盪","網"]},{"book":5,"sem":"上","lesson":8,"name":"安平古堡參觀記","chars":["育","列","史","型","敗","守","護","兵","土","附","瞭","頂","標","貴"]},{"book":5,"sem":"上","lesson":9,"name":"馬太鞍的巴拉告","chars":["溼","族","別","捕","式","造","層","竹","植","或","釣","智","慧","態"]},{"book":5,"sem":"上","lesson":10,"name":"狐狸的故事","chars":["狐","里","兄","入","呀","踢","棄","酸","肉","塊","計","壯","必","及"]},{"book":5,"sem":"上","lesson":11,"name":"巨人的花園","chars":["愉","悅","拜","訪","免","漫","盼","枯","鑽","恍","悟","拆","盛","隨"]},{"book":5,"sem":"上","lesson":12,"name":"奇特的朋友","chars":["障","漠","綿","央","男","複","疑","算","歲","害","該","退","吞","訝"]},{"book":6,"sem":"下","lesson":1,"name":"許願","chars":["願","晨","苗","徐","嫩","努","築","巢","虔","誠","爛","杜","鮮","翔"]},{"book":6,"sem":"下","lesson":2,"name":"下雨的時候","chars":["披","紗","順","垂","股","涼","覺","舒","味","軟","踩","陷","連","摺"]},{"book":6,"sem":"下","lesson":3,"name":"遇見美如奶奶","chars":["戴","鏡","吵","麻","腦","電","展","術","助","架","拾","區","製","椅"]},{"book":6,"sem":"下","lesson":4,"name":"工匠之祖","chars":["匠","祖","宮","解","斧","割","鋒","利","速","善","觀","考","尺","磨"]},{"book":6,"sem":"下","lesson":5,"name":"學田鼠開路","chars":["市","倫","通","決","糾","紛","律","改","設","便","議","員","付","建"]},{"book":6,"sem":"下","lesson":6,"name":"神奇密碼","chars":["碼","目","描","程","結","資","影","周","例","產","券","包","類","技"]},{"book":6,"sem":"下","lesson":7,"name":"油桐花．五月雪","chars":["桐","初","夏","腰","蓋","取","抬","梢","禮","掌","瓣","鋪","童","染"]},{"book":6,"sem":"下","lesson":8,"name":"大自然的美術館","chars":["野","柳","質","岬","趴","仙","珠","珍","岩","菇","豆","雕","塑","鬼"]},{"book":6,"sem":"下","lesson":9,"name":"臺灣的山椒魚","chars":["灣","冰","肺","黏","液","保","持","潤","敵","縫","爬","躍","伐","球"]},{"book":6,"sem":"下","lesson":10,"name":"漁夫和金魚","chars":["漁","夫","婦","拖","求","報","惱","盆","值","寬","僕","聊","隆","破"]},{"book":6,"sem":"下","lesson":11,"name":"聰明的鼠鹿","chars":["鹿","幕","虎","餓","夠","懷","損","威","填","理","撲","非","槍","逃"]},{"book":6,"sem":"下","lesson":12,"name":"還要跌幾次","chars":["跌","段","陡","民","措","編","謠","提","伯","萬","糕","勇","救","毫"]}],"國小4年級":[{"book":7,"sem":"上","lesson":1,"name":"水陸小高手","chars":["陸","泳","串","般","姿","溜","耳","鷹","滑","遨","緩","陀","螺","轉","煩"]},{"book":7,"sem":"上","lesson":2,"name":"下課以後","chars":["招","湯","拋","糧","姐","爭","警","偷","則","繩","依","捨","束","暫","幸"]},{"book":7,"sem":"上","lesson":3,"name":"我的籃球夢","chars":["場","社","邀","踏","投","熟","巧","練","習","彈","揮","彼","喧","優","弧"]},{"book":7,"sem":"上","lesson":4,"name":"永遠的馬偕","chars":["偕","命","奉","獻","醫","療","衛","藥","治","翻","嶺","捐","宿","堂","濃"]},{"book":7,"sem":"上","lesson":5,"name":"假如給我三天光明","chars":["凱","勒","導","勵","寧","注","憑","撫","蓓","蕾","何","毯","適","繽","盡"]},{"book":7,"sem":"上","lesson":6,"name":"攀登生命的高峰","chars":["攀","登","峰","擁","秀","稱","朗","穆","瑪","母","酷","氧","訓","谷","響"]},{"book":7,"sem":"上","lesson":7,"name":"美味的一堂課","chars":["薄","烙","沾","咖","哩","印","甩","材","醬","義","麵","郁","壽","醋","飯"]},{"book":7,"sem":"上","lesson":8,"name":"建築界的長頸鹿","chars":["頸","臨","樓","代","濟","阻","尼","器","震","京","晴","塔","訊","吉","橋"]},{"book":7,"sem":"上","lesson":9,"name":"請到我的家鄉來","chars":["佛","泰","廟","華","尚","埃","羅","勢","漥","堤","防","潮","鬱","充","划"]},{"book":7,"sem":"上","lesson":10,"name":"奇幻旋律","chars":["幻","旋","離","瞬","驗","牙","芝","盜","邁","困","龐","搓","榮","富","遍"]},{"book":7,"sem":"上","lesson":11,"name":"兔子先生等等我","chars":["背","錶","掉","深","鎖","鑰","匙","汁","示","迫","袋","哭","盒","扇","遲"]},{"book":7,"sem":"上","lesson":12,"name":"許願椅","chars":["妖","盯","嘎","迅","降","盤","搶","蘑","穴","綁","另","既","內","斷","激"]},{"book":8,"sem":"下","lesson":1,"name":"選拔動物之星","chars":["選","達","啟","宣","勤","厲","蝸","寸","駱","駝","皺","眉","艘","艇","拭"]},{"book":8,"sem":"下","lesson":2,"name":"心動不如行動","chars":["川","缺","窮","繼","研","趟","租","備","缽","緣","毅","慚","愧","慮","絆"]},{"book":8,"sem":"下","lesson":3,"name":"一束鮮花","chars":["潔","甚","至","環","境","懶","梳","髒","臭","雜","極","調","叢","暢","格"]},{"book":8,"sem":"下","lesson":4,"name":"米食飄香","chars":["米","稻","農","粒","蘿","蔔","漿","蒸","鹹","財","粿","艾","粽","推","飲"]},{"book":8,"sem":"下","lesson":5,"name":"讀書報告——藍色小洋裝","chars":["籍","繪","版","介","泣","敏","癢","靈","麥","揉","封","淺","查","酵","讚"]},{"book":8,"sem":"下","lesson":6,"name":"我愛鹿港","chars":["插","拌","磚","昂","繁","棟","雅","致","存","彎","狹","窄","井","芬","芳"]},{"book":8,"sem":"下","lesson":7,"name":"未來的模樣","chars":["足","跡","移","箭","輸","鍵","饑","荒","配","均","遷","惡","攜","眨"]},{"book":8,"sem":"下","lesson":8,"name":"小黑的新發現","chars":["棕","幹","隧","雷","噪","乘","隊","刃","仿","究","俯","衝","禁","僅"]},{"book":8,"sem":"下","lesson":9,"name":"向太空出發","chars":["號","仍","津","嘗","試","測","署","費","億","翁","嚮","引","催","李"]},{"book":8,"sem":"下","lesson":10,"name":"小青蛙想看海","chars":["豪","忽","瞧","灘","苔","滾","際","廣","丈","災","旱","耐","耗","遺","憾"]},{"book":8,"sem":"下","lesson":11,"name":"窗前的月光","chars":["皎","瘦","嫦","娥","搗","霜","映","勾","浮","盞","否","舊","淚","霧","孤"]},{"book":8,"sem":"下","lesson":12,"name":"如來佛的手掌心","chars":["乖","筋","斗","箍","喚","掀","修","咒","橘","擋","掏","齊","聖","砰","壓"]}],"國小1年級":[{"book":1,"sem":"上","lesson":1,"name":"拍拍手","chars":["拍","手","你","先","他","再","左","右","上","下"]},{"book":1,"sem":"上","lesson":2,"name":"這是誰的？","chars":["這","是","誰","的","我","啊","怎","麼","多","了","個"]},{"book":1,"sem":"上","lesson":3,"name":"秋千","chars":["秋","千","陪","玩","高","山","到","大","海","好","朋","友","們","起"]},{"book":1,"sem":"上","lesson":4,"name":"長大","chars":["長","小","子","課","吃","得","少","天","也","兩","不","知","快"]},{"book":1,"sem":"上","lesson":5,"name":"比一比","chars":["比","門","裡","外","有","什","同","早","晚","王","主","人","又"]},{"book":1,"sem":"上","lesson":6,"name":"小路","chars":["路","開","白","花","紅","走","在","和","說","朵","從","頭","那"]},{"book":2,"sem":"下","lesson":1,"name":"今天早上真熱鬧","chars":["今","真","熱","鬧","陣","風","吹","過","院","把","葉","叫","醒","鳥","狗"]},{"book":2,"sem":"下","lesson":2,"name":"花園裡有什麼？","chars":["園","聽","沒","正","唱","歌","看","草","出","新","芽","聞","身","香","找","還"]},{"book":2,"sem":"下","lesson":3,"name":"媽媽的音樂會","chars":["媽","音","樂","會","喜","歡","輕","來","重","就","始","細","短","後","菜","桌"]},{"book":2,"sem":"下","lesson":4,"name":"鞋","chars":["鞋","回","家","脫","爸","靠","著","見","像","船","港","口","享","受","溫","暖"]},{"book":2,"sem":"下","lesson":5,"name":"小種子快長大","chars":["種","問","要","做","它","才","需","水","於","澆","陽","光","放","公","話","伴"]},{"book":2,"sem":"下","lesson":6,"name":"奶奶的小跟班","chars":["奶","跟","班","床","弟","她","酒","拿","卡","片","給","寫","您","心","每","都"]},{"book":2,"sem":"下","lesson":7,"name":"作夢的雲","chars":["作","夢","雲","躺","自","己","變","成","棉","糖","黑","鵝","空","更"]},{"book":2,"sem":"下","lesson":8,"name":"妹妹的紅雨鞋","chars":["妹","雨","雙","穿","滴","遊","戲","魚","缸","落","面","停","去","隻","金","游"]},{"book":2,"sem":"下","lesson":9,"name":"七彩的虹","chars":["彩","虹","太","國","掃","除","洗","淨","馬","低","刷","亮","樹","很","認","送"]},{"book":2,"sem":"下","lesson":10,"name":"和你在一起","chars":["地","化","趣","拉","線","箏","升","神","奇","跑","跳","笑","件","事","情"]},{"book":2,"sem":"下","lesson":11,"name":"生日快樂","chars":["生","日","記","呢","時","道","呵","學","收","張","滿","祝","福","第","次","謝"]},{"book":2,"sem":"下","lesson":12,"name":"我們都是第一名","chars":["名","想","燈","前","點","半","清","楚","休","息","吧","幫","加","油","分","慢"]}],"國小2年級":[{"book":3,"sem":"上","lesson":1,"name":"新學年新希望","chars":["年","希","望","坐","位","本","淡","書","老","師","以","為","故","用","力","只","靜","現"]},{"book":3,"sem":"上","lesson":2,"name":"一起做早餐","chars":["全","蛋","煎","圓","番","茄","切","輪","司","夾","吐","中","方","城","堡","畫","臉","動"]},{"book":3,"sem":"上","lesson":3,"name":"走過小巷","chars":["巷","叔","貓","屋","捧","蝴","蝶","忙","娶","娘","黃","筆","打","扮","樣","越","美","麗"]},{"book":3,"sem":"上","lesson":4,"name":"運動會","chars":["運","青","飄","舞","哇","往","容","步","汗","腳","協","聲","拔","河","氣","兒","最","可"]},{"book":3,"sem":"上","lesson":5,"name":"水上木偶戲","chars":["木","偶","鄉","南","暑","假","帶","池","牛","旁","邊","演","原","站","竿","塘","田","識"]},{"book":3,"sem":"上","lesson":6,"name":"小鎮的柿餅節","chars":["鎮","餅","節","活","進","排","遠","籃","近","愛","月","乾","甜","客","買","親","如","意"]},{"book":3,"sem":"上","lesson":7,"name":"國王的新衣裳","chars":["衣","胖","漂","針","簡","單","聰","明","臣","敢","東","西","直","棒","街","眼","哪","思"]},{"book":3,"sem":"上","lesson":8,"name":"「聰明」的小熊","chars":["渴","烏","喝","瓶","法","森","林","物","旅","行","午","裝","許","石","難","忘","哈","但"]},{"book":3,"sem":"上","lesson":9,"name":"大象有多重？","chars":["象","操","粗","腿","柱","砍","幾","部","搖","沖","首","牽","沉","接","沿","然","紀","竟"]},{"book":3,"sem":"上","lesson":10,"name":"我愛冬天","chars":["冬","灰","北","冷","飛","牠","驚","發","冒","煙","圍","餐","咪","團","聚","火","鍋","妙"]},{"book":3,"sem":"上","lesson":11,"name":"遠方來的黑皮","chars":["皮","色","具","者","洋","寒","嘴","伸","飽","泥","沙","緊","裳","翅","膀","處","等","念"]},{"book":3,"sem":"上","lesson":12,"name":"新年快樂","chars":["嗎","雪","梨","夜","卻","因","臺","季","相","反","待","綻","雖","春","雞","期","敬","孫"]},{"book":4,"sem":"下","lesson":1,"name":"春天的顏色","chars":["顏","蛙","蔚","藍","興","鼠","洞","翠","綠","蜜","蜂","窩","粉","桃","奮","燕","遙","景"]},{"book":4,"sem":"下","lesson":2,"name":"花衣裳","chars":["所","躲","房","間","討","論","指","裙","而","且","紫","服","工","合","剪","貼","完","候"]},{"book":4,"sem":"下","lesson":3,"name":"彩色王國","chars":["座","對","表","各","突","強","被","特","舌","欣","賞","果","定","互","換","此","共","漸"]},{"book":4,"sem":"下","lesson":4,"name":"爸爸","chars":["散","芒","透","暗","照","掛","微","角","揚","星","閃","晶","當","睡","悄","常","臂","永"]},{"book":4,"sem":"下","lesson":5,"name":"我的家人","chars":["剛","品","爺","採","蕉","軍","機","辛","苦","流","堅","固","安","字","寶","貝","幅","管"]},{"book":4,"sem":"下","lesson":6,"name":"感恩留言板","chars":["感","恩","留","言","板","教","室","讀","紙","條","立","刻","健","康","志","校","孩","文"]},{"book":4,"sem":"下","lesson":7,"name":"月光河","chars":["久","祕","將","兔","其","猴","病","探","體","惜","無","辦","之","請","鼻","吸","模","度"]},{"book":4,"sem":"下","lesson":8,"name":"黃狗生蛋","chars":["經","顆","怪","羊","鴨","信","錯","睛","仔","能","消","傳","嚇","告","訴","忍","住","顧"]},{"book":4,"sem":"下","lesson":9,"name":"神筆馬良","chars":["良","錢","枝","尾","巴","村","貪","皇","帝","派","抓","銀","准","島","棵","元","波","浪"]},{"book":4,"sem":"下","lesson":10,"name":"知識探險家","chars":["險","詩","篇","布","科","創","限","古","世","界","任","曲","端","追","航","頁","精","采"]},{"book":4,"sem":"下","lesson":11,"name":"小讀者樂園","chars":["哥","圖","館","參","題","蟲","士","講","甲","形","借","約","數","迎","交","些","庫","索"]},{"book":4,"sem":"下","lesson":12,"name":"巨人山","chars":["巨","終","累","髮","根","牆","狂","呼","差","尖","趕","猜","百","食","桶","倒","量","底"]}],"國小6年級":[{"book":11,"sem":"上","lesson":1,"name":"跑道","chars":["級","軸","奪","屈","偏","搬","恨","抑","拒","尷","尬","悔","拱","距","默","鬥","扭","猛","愣"]},{"book":11,"sem":"上","lesson":2,"name":"朱子治家格言選","chars":["粥","縷","碗","綢","繆","毋","掘","纏","縛","瓦","缶","蔬","饈","腹","惠","勿","凡","預","悲"]},{"book":11,"sem":"上","lesson":3,"name":"談遇見更好的自己","chars":["揭","卓","培","裁","瑣","仲","耕","賺","穎","惋","欠","驕","傲","昨","耘","隔","茁"]},{"book":11,"sem":"上","lesson":4,"name":"臺灣美食詩選","chars":["鼎","擠","颳","廚","淋","晒","覆","筍","醃","攪","炸","瑩","饗","宴","彰","煮","豬"]},{"book":11,"sem":"上","lesson":5,"name":"最好的味覺禮物","chars":["削","沫","茶","嗅","按","舍","熬","砂","混","焦","舀","勺","判","熄","騰","啜","淌","沛","舔"]},{"book":11,"sem":"上","lesson":6,"name":"珍珠奶茶","chars":["歐","榜","嫁","烹","薯","末","勁","稠","遂","添","含","脂","鹽","呈","慣","蹈","徜","徉"]},{"book":11,"sem":"上","lesson":7,"name":"大小剛好的鞋子","chars":["仰","緬","甸","踝","絨","濺","襬","弄","恣","批","徑","謹","恰","乏","皆","嗤","嗯"]},{"book":11,"sem":"上","lesson":8,"name":"狐假虎威","chars":["隙","竄","旨","悠","寓","鷸","狡","窟","猾","騙","偽","誇","辨","謊","諷","惕","察","蔽","虛"]},{"book":11,"sem":"上","lesson":9,"name":"空城計","chars":["亭","支","誘","縣","懿","魏","旗","幟","崗","姓","倘","僮","薰","撤","諸","葛","慎","丞"]},{"book":11,"sem":"上","lesson":10,"name":"耶誕節","chars":["耶","郊","慈","祥","劈","啪","零","厭","倦","辯","私","貧","係","趁","稍","烘","衷","鋼"]},{"book":11,"sem":"上","lesson":11,"name":"下午茶風波","chars":["楓","恢","潑","莓","廳","額","灌","醉","釀","替","諒","脣","奔","乞","某","煥","橇","鈴","迴"]},{"book":11,"sem":"上","lesson":12,"name":"祕密花園","chars":["異","頰","蓬","勃","逛","庭","肅","薔","薇","瀰","刮","括","螞","蟻","儘"]},{"book":12,"sem":"下","lesson":1,"name":"馬達加斯加，出發！","chars":["嶼","獨","馳","輾","櫛","鱗","幣","莊","瀕","撒","掠","覓","紳","濛","亢","凌","岌"]},{"book":12,"sem":"下","lesson":2,"name":"沉睡的天空之城","chars":["址","屏","祕","魯","璀","璨","愜","振","氛","序","澎","湃","砌","梯","玄","拴","盎","眸","杏"]},{"book":12,"sem":"下","lesson":3,"name":"走進太陽之城","chars":["萊","瑞","霍","茅","唯","爆","供","府","購","碳","騎","駛","箱","嬉","乒","乓","鬆","欄"]},{"book":12,"sem":"下","lesson":4,"name":"送友人","chars":["郭","征","茲","蕭","澈","辭","臥","蹤","逢","抒","泊","暉","摯","誼"]},{"book":12,"sem":"下","lesson":5,"name":"蚵鄉風情","chars":["蚵","嬸","攏","柄","笨","拙","疲","憊","鈔","剖","棚","裹","樁","巡","甦","豎","媒","沸","宛"]},{"book":12,"sem":"下","lesson":6,"name":"童年．夏日．棉花糖","chars":["碧","疏","凰","株","巔","戀","蔭","紡","緯","纖","裊","袖","鋁","廠","孜","猶","陰","逝","斑"]},{"book":12,"sem":"下","lesson":7,"name":"我的少年夢","chars":["斜","閣","匱","攤","冥","篷","徒","籌","埡","脈","紮","窸","窣","誦","宇","宙","浩","瀚"]},{"book":12,"sem":"下","lesson":8,"name":"如何張開追夢的翅膀","chars":["瞻","愚","汲","庶","鍥","垮","嶄","輩","赴","構","諺","羹","坪","斤","貫","拓"]},{"book":12,"sem":"下","lesson":9,"name":"成為人生的開拓者","chars":["恭","份","荊","棘","俗","窘","溝","闖","涯","曙","帆","槳"]}],"國中1年級":[{"book":1,"sem":"上","lesson":1,"name":"夏夜","chars":["梢","撒","闔","朦","朧","山","巒","溜"]},{"book":1,"sem":"上","lesson":2,"name":"吃冰的滋味","chars":["初","中","黯","然","失","色","五","花","八","門","誠","得","其","所","哉","遜","童","叟","無","欺","障","眼","法","名","聞","遐","邇","垂","涎","三","尺","乾","糖","精","向","隅","軋","俄","頃","光","景","沁","剔","透","奪","人","目","兜","售","一","哄","而","上","殆"]},{"book":1,"sem":"上","lesson":3,"name":"善用時間的方法","chars":["格","言","傳","誦","不","時","之","需","輕","重","緩","急","惶","然","零","星","一","席","位","騰"]},{"book":1,"sem":"上","lesson":4,"name":"差不多先生傳","chars":["直","隸","省","錢","鋪","夥","計","掌","櫃","的","賠","小","心","不","上","一","命","嗚","呼","法","號","圓","通","大","師"]},{"book":1,"sem":"上","lesson":5,"name":"論語選","chars":["子","時","習","之","說","慍","君","三","人","行","師","焉","一","言","其","恕"]},{"book":1,"sem":"上","lesson":6,"name":"那默默的一群","chars":["疆","土","巷","弄","防","區","一","絲","不","苟","文","雅","厭","其","煩","泥","濘","敦","厚","風","範","人","物"]},{"book":1,"sem":"上","lesson":7,"name":"下雨天，真好","chars":["長","工","熹","微","啟","蒙","阿","榮","伯","吱","嗒","黃","梅","天","鼓","兒","詞","鄭","元","和","學","丐","亮","晃","唐","詩","西","子","湖","駐","足","放","鶴","亭"]},{"book":1,"sem":"上","lesson":8,"name":"紙船印象","chars":["倏","忽","熱","鐵","烙","膚","掠","歷","如","繪","眷","戀","不","堪","斑","雜","氣","派","儼","然","甫","比","肩","曹","操","的","戰","艦","首","尾","相","連","蔚","為","壯","觀","繭","年","事","而","立","涎","著","臉"]},{"book":1,"sem":"上","lesson":9,"name":"兒時記趣","chars":["明","察","秋","毫","藐","小","微","物","外","之","趣","夏","蚊","成","雷","私","擬","心","所","向","或","千","百","昂","首","項","為","強","素","帳","徐","噴","以","煙","作","青","雲","白","鶴","觀","唳","怡","然","稱","快","礫","壑","神","遊","龐","蓋","盡","吞","呀"]},{"book":1,"sem":"上","lesson":10,"name":"鬧元宵","chars":["曲","終","人","散","拎","憋","氣","截","訕","笑","驚","駭","莫","名","佐","料","索","性","頷","首","杵","較","勁","偌","大","煙","硝","活","脫","是","夜","揣","度","約","候"]},{"book":2,"sem":"下","lesson":1,"name":"傘","chars":["無","懈","可","擊","荷","蓋","暾"]},{"book":2,"sem":"下","lesson":2,"name":"近體詩選 （一）早發白帝城 （二）山居秋暝 （三）聞官軍收河南河北","chars":["發","辭","住","秋","暝","空","山","新","雨","後","喧","浣","下","隨","意","歇","王","孫","劍","外","薊","北","卻","看","妻","子","漫","卷","放","歌","縱","酒","青","春"]},{"book":2,"sem":"下","lesson":3,"name":"另一個春天","chars":["陰","霾","德","爾","菲","東","拮","据","怯","生","羞","赧","競","技","場","神","采","奕","抑","遏","潸","雜","沓"]},{"book":2,"sem":"下","lesson":4,"name":"背影","chars":["差","使","交","卸","禍","不","單","行","謀","事","勾","留","浦","口","茶","房","囑","咐","妥","帖","躊","躇","腳","夫","揀","迂","料","理","蹣","跚","攙","一","股","腦","兒","頹","唐","情","自","已","鬱","惦","記","箸","大","去"]},{"book":2,"sem":"下","lesson":5,"name":"聲音鐘","chars":["斗","室","宛","轉","有","致","抑","揚","頓","挫","天","籟","瑰","寶","具","體","而","微","牛","犁","歌","丟","銅","仔","乍","暖","還","寒","歐","巴","桑","不","知","凡","幾","阿","奇","毛","納","悶","慢","條","斯","理"]},{"book":2,"sem":"下","lesson":6,"name":"今夜看螢去","chars":["子","夜","潺","風","懷","羊","腸","小","徑","疇","簾","疏","巧","入","坐","人","衣","未","足","臨","書","卷","時","能","點","客","寂","寥","迓","梁","簡","文","帝","騰","空","類","星","隕","拂","木","若","花","生","邂","逅","紈","扇","嫻","靜","輒","弱","質","蕙","心","會","晤"]},{"book":2,"sem":"下","lesson":7,"name":"記承天夜遊","chars":["起","行","與","張","懷","民","如","積","水","空","明","藻","荇","交","橫","閑"]},{"book":2,"sem":"下","lesson":8,"name":"謝天","chars":["布","尷","尬","謝","飯","搖","曳","滔","天","糟","蹋","咱","們","供","桌","老","爺","也","者","掙","渺","茫","亙","古","嶄","新","外","飛","來","一","筆","謙","抑","於","遺","愛"]},{"book":2,"sem":"下","lesson":9,"name":"音樂家與職籃巨星","chars":["詮","釋","出","神","入","化","心","無","旁","騖","絢","麗","投","資","報","酬","率","人","意","表","芝","加","哥","公","牛","隊","嘆","為","觀","止","拚","命","精","湛","二","軍","飲","泣","如","虎","添","翼","臨","陣","磨","槍","渴","掘","井","璞","玉","物","換","星","移","脫","穎","而"]},{"book":2,"sem":"下","lesson":10,"name":"玉山——迎接臺灣第一道曙光","chars":["諸","巉","巖","峭","削","太","白","積","雪","攢","峰","可","望","不","即","軒","宇","輔","弼","凜","之","也","溫","庇","蔭","迥","然","同","翱","翔","搬","演","解","緣","倡","議","飆","馳"]}],"國中2年級":[{"book":3,"sem":"上","lesson":1,"name":"小詩選 （一）跳水 （二）風箏","chars":["湛","藍","扶","搖","直","上"]},{"book":3,"sem":"上","lesson":2,"name":"古體詩選 （一）庭中有奇樹 （二）慈烏夜啼","chars":["發","華","滋","榮","將","以","遺","所","思","馨","盈","致","貴","但","感","別","經","時","啞","沾","襟","反","哺","爾","任","歿","喪","不","臨","嗟","哉","斯","徒","輩","復"]},{"book":3,"sem":"上","lesson":3,"name":"土芭樂的生存之道","chars":["立","秋","結","實","纍","白","露","熾","烈","煞","是","醇","幽","微","枝","椏","彆","扭","盡","釋","前","嫌","了","然","溫","馴","豐","腴","形","容"]},{"book":3,"sem":"上","lesson":4,"name":"田園之秋選","chars":["蒂","滂","沱","霹","靂","咫","尺","攫","孤","伶","序","幕","震","懾","氣","脫","委","頓","匍","匐","肆","虐","蘇","醒","勢","萬","鈞","立","時","劈","殺","行","潦","登"]},{"book":3,"sem":"上","lesson":5,"name":"五柳先生傳","chars":["何","許","焉","閑","靜","榮","利","不","求","甚","解","會","意","嗜","造","飲","輒","盡","期","曾","吝","情","去","留","環","堵","蕭","然","短","褐","穿","結","簞","瓢","屢","空","晏","如","忘","懷","贊","黔","婁","戚","汲","極","茲","若","人","之","儔","乎","酣","觴","賦","詩","無","氏","民","歟","葛","天"]},{"book":3,"sem":"上","lesson":6,"name":"我在圖書館的一天","chars":["梭","巡","參","天","幽","雅","冥","思","正","襟","危","坐","鏤","刻","大","部","頭","慵","懶","靈","媒","煙","嵐","裊"]},{"book":3,"sem":"上","lesson":7,"name":"愛蓮說","chars":["蕃","李","唐","出","淤","泥","而","不","染","濯","清","漣","妖","中","通","外","直","蔓","枝","益","亭","淨","植","褻","玩","謂","隱","逸","者","噫","菊","之","愛","鮮","宜","乎"]},{"book":3,"sem":"上","lesson":8,"name":"鳥","chars":["蹓","躂","羽","翮","蜷","伏","瞵","視","昂","藏","搏","扶","搖","而","直","上","囀","市","聲","鼎","沸","客","夜","曳","喙","照","眼","斑","斕","乾","癟","臃","腫","穠","纖","合","度","踞","拳","黛","釉","綠","煙","突","鼓","噪"]},{"book":3,"sem":"上","lesson":9,"name":"冬陽","chars":["腥","臊","味","犁","劈","里","啪","啦","肆","無","忌","憚","搔","首","弄","姿","窟","窿","瞄","呼","嚕","徜","徉","被","胎","攙"]},{"book":3,"sem":"上","lesson":10,"name":"拆牆","chars":["筋","絡","叮","咣","挨","千","刀","的","當","心","畦","點","秧","子","百","思","不","解","廝","守","就","餐","饕","餮","否","極","泰","來","參","差"]},{"book":4,"sem":"下","lesson":1,"name":"一棵開花的樹","chars":["塵","緣","凋","零"]},{"book":4,"sem":"下","lesson":2,"name":"樂府詩選――木蘭詩","chars":["唧","軍","帖","可","汗","點","兵","爺","市","孃","濺","黑","山","燕","啾","赴","戎","機","關","朔","氣","明","堂","策","勳","十","二","轉","強","尚","書","郎","駝","兒","出","郭","相","扶","將","紅","妝","霍","閣","雲","鬢","火","伴","撲","迷","離","傍","地","走"]},{"book":4,"sem":"下","lesson":3,"name":"迷途羔羊――弗氏海豚","chars":["切","回","岸","緣","石","梯","港","嘴","蠢","動","睬","散","兵","鼠","竄","兩","個","月","計","畫","表","象","深","邃"]},{"book":4,"sem":"下","lesson":4,"name":"我所知道的康橋","chars":["水","溶","漠","楞","沃","腴","阜","擁","戴","娉","婷","嫵","媚","翳","入","了","天","聽","糝","伺","候","怯","怜","春","信","窈","窕","爛","縵","路","政","錦","繡","掛","單","恣","傳","呼","快","馬","迎","新","月","卻","上","輕","輿","趁","晚","涼","風","流","夸","父","荒","誕","溫","存","衝","偌","大","冉","迷","眩"]},{"book":4,"sem":"下","lesson":5,"name":"張釋之執法","chars":["廷","尉","上","行","中","渭","橋","走","乘","輿","屬","之","治","問","縣","人","蹕","奏","當","吾","馬","賴","柔","和","令","固","乃","天","子","所","與","下","公","共","也","方","其","時","立","誅","平","皆","為","輕","重","民","安","錯","手","足","唯","陛"]},{"book":4,"sem":"下","lesson":6,"name":"罐頭由來","chars":["無","產","階","級","輕","工","業","差","水","滸","傳","破","釜","沉","舟","就","食","於","民","秋","毫","犯","書","而","榜","之","傭","兵","倒","戈","改","弦","更","張","雛","形","不","菲","防","勝","埋","鍋","造","飯"]},{"book":4,"sem":"下","lesson":7,"name":"陋室銘","chars":["斯","惟","吾","德","馨","苔","痕","上","階","綠","草","色","入","簾","青","鴻","儒","白","丁","調","素","琴","金","經","絲","竹","案","牘","勞","形","諸","葛","廬","子","雲","亭","何","陋","之","有"]},{"book":4,"sem":"下","lesson":8,"name":"成功是失敗之母","chars":["老","生","常","談","前","番","盈","虛","消","長","剝","復","循","環","持","保","泰","秦","帝","宮","成","明","皇","殿","就","金","城","鞭","笞","天","下","賦","斂","馬","球","國","手","銳","意","革","弊","去","訛","河","清","海","晏","物","殷","俗","阜","開","元","寶","砌","禍","福","互","為","倚","伏","傾","軋","擠","害"]},{"book":4,"sem":"下","lesson":9,"name":"看雲的日子","chars":["淋","漓","盡","致","儼","然","目","眩","神","迷","君","臨","在","上","睥","睨","喳","呼","下","榻","掬","胸","中","塊","壘","膾","炙","人","口","發","酵","響","遏","行","雲"]},{"book":4,"sem":"下","lesson":10,"name":"項鍊","chars":["寒","傖","燴","官","邸","怒","不","可","遏","支","吾","法","郎","忐","忑","安","阿","諛","高","利","貸"]}],"國中3年級":[{"book":5,"sem":"上","lesson":1,"name":"戲李白","chars":["黃","河","之","水","天","上","來","轟","動","匡","廬","的","大","瀑","布","傾","側","西","江","東","去","沉","寂","蜀"]},{"book":5,"sem":"上","lesson":2,"name":"詞選 （一）如夢令 （二）南鄉子登京口北固亭有懷","chars":["濃","睡","消","捲","簾","人","否","綠","肥","紅","瘦","神","州","悠","年","少","兜","鍪","坐","斷","曹","劉","孫","仲","謀"]},{"book":5,"sem":"上","lesson":3,"name":"人間好時節","chars":["春","眠","不","覺","曉","四","句","耽","溺","鎮","日","落","寡","歡","有","百","花","秋","月","時","我","與","風","雪","可","愛","唯","二","狂","假","外","求","客","邸","更","無","柳","絮","因","起","採","菊","東","籬","下","張","晚","來","天","欲","砭","骨","詭","譎","多","變"]},{"book":5,"sem":"上","lesson":4,"name":"生於憂患死於安樂","chars":["舜","發","於","畎","畝","之","中","傅","說","舉","版","築","間","膠","鬲","魚","鹽","管","夷","吾","士","孫","叔","敖","海","百","里","奚","市","空","乏","其","身","行","拂","亂","所","為","以","動","心","忍","性","曾","益","不","能","困","衡","慮","作","徵","色","聲","喻","入","法","家","出"]},{"book":5,"sem":"上","lesson":5,"name":"清心苦味","chars":["外","婆","味","蕾","一","逕","世","故","金","巴","利","避","之","猶","恐","不","及","清","澄"]},{"book":5,"sem":"上","lesson":6,"name":"獵人","chars":["鞍","部","潮","氣","狐","狸","雅","爸","篝","火","絮","叨","侵","凌","悶","雷","神","祗","祇","頹","然","戲","謔"]},{"book":5,"sem":"上","lesson":7,"name":"與宋元思書","chars":["一","百","許","里","縹","碧","急","湍","甚","箭","寒","樹","負","勢","互","相","軒","邈","直","指","泠","嚶","轉","鳶","飛","戾","天","息","心","經","綸","世","務","柯","疏","條"]},{"book":5,"sem":"上","lesson":8,"name":"畫說湖心亭看雪","chars":["崇","禎","五","年","絕","更","定","初","拏","毳","衣","沆","碭","長","堤","芥","氈","三","大","白","金","陵","客","此","舟","子","相","公","張","岱","須","彌","滄","海","一","粟","精","警","生","宣","紙","膠","礬","摺","皺","噴","染","瀲","灩"]},{"book":5,"sem":"上","lesson":9,"name":"喂――出來！","chars":["投","機","分","子","佯","裝","小","鋼","珠","拔","地","而","起","天","際","線"]},{"book":6,"sem":"下","lesson":1,"name":"臺灣竹枝詞選 （一）鹿耳門 （二）蔗田","chars":["鹿","耳","門","鐵","板","沙","七","鯤","鯓","教","舶","萋","蘢","蔥","糖","廍","餉","犀"]},{"book":6,"sem":"下","lesson":2,"name":"曲選 （一）天淨沙秋思 （二）沉醉東風漁父詞","chars":["昏","鴉","古","道","斷","腸","天","涯","刎","頸","交","忘","機","友","點","傲","殺","萬","戶","侯","煙","波"]},{"book":6,"sem":"下","lesson":3,"name":"二十年後","chars":["威","風","凜","雪","茄","跋","涉","琢","磨","老","奸","巨","猾","覬","覦","剃","刀","邊","緣","寥","落","瑟","縮","滑","頭"]},{"book":6,"sem":"下","lesson":4,"name":"火車與熱氣球","chars":["人","生","到","處","知","何","似","二","句","壘","顛","簸","輕","舟","已","過","萬","重","山","蹇","西","遊","記","為","學","一","首","示","子","姪","南","海","宿","願","食","騎","鵝","旅","行","綠","野","仙","蹤"]},{"book":6,"sem":"下","lesson":5,"name":"憶高畑勳：螢火蟲之墓","chars":["孤","雛","世","罕","其","匹","遠","行","留","傳","沁","人","心","脾","寄","籬","下","泫","然","欲","泣","安","倍","首","相","道","籲","求","一","以","貫","之","兒","時","的","點","滴","輝","耀","姬","物","語","宮","崎","駿","吉","卜","力","工","作","室"]},{"book":6,"sem":"下","lesson":6,"name":"后羿射月","chars":["魁","梧","風","華","絕","代","雲","母","屏","燭","影","深","四","句","長","河","夜","盲","症","雷","射"]}],"國小5年級":[{"book":9,"sem":"上","lesson":1,"name":"蚊帳大使","chars":["蚊","帳","洲","瘧","疾","死","叮","鼓","募","集","寄","贈","賣","獎","狀","誌","基","潛"]},{"book":9,"sem":"上","lesson":2,"name":"從空中看臺灣","chars":["德","乎","血","攝","颱","錄","哀","巒","縱","臍","禍","殘","檳","榔","鏟","汙","超","抽"]},{"book":9,"sem":"上","lesson":3,"name":"憧憬","chars":["憧","憬","止","祈","凝","溢","觸","踮","藉","句","闊","徵","烈","確","性","顯","豐","即"]},{"book":9,"sem":"上","lesson":4,"name":"恆久的美","chars":["恆","澄","穗","養","源","藝","樸","堆","撿","巾","痠","素","尊","嚴","勞","怨","慷","慨","滋"]},{"book":9,"sem":"上","lesson":5,"name":"它抓得住你――商標的故事","chars":["譽","務","聯","核","申","局","松","註","冊","企","歷","英","銷","售","舉","勝","霸","項"]},{"book":9,"sem":"上","lesson":6,"name":"故事「動」起來","chars":["融","娛","汽","鐘","哨","眾","典","戰","衡","鳴","框","屬","劇","獲","佳","膩","擇","貌","官"]},{"book":9,"sem":"上","lesson":7,"name":"為生命找出口","chars":["逆","穩","憐","峭","壁","刀","競","抗","逸","鍊","渾","蚌","嵌","醜","陋","價","欲","盲","厚"]},{"book":9,"sem":"上","lesson":8,"name":"最勇敢的女孩","chars":["坦","父","恐","怖","織","占","播","控","制","攻","擊","權","脅","復","弱","武","撼","懼"]},{"book":9,"sem":"上","lesson":9,"name":"在挫折中成長","chars":["挫","折","維","崎","嶇","艱","稿","系","譯","肥","莖","減","予","幼","椰","泡","腐","鍛"]},{"book":9,"sem":"上","lesson":10,"name":"山中寄情","chars":["琴","唐","恬","罷","暮","掩","柴","扉","歸","畢","傍","閒","詠","幽","眠","隱","職","吟","曠"]},{"book":9,"sem":"上","lesson":11,"name":"與達駭黑熊走入山林","chars":["駭","疤","痕","罐","咚","碰","傾","寮","營","殺","崇","置","奄","翼","禱","吼","喉","嚨"]},{"book":9,"sem":"上","lesson":12,"name":"荒島上的國王","chars":["暈","昏","艙","途","捲","喪","獸","擱","礁","筏","塌","鸚","捏","燒","臼","烤","爐"]},{"book":10,"sem":"下","lesson":1,"name":"你會怎麼回答？","chars":["簽","遞","傻","瓜","若","續","痺","患","握","博","聆","肢","埋","擔","談","懸","章","符"]},{"book":10,"sem":"下","lesson":2,"name":"智救養馬人","chars":["匹","怒","廷","妥","諫","閉","覷","犯","罪","仁","政","斥","蒙","羞","懂","委","婉","勸"]},{"book":10,"sem":"下","lesson":3,"name":"真正的「聰明」","chars":["輛","屢","姍","抵","返","率","鄰","領","梭","隼","較","贏","逐","旦","遭","評","普","承","搏"]},{"book":10,"sem":"下","lesson":4,"name":"小記者，出動！","chars":["診","繃","緒","疫","篩","偉","雄","補","驟","菊","罩","塵","槌","餘","撥","廓","拼","湊","骨"]},{"book":10,"sem":"下","lesson":5,"name":"奇幻光芒的祕密","chars":["盈","浸","稀","儲","寵","寂","螢","彷","彿","悉","賦","詞","龍","冠","鳳","紋","飾","閱","湧"]},{"book":10,"sem":"下","lesson":6,"name":"人「聲」就是戲","chars":["睹","杯","奏","魔","脆","嗓","啞","咳","促","喘","吁","伏","唷","須","憂","增","詮","魅"]},{"book":10,"sem":"下","lesson":7,"name":"真相？真相！","chars":["證","檢","鯨","殖","哺","乳","胎","漲","汐","週","撈","滬","省","施","哲","圈","柢"]},{"book":10,"sem":"下","lesson":8,"name":"你想做人魚嗎？","chars":["涵","珊","瑚","鯊","豚","抹","噴","譟","鏽","錨","牧","窺","筒","琉","璃","凸","襯","托","玻"]},{"book":10,"sem":"下","lesson":9,"name":"海洋的殺手","chars":["積","噸","垃","圾","謎","貨","循","菌","鉤","鏈","孔","倖","據","宜","估","廢","踐","益","殼"]},{"book":10,"sem":"下","lesson":10,"name":"玉米人的奇蹟","chars":["蕩","洪","誕","沼","澤","豹","效","栩","跺","蘆","葦","堪","洶","鵡","狼","絕","挑","剔"]},{"book":10,"sem":"下","lesson":11,"name":"幸福的火苗","chars":["婪","嚎","群","疼","魂","規","違","駕","橫","屑","瀑","瀉","燃","噬","延","籠","焰","霆","啄"]},{"book":10,"sem":"下","lesson":12,"name":"神農嘗百草","chars":["穀","亡","授","臟","誤","眩","燥","咀","症","嗚","犧","牲","赭","鞭","藤","蔓","摘","責","佑"]}]},"翰林":{"國小3年級":[{"book":5,"sem":"上","lesson":1,"name":"時間是什麼","chars":["待","蝸","牠","吞","寸","碌","奔","斑","彈","簧","樂","短","悲","傷","永"]},{"book":5,"sem":"上","lesson":2,"name":"明天再寫","chars":["週","休","假","連","業","第","並","提","醒","拖","鬆","蜜","桃","妳","爛"]},{"book":5,"sem":"上","lesson":3,"name":"提早五分鐘","chars":["鍾","統","計","票","角","板","況","因","匆","及","慌","睡","文","具","此"]},{"book":5,"sem":"上","lesson":4,"name":"猴子的數學","chars":["猴","古","居","群","衣","省","錢","商","量","位","窮","怒","增","胡","摸"]},{"book":5,"sem":"上","lesson":5,"name":"神奇的盒子","chars":["使","杖","扶","淋","疼","結","另","累","息","椅","組","感","欣","賞","景"]},{"book":5,"sem":"上","lesson":6,"name":"小鉛筆大學問","chars":["木","部","混","斷","解","機","凹","蓋","治","枝","桿","削","按","且","虹"]},{"book":5,"sem":"上","lesson":7,"name":"風的味道","chars":["淡","鹹","蔚","藍","航","涼","乘","橇","野","閉","深","吸","瞞"]},{"book":5,"sem":"上","lesson":8,"name":"寄居蟹找新家","chars":["寄","幕","堆","杯","扮","殼","類","撿","瓶","淨","志","品","而","護","應"]},{"book":5,"sem":"上","lesson":9,"name":"阿塱壹古道","chars":["阿","挑","戰","屏","通","往","交","導","鳳","梨","投","岸","淺","沿","座"]},{"book":5,"sem":"上","lesson":10,"name":"秋千上的婚禮","chars":["婚","族","服","郎","參","代","束","酒","敬","藏","習","俗","排","惜","互"]},{"book":5,"sem":"上","lesson":11,"name":"一路平安","chars":["除","嬸","醫","煙","炮","村","修","廠","關","朝","檢","查","豐","盛","零"]},{"book":5,"sem":"上","lesson":12,"name":"大團圓","chars":["團","剩","默","粉","病","擠","床","啦","逗","嬰","娃","壓","催","叔","握"]},{"book":6,"sem":"下","lesson":1,"name":"拔不起來的筆","chars":["拔","之","潔","牆","膽","罰","父","練","肯","即","專","仍","牢","勁"]},{"book":6,"sem":"下","lesson":2,"name":"還差一點","chars":["差","堵","擋","秘","訣","管","豎","埋","模","奮","視","示","範","苦","誇"]},{"book":6,"sem":"下","lesson":3,"name":"用膝蓋跳舞的女孩","chars":["姿","引","克","程","肢","臂","夾","琴","腕","骨","敲","痛","騎","環","島"]},{"book":6,"sem":"下","lesson":4,"name":"靜靜的淡水河","chars":["廣","松","針","染","媚","勉","映","躍","茫","暮","祥","耀","黃","泰","銀"]},{"book":6,"sem":"下","lesson":5,"name":"茶鄉鹿谷","chars":["茶","鄉","城","園","條","摘","晒","揉","燥","烘","焙","烏","龍","究","值"]},{"book":6,"sem":"下","lesson":6,"name":"月世界","chars":["懷","訪","速","雄","目","丘","象","灰","許","紋","濃","密","驚","噴","集"]},{"book":6,"sem":"下","lesson":7,"name":"做泡菜","chars":["漬","疑","惑","報","菌","適","益","腸","康","封","隔","厲","騙","承","貪"]},{"book":6,"sem":"下","lesson":8,"name":"便利貼的妙用","chars":["升","級","困","建","議","何","顯","勾","調","效","序","慣","箱"]},{"book":6,"sem":"下","lesson":9,"name":"就愛兩兩在一起","chars":["案","筷","較","國","裝","套","必","須","端","免","店","供","取","化","記"]},{"book":6,"sem":"下","lesson":10,"name":"飛行員和小王子","chars":["員","幅","帽","圖","蛇","鯨","揮","潑","寵","既","胃","瞧","拇"]},{"book":6,"sem":"下","lesson":11,"name":"畫龍點睛","chars":["維","肖","寺","鳥","尚","邀","逼","孫","相","朗","布","壁","消","呆"]},{"book":6,"sem":"下","lesson":12,"name":"掉進一個兔子洞","chars":["夏","聊","幻","糕","跌","央","鼠","刺","牌","皇","后","令","夢","士","兵"]}],"國小4年級":[{"book":7,"sem":"上","lesson":1,"name":"美麗島","chars":["唾","沫","忠","衛","寒","椰","隊","健","蕉","舞","微","灣","甜","糖"]},{"book":7,"sem":"上","lesson":2,"name":"請到我的家鄉來","chars":["泉","抹","訝","齒","架","彷","彿","汽","區","恐","挖","陀","螺","聚"]},{"book":7,"sem":"上","lesson":3,"name":"鏡頭下的家鄉","chars":["鏡","軌","窗","樓","與","耕","耘","蔬","或","腮","烤","柳","丁","網","錄"]},{"book":7,"sem":"上","lesson":4,"name":"飛行夢","chars":["兄","翔","鷹","論","控","制","命","義","標","良","研","器","靈","紀","碑"]},{"book":7,"sem":"上","lesson":5,"name":"月光下","chars":["廚","煎","餅","鍋","徐","舒","瞇","掛","吟","詠","袖","飄","稱","彼","爭"]},{"book":7,"sem":"上","lesson":6,"name":"一起去月球","chars":["份","登","攤","蒐","梯","僅","複","未","瞬","移","科","技","降","選","逃"]},{"book":7,"sem":"上","lesson":7,"name":"松鼠先生的麵包","chars":["麵","焦","貓","擊","壞","批","爐","貼","徵","啟","沾","依","度","滋"]},{"book":7,"sem":"上","lesson":8,"name":"平凡的大俠","chars":["俠","餐","腦","頓","江","鞋","溼","止","措","撐","播","概","脫","愣","帥"]},{"book":7,"sem":"上","lesson":9,"name":"王子折箭","chars":["折","箭","善","民","祈","惱","博","禁","弓","欺","惡","懶","晉","跪","盡"]},{"book":7,"sem":"上","lesson":10,"name":"海中的熱帶雨林","chars":["珊","瑚","礁","積","萬","存","捕","撈","汙","株","縫","隙","繽","紛","藻"]},{"book":7,"sem":"上","lesson":11,"name":"美食島","chars":["鯊","拼","虎","叼","餵","嘴","嘗","鮮","籠","沉","豚","鑽","纏"]},{"book":7,"sem":"上","lesson":12,"name":"寧靜的音樂會","chars":["寧","譯","脣","線","達","章","嘉","賓","舉"]},{"book":8,"sem":"下","lesson":1,"name":"稻間鴨","chars":["苗","巡","呷","甲","喚","禾","咦","繼","續","啄","季","穗","燦"]},{"book":8,"sem":"下","lesson":2,"name":"會呼吸的房子","chars":["繞","孔","抬","溜","設","簡","簾","擺","棟","聰","慮","鋪"]},{"book":8,"sem":"下","lesson":3,"name":"石虎兄妹","chars":["傍","橘","霞","敏","捷","坡","舍","撞","伏","巨","嚇","黯","圍","迴","盪"]},{"book":8,"sem":"下","lesson":4,"name":"阿里棒棒","chars":["里","棒","艘","舟","戴","盔","召","賜","佑","順","激","共","餘","予"]},{"book":8,"sem":"下","lesson":5,"name":"快樂兒童日","chars":["慶","褲","華","披","紗","袍","鯉","庭","旗","偶","館","展","覽","演","翁"]},{"book":8,"sem":"下","lesson":6,"name":"阿公的祕密","chars":["簇","碎","隨","漫","遍","桐","者","踮","尖","芝","磨","沖","擂"]},{"book":8,"sem":"下","lesson":7,"name":"棒球英雄夢","chars":["英","曉","賽","弱","哀","准","觸","振","局","反","輸","支","壘","菠","勝"]},{"book":8,"sem":"下","lesson":8,"name":"夢幻全壘打","chars":["輪","領","剎","愈","噪","拚","衝","猶","豫","插","贏","硬","貫","挨","饒"]},{"book":8,"sem":"下","lesson":9,"name":"單車遊日月潭","chars":["規","曾","途","搭","緩","巧","透","棧","捉","悅","際","似","秀","趟"]},{"book":8,"sem":"下","lesson":10,"name":"孫悟空三借芭蕉扇","chars":["芭","扇","焰","擔","搧","熄","嫂","菩","薩","丹","唉","乃","齊","聖"]},{"book":8,"sem":"下","lesson":11,"name":"最後一片葉子","chars":["蒙","層","肺","炎","危","嚴","藤","狀","薄","霧","臨","蒼","翠","載","性"]},{"book":8,"sem":"下","lesson":12,"name":"閱讀課","chars":["閱","捐","讚","犧","牲","踴","穫","任","務","響","欄"]}],"國小1年級":[{"book":1,"sem":"上","lesson":1,"name":"小小羊","chars":["小","羊","草","吃","天","少","高","心","出","去"]},{"book":1,"sem":"上","lesson":2,"name":"奶奶家","chars":["奶","走","路","花","田","看","見","白","和","起"]},{"book":1,"sem":"上","lesson":3,"name":"種花","chars":["在","了","好","多","長","大","要","水","光","玩"]},{"book":1,"sem":"上","lesson":4,"name":"請問","chars":["請","問","你","有","星","太","陽","來","月","裡"]},{"book":1,"sem":"上","lesson":5,"name":"七彩滑梯","chars":["彩","上","能","不","爬","沒","棉","下","泡","池"]},{"book":1,"sem":"上","lesson":6,"name":"秋千","chars":["秋","千","子","空","說","早","風","兒","是","誰","他"]},{"book":1,"sem":"上","lesson":7,"name":"回音","chars":["回","音","山","到","我","叫","人","開","也","笑","哈"]},{"book":2,"sem":"下","lesson":1,"name":"小花狗","chars":["狗","冬","想","當","朋","友","冷","冰","話","色","忙","洗","澡","還"]},{"book":2,"sem":"下","lesson":2,"name":"找春天","chars":["找","綠","牛","跟","直","嗎","們","拉","著","伸","手","抱","得","溫"]},{"book":2,"sem":"下","lesson":3,"name":"和春天一樣","chars":["樣","原","跑","聞","香","真","漂","亮","等","介","紹","自","己","做"]},{"book":2,"sem":"下","lesson":4,"name":"送什麼呢","chars":["送","什","麼","呢","媽","生","日","會","朵","張","卡","片","寫","愛"]},{"book":2,"sem":"下","lesson":5,"name":"窗外的小麻雀","chars":["外","麻","雀","但","課","才","可","以","急","又","跳","停","先","再"]},{"book":2,"sem":"下","lesson":6,"name":"會動的亭子","chars":["亭","班","突","然","雨","家","地","方","只","拿","荷","葉","傘","門"]},{"book":2,"sem":"下","lesson":7,"name":"毛毛蟲過河","chars":["毛","蟲","河","站","魚","游","哇","青","蛙","幫","面","推","坐","船"]},{"book":2,"sem":"下","lesson":8,"name":"借筆","chars":["借","筆","她","就","很","給","興","都","前","每","今","背","書","包"]},{"book":2,"sem":"下","lesson":9,"name":"數不完的泡泡","chars":["數","完","氣","知","道","該","東","西","聲","對","這","句","像","冒"]},{"book":2,"sem":"下","lesson":10,"name":"兩張卡片","chars":["兩","教","室","桌","意","思","個","忽","啊","畫","忘","帶","用","吧"]},{"book":2,"sem":"下","lesson":11,"name":"發芽","chars":["芽","打","雷","土","抖","害","怕","咬","樹","暖","雙","勇","敢","棵"]},{"book":2,"sem":"下","lesson":12,"name":"鉛筆和橡皮擦","chars":["鉛","橡","皮","常","錯","久","哭","試","後","正","進","步","需","學"]},{"book":2,"sem":"下","lesson":13,"name":"誰能上臺","chars":["臺","故","事","決","定","狼","時","間","段","動","物","同","為","拍"]},{"book":2,"sem":"下","lesson":14,"name":"山頂","chars":["頂","向","雲","加","油","喘","鼓","汗","流","房","盒","細","絲","喊"]}],"國小2年級":[{"book":3,"sem":"上","lesson":1,"name":"踩影子","chars":["踩","影","遊","始","追","作","非","慢","馬","耳","頭","立","刻","指","紅","臉"]},{"book":3,"sem":"上","lesson":2,"name":"再玩一次","chars":["次","操","場","旁","呼","安","別","轉","身","眼","睛","發","告","訴","守","則","低"]},{"book":3,"sem":"上","lesson":3,"name":"謝謝好朋友","chars":["謝","戲","重","新","便","聽","點","言","語","容","易","被","邊","躲","歡","陪","趣"]},{"book":3,"sem":"上","lesson":4,"name":"水草下的呱呱","chars":["呱","猜","蝦","呀","靠","近","撥","抓","如","果","乖","現","偷","袋","瓜","證","明"]},{"book":3,"sem":"上","lesson":5,"name":"沙灘上的畫","chars":["沙","海","退","遠","洞","注","怎","金","夕","照","閃","腳","丫","留","印","美","麗"]},{"book":3,"sem":"上","lesson":6,"name":"草叢裡的星星","chars":["期","晴","放","晚","飯","全","散","穿","屋","竹","林","滿","暗","輕","那","成","顆"]},{"book":3,"sem":"上","lesson":7,"name":"神奇的竹筒飯","chars":["神","奇","筒","戶","育","院","火","準","備","煮","祖","工","肚","餓","碗","陣"]},{"book":3,"sem":"上","lesson":8,"name":"不一樣的故事","chars":["中","午","它","味","客","清","節","保","平","越","南","捲","食","分","享","剛","校"]},{"book":3,"sem":"上","lesson":9,"name":"美味的一堂課","chars":["堂","圓","形","紙","米","軟","搶","材","各","種","菜","接","老","師","童","活","更"]},{"book":3,"sem":"上","lesson":10,"name":"加加減減","chars":["減","表","弟","讀","認","識","姐","謎","答","搖","百","哥","題","趕","緊","王","異","口"]},{"book":3,"sem":"上","lesson":11,"name":"門、鬥大仙","chars":["鬥","仙","熱","鬧","市","勸","悶","左","右","理","閒","討","厭","候","胸","闊","情","復"]},{"book":3,"sem":"上","lesson":12,"name":"詠鵝","chars":["鵝","元","旦","念","曲","項","浮","掌","波","首","詩","脖","唱","歌","體","隻","翻","變"]},{"book":4,"sem":"下","lesson":1,"name":"媽媽在哪裡","chars":["哪","險","精","滴","迷","經","滑","圈","甩","昏","摔","街","丟","掉","滾","浪","救"]},{"book":4,"sem":"下","lesson":2,"name":"喜歡這個新家","chars":["喜","公","由","孩","植","乾","枯","喝","渴","死","落","湖","迎","希","望","住","幸","福"]},{"book":4,"sem":"下","lesson":3,"name":"去探險","chars":["探","柔","處","旅","行","極","珍","珠","最","入","漠","式","無","壯","觀","世","界","妙"]},{"book":4,"sem":"下","lesson":4,"name":"一場雨","chars":["農","夫","稻","飽","扭","尾","巴","力","淹","泥","蝌","蚪","努","塘","爺","搞","楚","底"]},{"book":4,"sem":"下","lesson":5,"name":"笑容回來了","chars":["負","責","資","源","收","漸","換","總","覺","親","切","於","仔","察","法","利","合","改"]},{"book":4,"sem":"下","lesson":6,"name":"有禮貌的回答","chars":["禮","從","搬","夠","昨","些","球","腹","忍","整","廁","所","踢","足","比","信","祝"]},{"book":4,"sem":"下","lesson":7,"name":"孵蛋的男孩","chars":["蛋","男","靜","晨","傳","雞","吵","女","主","母","求","助","離","怪","凡","竟","名","迪"]},{"book":4,"sem":"下","lesson":8,"name":"實驗室的意外","chars":["實","驗","擦","產","電","考","歲","買","車","幾","列","終","強","烈","黑","吹","難","牙"]},{"book":4,"sem":"下","lesson":9,"name":"點亮世界的人","chars":["約","燈","雖","已","賣","貴","般","根","本","料","功","費","至","失","敗","造","持","宜"]},{"book":4,"sem":"下","lesson":10,"name":"醜小鴨","chars":["鴨","其","特","塊","遇","獵","碰","破","盤","煩","雪","孤","單","淚","飛","悄","羽","伴"]},{"book":4,"sem":"下","lesson":11,"name":"蜘蛛救蛋","chars":["鴿","裂","痕","拜","託","寶","貝","件","補","內","顏","石","燒","捧","將","算","吐","顧"]},{"book":4,"sem":"下","lesson":12,"name":"玉兔搗藥","chars":["玉","兔","搗","藥","姑","娘","養","胖","吳","躺","受","桂","砍","棍","夜","運","招"]}],"國小6年級":[{"book":11,"sem":"上","lesson":1,"name":"遇見自己","chars":["皺","晃","弄","摯","蝴","蝶","蛹","翼","註","儲"]},{"book":11,"sem":"上","lesson":2,"name":"為什麼大家不理我","chars":["眶","固","辯","胞","胎","盼","郵","暈","稚","慘","憤","慨","狠","憂","涕","慰","寞"]},{"book":11,"sem":"上","lesson":3,"name":"孔子說的話","chars":["杏","婆","娑","鏗","鏘","撫","壇","徒","鍊","曰","矣","舊","焉","亦","辨","警","惕","慧"]},{"book":11,"sem":"上","lesson":4,"name":"向大自然學習","chars":["鰭","划","奧","仿","迫","蚊","膚","鋸","劃","擴","液","奈","構","鵰","霸","翹","垂"]},{"book":11,"sem":"上","lesson":5,"name":"樹","chars":["施","濘","躁","霎","幹","典","賀","遮","雋","踏","穩","稀","襟","仁","酥","庇","栽"]},{"book":11,"sem":"上","lesson":6,"name":"善用自嘲，展現幽默","chars":["嘲","詼","僵","侃","競","醜","哄","判","諷","丐","貶","捏","吻","坦","魅"]},{"book":11,"sem":"上","lesson":7,"name":"跟著公共藝術去旅行","chars":["姨","雕","拓","蕨","梅","佇","冽","澤","苞","錦","鄒","眨","鏽","鋼","涵","銅","籍","略"]},{"book":11,"sem":"上","lesson":8,"name":"街頭藝術家","chars":["墩","塗","撇","咧","攏","副","羈","伙","鈔","幣","喇","脹","筋","儼","廂","弦","矩","羨"]},{"book":11,"sem":"上","lesson":9,"name":"孫翠鳳和歌仔戲","chars":["鬟","涯","劈","腿","倍","邁","獅","丑","甘","井","騰","素","絢","柱","吊","蘭","尤"]},{"book":11,"sem":"上","lesson":10,"name":"過故人莊","chars":["莊","暢","黍","郭","斜","軒","桑","菊","穀","曆","綿","殷","勤","樸","訂"]},{"book":11,"sem":"上","lesson":11,"name":"走一段海岸","chars":["蹋","愁","岩","濤","洶","湧","瑣","礫","豆","鹽","叨","泣","頰","蟹","挽"]},{"book":11,"sem":"上","lesson":12,"name":"存根","chars":["銜","割","嫁","辛","販","憑","鑿","傢","駁","誣","監","蒂","莖","粗","毫"]},{"book":12,"sem":"下","lesson":1,"name":"遊走在世界的市場裡","chars":["遛","逛","繫","陌","俐","醬","咖","啡","倚","貨","築","恨","贈","剌","豔","辣","襯","托","彰","購"]},{"book":12,"sem":"下","lesson":2,"name":"到不來梅當個樂師吧","chars":["疆","港","摒","諺","罐","驢","馱","衰","盜","頤","怖","嘶","啞","嗓","嚥","爪","梁","喻","惦","初"]},{"book":12,"sem":"下","lesson":3,"name":"大小剛好的鞋子","chars":["踝","絨","號","濺","屈","嫌","埃","縱","攝","氏","逢","倨","嗤","欠","陋","寡","嗯"]},{"book":12,"sem":"下","lesson":4,"name":"王戎辨苦李","chars":["戎","李","劉","彙","晉","軼","撰","遣","辭","栩","唯","濬","致","纍","澀","賅","敘","述"]},{"book":12,"sem":"下","lesson":5,"name":"童年．夏日．棉花糖","chars":["巷","凰","葵","巔","盎","梭","緯","勺","晶","瑩","攪","拌","剪","裁","鋁","防","鈴","逝","恆","恬"]},{"book":12,"sem":"下","lesson":6,"name":"兒童的保護傘","chars":["輔","仆","傾","窘","貧","兼","職","畢","飢","刊","斤","貸","捍","含","歧","抑","濟","績","凌","妨"]},{"book":12,"sem":"下","lesson":7,"name":"你為何而學","chars":["驅","衷","迭","滯","崗","謂","秉","俱","誕","旺","鑰","匙","挫","蔽","域","侷","掘","釐","燃"]},{"book":12,"sem":"下","lesson":8,"name":"我的武俠大夢","chars":["駕","拈","豬","蜘","蛛","詫","啼","抉","苛","塌","稿","湛","鍛","旨","柢","茁","懵","驟"]},{"book":12,"sem":"下","lesson":9,"name":"雛鳥試飛","chars":["雛","膛","芒","啾","拙","懼","凶","漲","鷗","嘹","滔","襲","陷","阱"]}],"國中1年級":[{"book":1,"sem":"上","lesson":1,"name":"夏夜","chars":["梢","撒","珍","珠","銀","幣","闔","朦","朧","山","巒","藤","蔓"]},{"book":1,"sem":"上","lesson":2,"name":"無心的錯誤","chars":["荷","槍","實","彈","慫","恿","心","悚","彌","補","肇","事","朽","幾","靶","子","審","度","驚","惶","擄","人","勒","贖","通","緝","犯","前","科","九","一","兜","風"]},{"book":1,"sem":"上","lesson":3,"name":"母親的教誨","chars":["教","誨","老","子","腳","步","完","全","跌","他","的","股","生","書","擰","娘","涼","什","麼","都","不","呀","輕","薄","說","嘴","翳","舔","廣","漠","待","人","接","物"]},{"book":1,"sem":"上","lesson":4,"name":"論語選","chars":["養","至","於","犬","馬","皆","能","有","為","山","未","成","一","簣","平","地","往","三","省","吾","身","人","謀","而","不","忠","乎","信","傳","習"]},{"book":1,"sem":"上","lesson":5,"name":"背影","chars":["差","使","交","卸","狼","藉","籍","簌","典","質","虧","空","慘","澹","賦","閒","勾","留","茶","房","囑","咐","妥","帖","躊","躇","腳","夫","揀","迂","蹣","跚","攙","一","股","腦","兒","箸","大","去"]},{"book":1,"sem":"上","lesson":6,"name":"心囚","chars":["禁","錮","轄","制","鐐","銬","席","斗","室","無","干","憔","悴","鬱","寡","歡","頹","喪","枷","鎖","沉","溺","左","右","囹","圄"]},{"book":1,"sem":"上","lesson":7,"name":"兒時記趣","chars":["明","察","秋","毫","藐","小","微","物","外","之","趣","夏","蚊","成","雷","私","擬","心","所","向","昂","首","項","為","強","素","徐","噴","以","煙","唳","怡","然","稱","快","叢","草","林","礫","壑","神","遊","龐","蓋","盡","吞","呀"]},{"book":1,"sem":"上","lesson":8,"name":"朋友相交","chars":["之","殷","浩","蕩","憂","戚","與","共","莫","逆","於","心","相","交","滿","天","下","知","有","幾","人","歷","久","而","彌","新","距","何","以","道","里","計","君","子","咫","尺","坦","磊","落","不","逾","規","矩","若","日","月","蝕","得","見","綢","繆","無","所","用","其","極","緘","默","友","直","諒","多","聞","傾","潛","移","化"]},{"book":1,"sem":"上","lesson":9,"name":"音樂家與職籃巨星","chars":["詮","釋","出","神","入","化","心","無","旁","騖","絢","麗","投","資","報","酬","率","人","意","表","嘆","為","觀","止","五","呎","八","吋","拚","命","精","湛","二","軍","飲","泣","如","虎","添","翼","臨","陣","磨","鎗","渴","掘","井","璞","物","換","星","移","脫","穎","而"]},{"book":1,"sem":"上","lesson":10,"name":"藍色串珠項鍊","chars":["來","龍","去","脈","打","烊","顧","影","自","憐","傾","囊"]},{"book":2,"sem":"下","lesson":1,"name":"聲音鐘","chars":["抑","揚","頓","挫","天","籟","瑰","寶","具","體","而","微","牛","犁","歌","丟","銅","仔","乍","暖","還","寒","歐","巴","桑","不","知","凡","幾","阿","奇","毛"]},{"book":2,"sem":"下","lesson":2,"name":"孩子的鐘塔","chars":["吹","拂","詛","咒","應","允","義","舉","漣","漪","罹","患","亟","抑","制","樁","幀","徒","然","不","朽","矗","立","致","意","鑄","鐫","刻"]},{"book":2,"sem":"下","lesson":3,"name":"紙船印象","chars":["過","眼","雲","煙","倏","忽","熱","鐵","烙","膚","掠","歷","如","繪","眷","戀","濘","理","直","氣","壯","斑","雜","派","儼","然","甫","千","里","單","騎","比","肩","曹","操","的","戰","艦","首","尾","相","連","蔚","為","觀","繭","年","事","而","立","涎","著","臉"]},{"book":2,"sem":"下","lesson":4,"name":"小詩選 （一）跳水 （二）風箏","chars":["湛","藍","扶","搖","直","上","莫","非"]},{"book":2,"sem":"下","lesson":5,"name":"近體詩選 （一）登鸛雀樓 （二）聞官軍收河南河北 （三）出獄歸家","chars":["盡","欲","窮","千","里","目","卻","看","妻","子","漫","卷","放","歌","縱","酒","青","春","莽","乾","坤","此","生","拚","與","世","相","違"]},{"book":2,"sem":"下","lesson":6,"name":"石虎是我們的龍貓","chars":["四","五","年","級","緬","懷","契","機","淺","山","銳","減","常","民","小","廟","鑲","嵌","輾","斃","蓊","鬱","次","生","林","繁","衍","庇","佑","駐","足","委","實","石","虎","米","驚","鴻","一","瞥"]},{"book":2,"sem":"下","lesson":7,"name":"五柳先生傳","chars":["何","許","焉","閑","靜","榮","利","不","求","甚","解","會","意","嗜","或","造","飲","輒","盡","期","曾","吝","情","去","留","環","堵","蕭","然","短","褐","穿","結","簞","瓢","屢","空","晏","如","贊","黔","婁","戚","汲","極","茲","若","人","之","儔","乎","酣","觴","賦","詩","無","懷","氏","民","歟","葛","天"]},{"book":2,"sem":"下","lesson":8,"name":"牡蠣有容，珍珠乃大","chars":["同","化","外","衣","異","己","胸","襟","雅","量","旭","日","東","升","怨","天","尤","人","操","之","在","有","容","乃","大"]},{"book":2,"sem":"下","lesson":9,"name":"謝天","chars":["布","尷","尬","謝","飯","搖","曳","滔","天","蹧","蹋","咱","們","偶","像","關","帝","廟","供","桌","老","爺","也","者","掙","渺","茫","瀏","覽","亙","古","嶄","新","外","飛","來","一","筆","謙","抑","於","遺","愛"]},{"book":2,"sem":"下","lesson":10,"name":"貓的天堂","chars":["哆","嗦","獻","殷","勤","冷","不","防","蹓","躂","初","出","茅","廬","踉","蹌"]}],"國中2年級":[{"book":3,"sem":"上","lesson":1,"name":"田園之秋選","chars":["蒂","滂","沱","霹","靂","環","起","霎","時","間","攫","孤","伶","序","幕","震","懾","氣","脫","委","頓","匍","匐","肆","虐","蘇","醒","勢","萬","鈞","逞","劈","殺","行","潦","登"]},{"book":3,"sem":"上","lesson":2,"name":"古詩選 （一）迢迢牽牛星 （二）慈烏夜啼","chars":["迢","牽","牛","星","皎","河","漢","女","纖","擢","素","手","札","機","杼","終","日","成","章","零","如","雨","去","復","幾","許","盈","脈","啞","經","年","沾","襟","反","哺","爾","任","母","歿","喪","不","臨","嗟","哉","斯","徒","輩"]},{"book":3,"sem":"上","lesson":3,"name":"下雨天，真好","chars":["魂","牽","夢","縈","長","工","熹","微","啟","蒙","阿","榮","伯","布","姑","娘","吱","嗒","黃","梅","天","鼓","兒","詞","鄭","元","和","學","丐","亮","晃","唐","詩","麴","西","子","湖","放","鶴","亭","幽"]},{"book":3,"sem":"上","lesson":4,"name":"愛蓮說","chars":["蕃","李","唐","出","淤","泥","而","不","染","濯","清","漣","妖","中","通","外","直","蔓","枝","益","亭","淨","植","褻","玩","焉","謂","隱","逸","者","噫","菊","之","愛","鮮","宜","乎"]},{"book":3,"sem":"上","lesson":5,"name":"森林最優美的一天","chars":["野","人","獻","曝","拂","黏","稠","遐","思","嗆","鼻","澗","戰","兢","一","剎","那","福","爾","摩","沙","曼","妙"]},{"book":3,"sem":"上","lesson":6,"name":"鳥","chars":["羽","翮","蜷","伏","瞵","視","昂","藏","搏","扶","搖","而","直","上","呱","市","聲","鼎","沸","客","夜","酸","楚","曳","翹","喙","照","眼","斑","斕","乾","癟","豐","腴","穠","纖","合","度","踞","一","行","白","鷺","青","天","黛","釉","綠","煙","突","鼓","噪"]},{"book":3,"sem":"上","lesson":7,"name":"張釋之執法","chars":["廷","尉","上","行","中","渭","橋","走","乘","輿","屬","之","治","問","縣","人","蹕","奏","當","吾","馬","賴","柔","和","令","他","固","乃","天","子","所","與","下","公","共","也","方","其","時","立","誅","平","傾","用","法","皆","為","輕","重","民","安","錯","手","足","唯","陛"]},{"book":3,"sem":"上","lesson":8,"name":"生命中的碎珠","chars":["著","書","立","說","從","容","自","如","溫","藹","不","敷","撇","開","盛","年","四","句","千","字","文","尺","璧","二","積","沙","能","夠","成","塔","集","腋","可","以","裘","宗"]},{"book":3,"sem":"上","lesson":9,"name":"一棵開花的樹","chars":["塵","緣","無","視","凋","零","的","心"]},{"book":3,"sem":"上","lesson":10,"name":"畫的哀傷","chars":["恫","嚇","獨","占","鰲","頭","捶","胸","頓","足","赫","然","目","眩","神","迷"]},{"book":4,"sem":"下","lesson":1,"name":"余光中詩選 （一）讓春天從高雄出發 （二）控訴一枝煙囪","chars":["控","訴","肆","無","忌","憚","流","氓","吞","吐","哮","喘","撣","著","菸","屑","一","百","三","十","萬","懨","蠕","矇","眼","瞳"]},{"book":4,"sem":"下","lesson":2,"name":"木蘭詩","chars":["唧","軍","帖","可","汗","大","點","兵","爺","市","孃","濺","啾","戎","機","關","山","度","若","飛","朔","氣","策","勳","十","二","轉","強","尚","書","郎","明","駝","兒","郭","扶","將","紅","妝","霍","閣","火","伴","撲","迷","離","兩","兔","傍","地","走"]},{"book":4,"sem":"下","lesson":3,"name":"運動家的風度","chars":["陶","鑄","君","子","無","所","爭","必","也","射","乎","揖","讓","而","升","下","飲","雍","容","睽","不","屑","怨","天","尤","人","公","諸","得","失","動","於","衷","悻","然","言","信","行","果","任","重","道","遠"]},{"book":4,"sem":"下","lesson":4,"name":"我所知道的康橋","chars":["水","溶","漠","楞","教","寺","山","巖","沃","腴","土","阜","擁","戴","娉","婷","嫵","媚","參","差","翳","入","了","天","聽","糝","伺","候","怯","怜","春","信","窈","窕","爛","縵","路","政","掛","單","恣","陸","放","翁","傳","呼","二","句","輿","風","流","夸","父","荒","誕","溫","存","栩","衝","偌","大","冉","迷","眩"]},{"book":4,"sem":"下","lesson":5,"name":"陋室銘","chars":["斯","惟","吾","德","馨","苔","痕","上","階","綠","草","色","入","簾","青","鴻","儒","白","丁","調","素","琴","金","經","絲","竹","案","牘","勞","形","諸","葛","廬","子","雲","亭","何","陋","之","有"]},{"book":4,"sem":"下","lesson":6,"name":"水神的指引","chars":["背","離","卡","瑪","置","信","彌","足","珍","貴","盹","狩","獵","上","哇","塵","封"]},{"book":4,"sem":"下","lesson":7,"name":"飛魚","chars":["顫","起","紛","匆","達","悟","族","如","火","荼","阿","美","薄","暮","黧","黑","粗","獷","奕","式","微","豐","年","祭","無","采","工","漁","汛","銀","光","粼","閃","燦","舷","抖","擻","懾","怔","吮","吸","暈","撇","藥","引","窸","窣","海","翁","蚊","蚋","憋","氣"]},{"book":4,"sem":"下","lesson":8,"name":"空城計","chars":["分","撥","糧","草","飛","馬","望","蜂","擁","失","色","旌","旗","城","鋪","妄","行","出","入","鶴","氅","綸","巾","敵","樓","凭","欄","焚","香","操","琴","卻","說","前","軍","哨","三","笑","容","可","掬","麈","尾","莫","非","弄","險","焉","撫","掌","駭","然","蓋","投","興","苞","玄","機","某","等","得","不","為","司","懿","所","擒","乎","言","訖"]},{"book":4,"sem":"下","lesson":9,"name":"管好舌頭","chars":["老","神","在","出","糗","昏","聵","叱","吒","風","雲","縱","橫","捭","闔","三","寸","不","爛","之","舌","誣","枉","無","恙","煽","動","說","難","巧","如","簧","騁","快","樊","籠","猛","獸","柙","一","言","喪","邦"]},{"book":4,"sem":"下","lesson":10,"name":"科幻極短篇選 （一）深藍的憂鬱 （二）替代死刑","chars":["偃","旗","息","鼓","揶","揄","蟄","伏","行","禮","如","儀","人","道","主","義","屍","走","肉","緩","刑"]}],"國中3年級":[{"book":5,"sem":"上","lesson":1,"name":"土","chars":["赤","膊","瀟","灑","揮","汗","吟","哦","自","己","的","詠","嘆","閒","愁","逸","致","漬","蝕","盡","談","經","論","道","說","賢","話","聖","握","鋤","荷","犁"]},{"book":5,"sem":"上","lesson":2,"name":"詞選 （一）虞美人 （二）南鄉子登京口北固亭有懷","chars":["春","花","秋","月","了","故","國","雕","闌","玉","砌","朱","顏","幾","多","神","州","悠","年","少","萬","兜","鍪","坐","斷","曹","劉","孫","仲","謀"]},{"book":5,"sem":"上","lesson":3,"name":"與921說再見：20年的生命練習題","chars":["山","河","變","色","倖","存","出","頭","罹","難","失","依","兒","天","崩","地","坼","剖","白","鉅","細","靡","遺","結","痂","回","馬","槍","翻","騰"]},{"book":5,"sem":"上","lesson":4,"name":"與宋元思書","chars":["風","煙","俱","淨","天","山","共","色","一","百","許","里","獨","絕","縹","碧","急","湍","甚","箭","寒","樹","負","勢","互","相","軒","邈","直","指","泠","嚶","轉","鳶","飛","戾","息","心","經","綸","世","務","窺","谷","忘","返","橫","柯","疏","條","交","映"]},{"book":5,"sem":"上","lesson":5,"name":"一家手語餐廳的誕生","chars":["一","竅","不","通","入","境","隨","俗","既","來","之","則","安","備","受","矚","目","店","招","烏","龍","宅","心","仁","厚","逆","料","牟","利","門","庭","若","市","喜","出","望","外","春","雷","啟","戶","彼","等","身","立","命","遑","論","啻","朝","聖","倦","眼","看","盡","人","間","事"]},{"book":5,"sem":"上","lesson":6,"name":"生於憂患死於安樂","chars":["舜","發","於","畎","畝","之","中","傅","說","舉","版","築","間","膠","鬲","魚","鹽","管","夷","吾","士","孫","叔","敖","海","百","里","奚","市","空","乏","其","身","行","拂","亂","所","為","以","動","心","忍","性","曾","益","不","能","困","衡","慮","作","徵","色","聲","喻","入","法","家"]},{"book":5,"sem":"上","lesson":7,"name":"蘇東坡突圍","chars":["渲","染","通","體","風","雅","給","李","端","叔","的","一","封","信","得","罪","深","自","閉","塞","扁","舟","草","履","放","浪","山","水","間","推","罵","無","字","見","及","有","書","與","之","亦","不","答","幸","庶","幾","免","矣","連","篇","累","牘","關","宏","旨","溜","達","大","義","凜","然","反","顧","告","漏","斷","誰","二","句","縹","緲","鴻","驚","起","省","揀","盡","家","勃","鬱","念","奴","嬌","赤","壁","懷","古","前","後","賦"]},{"book":5,"sem":"上","lesson":8,"name":"我們的饕餮時光","chars":["勒","戒","七","宗","罪","裡","的","饕","餮","告","解","囫","圇","口","腔","期","療","饑","瞠","乎","其","後","漫","漶","錯","位","慰","藉","酗","規","管","法","西","斯","沆","瀣","一","氣","噬"]},{"book":5,"sem":"上","lesson":9,"name":"射鵰英雄傳――智鬥書生","chars":["潑","天","提","縱","術","登","衝","要","蹙","眉","浴","乎","沂","風","舞","雩","微","言","大","義","頦","殆","哉","留","難","掉","搪","塞","半","晌","中","式","辛","未","擅","勝","場","絕","對","魑","魅","魍","魎","履","險","如","夷"]},{"book":6,"sem":"下","lesson":1,"name":"元曲選 （一）天淨沙秋思 （二）沉醉東風漁父詞","chars":["昏","鴉","古","道","西","風","斷","腸","天","涯","刎","頸","交","忘","機","友","傲","殺","萬","戶","侯","釣","叟"]},{"book":6,"sem":"下","lesson":2,"name":"石滬","chars":["龍","門","迎","迓","海","市","蜃","樓","砧","板","袖","珍","不","遠","千","里"]},{"book":6,"sem":"下","lesson":3,"name":"人不可以無癖","chars":["張","岱","性","情","中","人","莫","名","不","能","自","已","事","到","可","傳","皆","具","癖","好","尚","蘭","茞","蓀","蕙","逐","臭","之","夫","歐","陽","脩","生","二","句","柳","永","衣","帶","伊","以","順","處","逆","章","萬","緣","消","此","病","綴","合","恨"]},{"book":6,"sem":"下","lesson":4,"name":"鄒忌諷齊王納諫","chars":["諷","脩","八","尺","有","餘","昳","麗","朝","服","衣","冠","窺","鏡","我","孰","與","城","北","徐","公","美","及","旦","日","熟","視","弗","如","遠","甚","私","威","王","齊","地","方","千","里","宮","婦","左","右","蔽","面","刺","寡","人","之","過","上","賞","謗","議","於","市","聞","耳","時","而","間","進","期","年","戰","勝","廷"]},{"book":6,"sem":"下","lesson":5,"name":"永不滿足，長保傻勁――賈伯斯的人生三堂課","chars":["文","憑","輟","學","哩","克","里","希","納","神","廟","活","版","水","到","渠","成","願","景","歧","見","眾","所","周","知","炒","魷","魚","化","為","烏","有","宿","命","倖","免"]}],"國小5年級":[{"book":9,"sem":"上","lesson":1,"name":"你我之間","chars":["堅","耐","勞","獨","距","蝟","擁","繩","刷","膏"]},{"book":9,"sem":"上","lesson":2,"name":"風起，大家都在","chars":["笛","奏","旋","律","梢","廊","熟","悉","亂","諧","階","融","絮","係","伍","威","幟","卷"]},{"book":9,"sem":"上","lesson":3,"name":"廉頗與藺相如","chars":["璧","歸","諸","侯","官","軍","羞","辱","懦","恥","權","勢","攻","協","君","愧","荊","肝"]},{"book":9,"sem":"上","lesson":4,"name":"來場快樂的桌遊","chars":["筍","廳","眾","據","棋","撲","富","純","寓","超","炒","氛","齡","智","例","憶","培","患"]},{"book":9,"sem":"上","lesson":5,"name":"超級英雄","chars":["采","揚","媲","訊","搜","尋","劇","螢","拯","預","脈","授","吔","違","司","潤","愕","創"]},{"book":9,"sem":"上","lesson":6,"name":"世足賽的贏家","chars":["盃","席","塑","廢","質","飲","億","掩","焚","粒","熔","抽","紡","織","耗","碳","屆","股"]},{"book":9,"sem":"上","lesson":7,"name":"美景閒情――詩兩首","chars":["返","苔","寨","附","曠","寂","茂","鳴","澗","悠","乎","描","幽","凸","貌","漆","乍","添"]},{"book":9,"sem":"上","lesson":8,"name":"與山為鄰","chars":["鄰","偏","付","熬","戀","扣","串","疲","倦","懂","蹲","澈","絕","蓬","灘","蔭","願"]},{"book":9,"sem":"上","lesson":9,"name":"窗邊的鳴聲","chars":["玻","璃","測","隱","棲","覓","昆","誘","繡","尊","側","褐","掀","暑","圃","魔","籬","捨"]},{"book":9,"sem":"上","lesson":10,"name":"敏銳觀察","chars":["銳","膩","偉","格","納","德","洲","洋","湊","陸","某","評","飾","詞","丈","銷","售","臘"]},{"book":9,"sem":"上","lesson":11,"name":"你一定會聽見的","chars":["蒲","梳","髮","砂","螞","蟻","楓","噗","炸","拂","狂","掃","颱","溝","籃","擇","脆","編"]},{"book":9,"sem":"上","lesson":12,"name":"藍色連身裙","chars":["裙","煦","置","髒","嘈","塵","裳","嘆","咪","妻","柵","闢","政","府","境","糟","皆","蹟"]},{"book":10,"sem":"下","lesson":1,"name":"鵝鑾鼻詩","chars":["塔","符","坎","坷","潮","澎","湃","垠","限","陵","北","囪","瞭","跡","仰","俯","碧","漾"]},{"book":10,"sem":"下","lesson":2,"name":"山與海的交響樂――東海岸鐵道","chars":["聳","巒","障","喧","史","坳","翅","膀","態","翱","隧","灑","綻","卵","冉","震","顫","覆"]},{"book":10,"sem":"下","lesson":3,"name":"我眼中的東方之最","chars":["廟","拾","綴","射","若","型","杜","鵑","宇","宙","昂","簽","擅","拘","厚","欲","璞","屬"]},{"book":10,"sem":"下","lesson":4,"name":"滿修女採訪記","chars":["殘","藹","談","爽","撼","慈","驕","傲","尷","尬","恢","輝","甚","佩","怨","悔","奉","私"]},{"book":10,"sem":"下","lesson":5,"name":"誰該被派去非洲","chars":["派","囑","咐","武","肉","幼","優","裕","憐","末","誠","慎","瞄","礙","攔","阻","乞","灌"]},{"book":10,"sem":"下","lesson":6,"name":"幸福的味道","chars":["瀰","暫","耍","猛","索","煞","肅","替","否","講","愉","鬼","蓆","嗅","聯","絡","簿"]},{"book":10,"sem":"下","lesson":7,"name":"生活有感――詩兩首","chars":["悟","縷","莫","堪","禿","椏","畝","鑑","徘","徊","渠","陰","遺","憾","竭","濁"]},{"book":10,"sem":"下","lesson":8,"name":"別把重點當全部","chars":["哏","配","宣","寬","泛","繁","篇","刪","媒","婦","頁","價","擷","誤","澄","謠","版","謹"]},{"book":10,"sem":"下","lesson":9,"name":"良言一句三冬暖","chars":["疏","懇","誼","訓","委","婉","懈","刀","迥","恰","勵","渾","獲","敵","罵","仗","榮","劍"]},{"book":10,"sem":"下","lesson":10,"name":"擅長推理的人","chars":["呎","瘦","劑","邏","輯","瀑","謬","釋","黝","皙"]},{"book":10,"sem":"下","lesson":11,"name":"草船借箭","chars":["帳","佳","督","殺","侍","酬","詐","匠","延","幔","紮","營","牽","吶","率","恍","丞","庫"]},{"book":10,"sem":"下","lesson":12,"name":"三個問題","chars":["避","儘","茅","睿","鏟","畦","鬍","虛","呻","血","檻","諒","財","誓","仇","遭","豁"]}]}};
+const ZHUYIN = {"一":"ㄧ","丁":"ㄉㄧㄥ","七":"ㄑㄧ","丈":"ㄓㄤˋ","三":"ㄙㄢ","上":"ㄕㄤˋ","下":"ㄒㄧㄚˋ","不":"ㄅㄨˋ","丐":"ㄍㄞˋ","丑":"ㄔㄡˇ","且":"ㄑㄧㄝˇ","世":"ㄕˋ","丘":"ㄑㄧㄡ","丞":"ㄔㄥˊ","丟":"ㄉㄧㄡ","並":"ㄅㄧㄥˋ","丫":"ㄧㄚ","中":"ㄓㄨㄥ","串":"ㄔㄨㄢˋ","丸":"ㄨㄢˊ","丹":"ㄉㄢ","主":"ㄓㄨˇ","乃":"ㄋㄞˇ","久":"ㄐㄧㄡˇ","之":"ㄓ","乍":"ㄓㄚˋ","乎":"ㄏㄨ","乏":"ㄈㄚˊ","乒":"ㄆㄧㄥ","乓":"ㄆㄤ","乖":"ㄍㄨㄞ","乘":"ㄔㄥˊ","九":"ㄐㄧㄡˇ","乞":"ㄑㄧˇ","也":"ㄧㄝˇ","乳":"ㄖㄨˇ","乾":"ㄑㄧㄢˊ","亂":"ㄌㄨㄢˋ","了":"ㄌㄜ˙","予":"ㄩˇ","事":"ㄕˋ","二":"ㄦˋ","亍":"ㄔㄨˋ","互":"ㄏㄨˋ","五":"ㄨˇ","井":"ㄐㄧㄥˇ","亙":"ㄍㄣˋ","些":"ㄒㄧㄝ","亞":"ㄧㄚˋ","亟":"ㄐㄧˊ","亡":"ㄨㄤˊ","亢":"ㄎㄤˋ","交":"ㄐㄧㄠ","亦":"ㄧˋ","亨":"ㄏㄥ","享":"ㄒㄧㄤˇ","京":"ㄐㄧㄥ","亭":"ㄊㄧㄥˊ","亮":"ㄌㄧㄤˋ","人":"ㄖㄣˊ","什":"ㄕㄣˊ","仁":"ㄖㄣˊ","仆":"ㄆㄨ","仇":"ㄔㄡˊ","今":"ㄐㄧㄣ","介":"ㄐㄧㄝˋ","仍":"ㄖㄥˊ","仔":"ㄗㄞˇ","他":"ㄊㄚ","仗":"ㄓㄤˋ","付":"ㄈㄨˋ","仙":"ㄒㄧㄢ","代":"ㄉㄞˋ","令":"ㄌㄧㄥˋ","以":"ㄧˇ","仰":"ㄧㄤˇ","仲":"ㄓㄨㄥˋ","件":"ㄐㄧㄢˋ","任":"ㄖㄣˋ","份":"ㄈㄣˋ","仿":"ㄈㄤˇ","企":"ㄑㄧˇ","伊":"ㄧ","伍":"ㄨˇ","伏":"ㄈㄨˊ","伐":"ㄈㄚˊ","休":"ㄒㄧㄡ","伙":"ㄏㄨㄛˇ","伯":"ㄅㄛˊ","估":"ㄍㄨ","伴":"ㄅㄢˋ","伶":"ㄌㄧㄥˊ","伸":"ㄕㄣ","伺":"ㄘˋ","似":"ㄕˋ","佃":"ㄉㄧㄢˋ","但":"ㄉㄢˋ","佇":"ㄓㄨˋ","位":"ㄨㄟˋ","低":"ㄉㄧ","住":"ㄓㄨˋ","佐":"ㄗㄨㄛˇ","佑":"ㄧㄡˋ","何":"ㄏㄜˊ","佛":"ㄈㄨˊ","作":"ㄗㄨㄛˋ","你":"ㄋㄧˇ","佣":"ㄩㄥ","佩":"ㄆㄟˋ","佯":"ㄧㄤˊ","佳":"ㄐㄧㄚ","使":"ㄕˇ","侃":"ㄎㄢˇ","來":"ㄌㄞˊ","例":"ㄌㄧˋ","侍":"ㄕˋ","供":"ㄍㄨㄥ","依":"ㄧ","侯":"ㄏㄡˊ","侵":"ㄑㄧㄣ","侷":"ㄐㄩˊ","便":"ㄅㄧㄢˋ","係":"ㄒㄧˋ","促":"ㄘㄨˋ","俄":"ㄜˊ","俐":"ㄌㄧˋ","俑":"ㄩㄥˇ","俗":"ㄙㄨˊ","保":"ㄅㄠˇ","俠":"ㄒㄧㄚˊ","信":"ㄒㄧㄣˋ","修":"ㄒㄧㄡ","俯":"ㄈㄨˇ","俱":"ㄐㄩˋ","倉":"ㄘㄤ","個":"ㄍㄜˋ","倍":"ㄅㄟˋ","倏":"ㄕㄨ","們":"ㄇㄣ˙","倒":"ㄉㄠˋ","倖":"ㄒㄧㄥˋ","倘":"ㄊㄤˇ","候":"ㄏㄡˋ","倚":"ㄧˇ","借":"ㄐㄧㄝˋ","倡":"ㄔㄤˋ","倦":"ㄐㄩㄢˋ","倨":"ㄐㄩˋ","倫":"ㄌㄨㄣˊ","值":"ㄓˊ","偃":"ㄧㄢˇ","假":"ㄐㄧㄚˇ","偉":"ㄨㄟˇ","偌":"ㄖㄨㄛˋ","偏":"ㄆㄧㄢ","偕":"ㄒㄧㄝˊ","做":"ㄗㄨㄛˋ","停":"ㄊㄧㄥˊ","健":"ㄐㄧㄢˋ","側":"ㄘㄜˋ","偶":"ㄡˇ","偷":"ㄊㄡ","偽":"ㄨㄟˇ","傅":"ㄈㄨˋ","傍":"ㄅㄤˋ","傑":"ㄐㄧㄝˊ","傖":"ㄘㄤ","傘":"ㄙㄢˇ","備":"ㄅㄟˋ","傢":"ㄐㄧㄚ","催":"ㄘㄨㄟ","傭":"ㄩㄥ","傲":"ㄠˋ","傳":"ㄔㄨㄢˊ","傷":"ㄕㄤ","傻":"ㄕㄚˇ","傾":"ㄑㄧㄥ","僅":"ㄐㄧㄣˇ","像":"ㄒㄧㄤˋ","僕":"ㄆㄨˊ","僮":"ㄊㄨㄥˊ","僵":"ㄐㄧㄤ","價":"ㄐㄧㄚˋ","儀":"ㄧˊ","億":"ㄧˋ","儉":"ㄐㄧㄢˇ","儒":"ㄖㄨˊ","儔":"ㄔㄡˊ","儘":"ㄐㄧㄣˇ","償":"ㄔㄤˊ","優":"ㄧㄡ","儲":"ㄔㄨˇ","儼":"ㄧㄢˇ","兀":"ㄨˋ","允":"ㄩㄣˇ","元":"ㄩㄢˊ","兄":"ㄒㄩㄥ","充":"ㄔㄨㄥ","先":"ㄒㄧㄢ","光":"ㄍㄨㄤ","克":"ㄎㄜˋ","免":"ㄇㄧㄢˇ","兒":"ㄦˊ","兔":"ㄊㄨˋ","兜":"ㄉㄡ","兢":"ㄐㄧㄥ","入":"ㄖㄨˋ","內":"ㄋㄟˋ","全":"ㄑㄩㄢˊ","兩":"ㄌㄧㄤˇ","八":"ㄅㄚ","公":"ㄍㄨㄥ","兮":"ㄒㄧ","共":"ㄍㄨㄥˋ","兵":"ㄅㄧㄥ","其":"ㄑㄧˊ","具":"ㄐㄩˋ","典":"ㄉㄧㄢˇ","兼":"ㄐㄧㄢ","冉":"ㄖㄢˇ","冊":"ㄘㄜˋ","再":"ㄗㄞˋ","冒":"ㄇㄠˋ","冠":"ㄍㄨㄢ","冤":"ㄩㄢ","冥":"ㄇㄧㄥˊ","冬":"ㄉㄨㄥ","冰":"ㄅㄧㄥ","冷":"ㄌㄥˇ","冽":"ㄌㄧㄝˋ","准":"ㄓㄨㄣˇ","凋":"ㄉㄧㄠ","凌":"ㄌㄧㄥˊ","凍":"ㄉㄨㄥˋ","凜":"ㄌㄧㄣˇ","凝":"ㄋㄧㄥˊ","凡":"ㄈㄢˊ","凭":"ㄆㄧㄥˊ","凰":"ㄏㄨㄤˊ","凱":"ㄎㄞˇ","凶":"ㄒㄩㄥ","凸":"ㄊㄨ","凹":"ㄠ","出":"ㄔㄨ","刀":"ㄉㄠ","刃":"ㄖㄣˋ","分":"ㄈㄣ","切":"ㄑㄧㄝˋ","刊":"ㄎㄢ","刎":"ㄨㄣˇ","刑":"ㄒㄧㄥˊ","划":"ㄏㄨㄚˋ","列":"ㄌㄧㄝˋ","初":"ㄔㄨ","判":"ㄆㄢˋ","別":"ㄅㄧㄝˊ","利":"ㄌㄧˋ","刪":"ㄕㄢ","刮":"ㄍㄨㄚ","到":"ㄉㄠˋ","制":"ㄓˋ","刷":"ㄕㄨㄚ","券":"ㄑㄩㄢˋ","刺":"ㄘˋ","刻":"ㄎㄜˋ","剃":"ㄊㄧˋ","則":"ㄗㄜˊ","削":"ㄒㄩㄝ","剌":"ㄌㄚˊ","前":"ㄑㄧㄢˊ","剎":"ㄕㄚ","剔":"ㄊㄧ","剖":"ㄆㄡ","剛":"ㄍㄤ","剝":"ㄅㄛ","剩":"ㄕㄥˋ","剪":"ㄐㄧㄢˇ","副":"ㄈㄨˋ","割":"ㄍㄜ","創":"ㄔㄨㄤˋ","劃":"ㄏㄨㄚˋ","劇":"ㄐㄩˋ","劈":"ㄆㄧ","劉":"ㄌㄧㄡˊ","劍":"ㄐㄧㄢˋ","劑":"ㄐㄧˋ","力":"ㄌㄧˋ","功":"ㄍㄨㄥ","加":"ㄐㄧㄚ","助":"ㄓㄨˋ","努":"ㄋㄨˇ","勁":"ㄐㄧㄣˋ","勃":"ㄅㄛˊ","勇":"ㄩㄥˇ","勉":"ㄇㄧㄢˇ","勒":"ㄌㄟ","動":"ㄉㄨㄥˋ","務":"ㄨˋ","勝":"ㄕㄥˋ","勞":"ㄌㄠˊ","募":"ㄇㄨˋ","勢":"ㄕˋ","勤":"ㄑㄧㄣˊ","勳":"ㄒㄩㄣ","勵":"ㄌㄧˋ","勸":"ㄑㄩㄢˋ","勺":"ㄕㄠˊ","勾":"ㄍㄡ","勿":"ㄨˋ","包":"ㄅㄠ","匆":"ㄘㄨㄥ","匍":"ㄆㄨˊ","匐":"ㄈㄨˊ","化":"ㄏㄨㄚˋ","北":"ㄅㄟˇ","匙":"ㄕ˙","匠":"ㄐㄧㄤˋ","匡":"ㄎㄨㄤ","匣":"ㄒㄧㄚˊ","匯":"ㄏㄨㄟˋ","匱":"ㄍㄨㄟˋ","匹":"ㄆㄧˇ","區":"ㄑㄩ","十":"ㄕˊ","千":"ㄑㄧㄢ","升":"ㄕㄥ","午":"ㄨˇ","半":"ㄅㄢˋ","卓":"ㄓㄨㄛˊ","協":"ㄒㄧㄝˊ","南":"ㄋㄢˊ","博":"ㄅㄛˊ","卜":"ㄅㄛ˙","占":"ㄓㄢˋ","卡":"ㄎㄚˇ","印":"ㄧㄣˋ","危":"ㄨㄟ","即":"ㄐㄧˊ","卵":"ㄌㄨㄢˇ","卷":"ㄐㄩㄢˇ","卸":"ㄒㄧㄝˋ","卻":"ㄑㄩㄝˋ","厚":"ㄏㄡˋ","原":"ㄩㄢˊ","厭":"ㄧㄢˋ","厲":"ㄌㄧˋ","去":"ㄑㄩˋ","參":"ㄘㄢ","又":"ㄧㄡˋ","及":"ㄐㄧˊ","友":"ㄧㄡˇ","反":"ㄈㄢˇ","叔":"ㄕㄨ","取":"ㄑㄩˇ","受":"ㄕㄡˋ","叟":"ㄙㄡˇ","叢":"ㄘㄨㄥˊ","口":"ㄎㄡˇ","古":"ㄍㄨˇ","句":"ㄐㄩˋ","另":"ㄌㄧㄥˋ","叨":"ㄉㄠ","叩":"ㄎㄡˋ","只":"ㄓˇ","叫":"ㄐㄧㄠˋ","召":"ㄓㄠˋ","叮":"ㄉㄧㄥ","可":"ㄎㄜˇ","叱":"ㄔˋ","史":"ㄕˇ","右":"ㄧㄡˋ","司":"ㄙ","叼":"ㄉㄧㄠ","吁":"ㄒㄩ","吃":"ㄔ","各":"ㄍㄜˋ","合":"ㄏㄜˊ","吉":"ㄐㄧˊ","吊":"ㄉㄧㄠˋ","吋":"ㄘㄨㄣˋ","同":"ㄊㄨㄥˊ","名":"ㄇㄧㄥˊ","后":"ㄏㄡˋ","吐":"ㄊㄨˇ","向":"ㄒㄧㄤˋ","吒":"ㄓㄚ","吔":"ㄧㄝˇ","君":"ㄐㄩㄣ","吝":"ㄌㄧㄣˋ","吞":"ㄊㄨㄣ","吟":"ㄧㄣˊ","否":"ㄈㄡˇ","吧":"ㄅㄚ˙","含":"ㄏㄢˊ","吮":"ㄕㄨㄣˇ","吱":"ㄓ","吳":"ㄨˊ","吵":"ㄔㄠˇ","吶":"ㄋㄚˋ","吸":"ㄒㄧ","吹":"ㄔㄨㄟ","吻":"ㄨㄣˇ","吼":"ㄏㄡˇ","吾":"ㄨˊ","呀":"ㄧㄚ˙","呆":"ㄉㄞ","呈":"ㄔㄥˊ","告":"ㄍㄠˋ","呎":"ㄔˇ","呢":"ㄋㄜ˙","周":"ㄓㄡ","呱":"ㄍㄨ","味":"ㄨㄟˋ","呵":"ㄏㄜ","呷":"ㄍㄚ","呻":"ㄕㄣ","呼":"ㄏㄨ","命":"ㄇㄧㄥˋ","咀":"ㄐㄩˇ","咂":"ㄗㄚ","和":"ㄏㄜˊ","咐":"ㄈㄨˋ","咒":"ㄓㄡˋ","咖":"ㄎㄚ","咚":"ㄉㄨㄥ","咣":"ㄍㄨㄤ","咦":"ㄧˊ","咧":"ㄌㄧㄝˇ","咪":"ㄇㄧ","咫":"ㄓˇ","咬":"ㄧㄠˇ","咱":"ㄗㄢˊ","咳":"ㄎㄜˊ","哀":"ㄞ","品":"ㄆㄧㄣˇ","哄":"ㄏㄨㄥˇ","哆":"ㄉㄨㄛ","哇":"ㄨㄚ˙","哈":"ㄏㄚ","哉":"ㄗㄞ","哏":"ㄍㄣˊ","員":"ㄩㄢˊ","哥":"ㄍㄜ","哦":"ㄛˊ","哨":"ㄕㄠˋ","哩":"ㄌㄧ","哪":"ㄋㄚˇ","哭":"ㄎㄨ","哮":"ㄒㄧㄠ","哲":"ㄓㄜˊ","哺":"ㄅㄨˇ","唉":"ㄞ","唐":"ㄊㄤˊ","唧":"ㄐㄧ","售":"ㄕㄡˋ","唯":"ㄨㄟˊ","唱":"ㄔㄤˋ","唳":"ㄌㄧˋ","唷":"ㄧㄛ","唾":"ㄊㄨㄛˋ","啄":"ㄓㄨㄛˊ","商":"ㄕㄤ","啊":"ㄚ˙","問":"ㄨㄣˋ","啜":"ㄔㄨㄞˋ","啞":"ㄧㄚˇ","啟":"ㄑㄧˇ","啡":"ㄈㄟ","啦":"ㄌㄚ˙","啪":"ㄆㄚ","啻":"ㄔˋ","啼":"ㄊㄧˊ","啾":"ㄐㄧㄡ","喂":"ㄨㄟˋ","喃":"ㄋㄢˊ","善":"ㄕㄢˋ","喇":"ㄌㄚˇ","喉":"ㄏㄡˊ","喊":"ㄏㄢˇ","喏":"ㄋㄨㄛˋ","喘":"ㄔㄨㄢˇ","喙":"ㄏㄨㄟˋ","喚":"ㄏㄨㄢˋ","喜":"ㄒㄧˇ","喝":"ㄏㄜ","喧":"ㄒㄩㄢ","喪":"ㄙㄤˋ","單":"ㄉㄢ","喳":"ㄓㄚ","喻":"ㄩˋ","嗅":"ㄒㄧㄡˋ","嗆":"ㄑㄧㄤ","嗎":"ㄇㄚ˙","嗒":"ㄉㄚ","嗓":"ㄙㄤˇ","嗚":"ㄨ","嗜":"ㄕˋ","嗟":"ㄐㄧㄝ","嗤":"ㄔ","嗦":"ㄙㄨㄛ˙","嗯":"ㄣˊ","嘆":"ㄊㄢˋ","嘈":"ㄘㄠˊ","嘉":"ㄐㄧㄚ","嘎":"ㄍㄚ","嘖":"ㄗㄜˊ","嘗":"ㄔㄤˊ","嘯":"ㄒㄧㄠˋ","嘲":"ㄔㄠˊ","嘴":"ㄗㄨㄟˇ","嘶":"ㄙ","嘹":"ㄌㄧㄠˊ","嘻":"ㄒㄧ","噗":"ㄆㄨ","器":"ㄑㄧˋ","噩":"ㄜˋ","噪":"ㄗㄠˋ","噫":"ㄧ","噬":"ㄕˋ","噴":"ㄆㄣ","噸":"ㄉㄨㄣ","嚀":"ㄋㄧㄥˊ","嚅":"ㄖㄨˊ","嚇":"ㄒㄧㄚˋ","嚎":"ㄏㄠˊ","嚕":"ㄌㄨˇ","嚥":"ㄧㄢˋ","嚨":"ㄌㄨㄥˊ","嚮":"ㄒㄧㄤˋ","嚴":"ㄧㄢˊ","嚶":"ㄧㄥ","嚷":"ㄖㄤˇ","嚼":"ㄐㄩㄝˊ","囀":"ㄓㄨㄢˋ","囁":"ㄋㄧㄝˋ","囂":"ㄒㄧㄠ","囊":"ㄋㄤˊ","囑":"ㄓㄨˇ","四":"ㄙˋ","回":"ㄏㄨㄟˊ","因":"ㄧㄣ","囪":"ㄘㄨㄥ","囫":"ㄏㄨˊ","困":"ㄎㄨㄣˋ","囹":"ㄌㄧㄥˊ","固":"ㄍㄨˋ","圃":"ㄆㄨˇ","圄":"ㄩˇ","圇":"ㄌㄨㄣˊ","圈":"ㄑㄩㄢ","國":"ㄍㄨㄛˊ","圍":"ㄨㄟˊ","園":"ㄩㄢˊ","圓":"ㄩㄢˊ","圖":"ㄊㄨˊ","團":"ㄊㄨㄢˊ","土":"ㄊㄨˇ","在":"ㄗㄞˋ","地":"ㄉㄧˋ","圾":"ㄐㄧ","址":"ㄓˇ","均":"ㄐㄩㄣ","坎":"ㄎㄢˇ","坐":"ㄗㄨㄛˋ","坑":"ㄎㄥ","坡":"ㄆㄛ","坤":"ㄎㄨㄣ","坦":"ㄊㄢˇ","坪":"ㄆㄧㄥˊ","坳":"ㄠˋ","坷":"ㄎㄜˇ","坼":"ㄔㄜˋ","垂":"ㄔㄨㄟˊ","垃":"ㄌㄚ","型":"ㄒㄧㄥˊ","垠":"ㄧㄣˊ","垢":"ㄍㄡˋ","垮":"ㄎㄨㄚˇ","埃":"ㄞ","埋":"ㄇㄞˊ","城":"ㄔㄥˊ","域":"ㄩˋ","埡":"ㄧㄚ","執":"ㄓˊ","培":"ㄆㄟˊ","基":"ㄐㄧ","堂":"ㄊㄤˊ","堅":"ㄐㄧㄢ","堆":"ㄉㄨㄟ","堡":"ㄅㄠˇ","堤":"ㄉㄧ","堪":"ㄎㄢ","報":"ㄅㄠˋ","場":"ㄔㄤˇ","堵":"ㄉㄨˇ","塊":"ㄎㄨㄞˋ","塌":"ㄊㄚ","塑":"ㄙㄨˋ","塔":"ㄊㄚˇ","塗":"ㄊㄨˊ","塘":"ㄊㄤˊ","塞":"ㄙㄞ","填":"ㄊㄧㄢˊ","塵":"ㄔㄣˊ","境":"ㄐㄧㄥˋ","墊":"ㄉㄧㄢˋ","墓":"ㄇㄨˋ","增":"ㄗㄥ","墨":"ㄇㄛˋ","墩":"ㄉㄨㄣ","壁":"ㄅㄧˋ","壅":"ㄩㄥ","壇":"ㄊㄢˊ","壑":"ㄏㄜˋ","壓":"ㄧㄚ","壘":"ㄌㄟˇ","壞":"ㄏㄨㄞˋ","壤":"ㄖㄤˇ","士":"ㄕˋ","壯":"ㄓㄨㄤˋ","壺":"ㄏㄨˊ","壽":"ㄕㄡˋ","夏":"ㄒㄧㄚˋ","夕":"ㄒㄧ","外":"ㄨㄞˋ","多":"ㄉㄨㄛ","夜":"ㄧㄝˋ","夠":"ㄍㄡˋ","夢":"ㄇㄥˋ","夥":"ㄏㄨㄛˇ","大":"ㄉㄚˋ","天":"ㄊㄧㄢ","太":"ㄊㄞˋ","夫":"ㄈㄨ","央":"ㄧㄤ","失":"ㄕ","夷":"ㄧˊ","夸":"ㄎㄨㄚ","夾":"ㄐㄧㄚ","奄":"ㄧㄢˇ","奇":"ㄑㄧˊ","奈":"ㄋㄞˋ","奉":"ㄈㄥˋ","奏":"ㄗㄡˋ","契":"ㄑㄧˋ","奔":"ㄅㄣ","奕":"ㄧˋ","套":"ㄊㄠˋ","奚":"ㄒㄧ","奠":"ㄉㄧㄢˋ","奧":"ㄠˋ","奪":"ㄉㄨㄛˊ","奮":"ㄈㄣˋ","女":"ㄋㄩˇ","奴":"ㄋㄨˊ","奶":"ㄋㄞˇ","奸":"ㄐㄧㄢ","她":"ㄊㄚ","好":"ㄏㄠˇ","如":"ㄖㄨˊ","妄":"ㄨㄤˋ","妒":"ㄉㄨˋ","妖":"ㄧㄠ","妙":"ㄇㄧㄠˋ","妝":"ㄓㄨㄤ","妞":"ㄋㄧㄡ","妥":"ㄊㄨㄛˇ","妨":"ㄈㄤˊ","妳":"ㄋㄧˇ","妹":"ㄇㄟˋ","妻":"ㄑㄧ","始":"ㄕˇ","姍":"ㄕㄢ","姐":"ㄐㄧㄝˇ","姑":"ㄍㄨ","姓":"ㄒㄧㄥˋ","委":"ㄨㄟˇ","姚":"ㄧㄠˊ","姨":"ㄧˊ","姪":"ㄓˊ","姬":"ㄐㄧ","姿":"ㄗ","威":"ㄨㄟ","娃":"ㄨㄚˊ","娉":"ㄆㄧㄥ","娑":"ㄙㄨㄛ","娘":"ㄋㄧㄤˊ","娛":"ㄩˊ","娥":"ㄜˊ","娶":"ㄑㄩˇ","婁":"ㄌㄡˊ","婆":"ㄆㄛˊ","婉":"ㄨㄢˇ","婚":"ㄏㄨㄣ","婦":"ㄈㄨˋ","婪":"ㄌㄢˊ","婷":"ㄊㄧㄥˊ","媒":"ㄇㄟˊ","媚":"ㄇㄟˋ","媲":"ㄆㄧˋ","媽":"ㄇㄚ","嫁":"ㄐㄧㄚˋ","嫂":"ㄙㄠˇ","嫌":"ㄒㄧㄢˊ","嫦":"ㄔㄤˊ","嫩":"ㄋㄣˋ","嫵":"ㄨˇ","嫻":"ㄒㄧㄢˊ","嬉":"ㄒㄧ","嬌":"ㄐㄧㄠ","嬤":"ㄇㄚ","嬰":"ㄧㄥ","嬸":"ㄕㄣˇ","孃":"ㄋㄧㄤˊ","子":"ㄗ˙","孔":"ㄎㄨㄥˇ","字":"ㄗˋ","存":"ㄘㄨㄣˊ","孜":"ㄗ","孝":"ㄒㄧㄠˋ","季":"ㄐㄧˋ","孤":"ㄍㄨ","孩":"ㄏㄞˊ","孫":"ㄙㄨㄣ","孰":"ㄕㄨˊ","學":"ㄒㄩㄝˊ","它":"ㄊㄚ","宅":"ㄓㄞˊ","宇":"ㄩˇ","守":"ㄕㄡˇ","安":"ㄢ","完":"ㄨㄢˊ","宏":"ㄏㄨㄥˊ","宕":"ㄉㄤˋ","宗":"ㄗㄨㄥ","官":"ㄍㄨㄢ","宙":"ㄓㄡˋ","定":"ㄉㄧㄥˋ","宛":"ㄨㄢˇ","宜":"ㄧˊ","客":"ㄎㄜˋ","宣":"ㄒㄩㄢ","室":"ㄕˋ","宮":"ㄍㄨㄥ","害":"ㄏㄞˋ","宴":"ㄧㄢˋ","家":"ㄐㄧㄚ","容":"ㄖㄨㄥˊ","宿":"ㄙㄨˋ","寂":"ㄐㄧˋ","寄":"ㄐㄧˋ","密":"ㄇㄧˋ","富":"ㄈㄨˋ","寒":"ㄏㄢˊ","寓":"ㄩˋ","寞":"ㄇㄛˋ","察":"ㄔㄚˊ","寡":"ㄍㄨㄚˇ","寥":"ㄌㄧㄠˊ","實":"ㄕˊ","寧":"ㄋㄧㄥˊ","寨":"ㄓㄞˋ","審":"ㄕㄣˇ","寫":"ㄒㄧㄝˇ","寬":"ㄎㄨㄢ","寮":"ㄌㄧㄠˊ","寵":"ㄔㄨㄥˇ","寶":"ㄅㄠˇ","寸":"ㄘㄨㄣˋ","寺":"ㄙˋ","封":"ㄈㄥ","射":"ㄕㄜˋ","將":"ㄐㄧㄤ","專":"ㄓㄨㄢ","尉":"ㄨㄟˋ","尊":"ㄗㄨㄣ","尋":"ㄒㄩㄣˊ","對":"ㄉㄨㄟˋ","導":"ㄉㄠˇ","小":"ㄒㄧㄠˇ","少":"ㄕㄠˇ","尖":"ㄐㄧㄢ","尚":"ㄕㄤˋ","尤":"ㄧㄡˊ","尬":"ㄍㄚˋ","就":"ㄐㄧㄡˋ","尷":"ㄍㄢ","尺":"ㄔˇ","尼":"ㄋㄧˊ","尾":"ㄨㄟˇ","尿":"ㄋㄧㄠˋ","局":"ㄐㄩˊ","屁":"ㄆㄧˋ","居":"ㄐㄩ","屆":"ㄐㄧㄝˋ","屈":"ㄑㄩ","屋":"ㄨ","屍":"ㄕ","屏":"ㄆㄧㄥˊ","屑":"ㄒㄧㄝˋ","展":"ㄓㄢˇ","屢":"ㄌㄩˇ","層":"ㄘㄥˊ","履":"ㄌㄩˇ","屬":"ㄕㄨˇ","山":"ㄕㄢ","屹":"ㄧˋ","岌":"ㄐㄧˊ","岔":"ㄔㄚˋ","岩":"ㄧㄢˊ","岬":"ㄐㄧㄚˇ","岱":"ㄉㄞˋ","岸":"ㄢˋ","峙":"ㄓˋ","峭":"ㄑㄧㄠˋ","峰":"ㄈㄥ","島":"ㄉㄠˇ","峽":"ㄒㄧㄚˊ","崇":"ㄔㄨㄥˊ","崎":"ㄑㄧˊ","崖":"ㄧㄚˊ","崗":"ㄍㄤˇ","崩":"ㄅㄥ","嵌":"ㄑㄧㄢˋ","嵐":"ㄌㄢˊ","嶄":"ㄓㄢˇ","嶇":"ㄑㄩ","嶺":"ㄌㄧㄥˇ","嶼":"ㄩˇ","巉":"ㄔㄢˊ","巍":"ㄨㄟ","巒":"ㄌㄨㄢˊ","巔":"ㄉㄧㄢ","巖":"ㄧㄢˊ","川":"ㄔㄨㄢ","州":"ㄓㄡ","巡":"ㄒㄩㄣˊ","巢":"ㄔㄠˊ","工":"ㄍㄨㄥ","左":"ㄗㄨㄛˇ","巧":"ㄑㄧㄠˇ","巨":"ㄐㄩˋ","巫":"ㄨ","差":"ㄔㄚˋ","己":"ㄐㄧˇ","已":"ㄧˇ","巴":"ㄅㄚ","巷":"ㄒㄧㄤˋ","巾":"ㄐㄧㄣ","市":"ㄕˋ","布":"ㄅㄨˋ","帆":"ㄈㄢ","希":"ㄒㄧ","帖":"ㄊㄧㄝ","帝":"ㄉㄧˋ","帥":"ㄕㄨㄞˋ","師":"ㄕ","席":"ㄒㄧˊ","帳":"ㄓㄤˋ","帶":"ㄉㄞˋ","常":"ㄔㄤˊ","帽":"ㄇㄠˋ","幀":"ㄓㄥˋ","幅":"ㄈㄨˊ","幔":"ㄇㄢˋ","幕":"ㄇㄨˋ","幟":"ㄓˋ","幡":"ㄈㄢ","幢":"ㄔㄨㄤˊ","幣":"ㄅㄧˋ","幫":"ㄅㄤ","干":"ㄍㄢˋ","平":"ㄆㄧㄥˊ","年":"ㄋㄧㄢˊ","幸":"ㄒㄧㄥˋ","幹":"ㄍㄢˋ","幻":"ㄏㄨㄢˋ","幼":"ㄧㄡˋ","幽":"ㄧㄡ","幾":"ㄐㄧˇ","庇":"ㄅㄧˋ","床":"ㄔㄨㄤˊ","序":"ㄒㄩˋ","底":"ㄉㄧˇ","店":"ㄉㄧㄢˋ","府":"ㄈㄨˇ","度":"ㄉㄨˋ","座":"ㄗㄨㄛˋ","庫":"ㄎㄨˋ","庭":"ㄊㄧㄥˊ","庶":"ㄕㄨˋ","康":"ㄎㄤ","庸":"ㄩㄥ","廁":"ㄘㄜˋ","廂":"ㄒㄧㄤ","廊":"ㄌㄤˊ","廍":"ㄅㄨˋ","廓":"ㄎㄨㄛˋ","廚":"ㄔㄨˊ","廝":"ㄙ","廟":"ㄇㄧㄠˋ","廠":"ㄔㄤˇ","廢":"ㄈㄟˋ","廣":"ㄍㄨㄤˇ","廬":"ㄌㄨˊ","廳":"ㄊㄧㄥ","延":"ㄧㄢˊ","廷":"ㄊㄧㄥˊ","建":"ㄐㄧㄢˋ","弄":"ㄋㄨㄥˋ","弊":"ㄅㄧˋ","式":"ㄕˋ","弓":"ㄍㄨㄥ","引":"ㄧㄣˇ","弗":"ㄈㄨˊ","弟":"ㄉㄧˋ","弦":"ㄒㄧㄢˊ","弧":"ㄏㄨˊ","弱":"ㄖㄨㄛˋ","張":"ㄓㄤ","強":"ㄑㄧㄤˊ","弼":"ㄅㄧˋ","彆":"ㄅㄧㄝˋ","彈":"ㄉㄢˋ","彌":"ㄇㄧˊ","彎":"ㄨㄢ","彙":"ㄏㄨㄟˋ","形":"ㄒㄧㄥˊ","彩":"ㄘㄞˇ","彰":"ㄓㄤ","影":"ㄧㄥˇ","彳":"ㄔˋ","彷":"ㄆㄤˊ","彼":"ㄅㄧˇ","彿":"ㄈㄨˊ","往":"ㄨㄤˇ","征":"ㄓㄥ","待":"ㄉㄞˋ","很":"ㄏㄣˇ","徉":"ㄧㄤˊ","徊":"ㄏㄨㄞˊ","律":"ㄌㄩˋ","後":"ㄏㄡˋ","徐":"ㄒㄩˊ","徑":"ㄐㄧㄥˋ","徒":"ㄊㄨˊ","得":"ㄉㄜˊ","徘":"ㄆㄞˊ","徜":"ㄔㄤˊ","從":"ㄘㄨㄥˊ","復":"ㄈㄨˋ","循":"ㄒㄩㄣˊ","微":"ㄨㄟ","徵":"ㄓㄥ","德":"ㄉㄜˊ","徹":"ㄔㄜˋ","徽":"ㄏㄨㄟ","心":"ㄒㄧㄣ","必":"ㄅㄧˋ","忌":"ㄐㄧˋ","忍":"ㄖㄣˇ","忐":"ㄊㄢˇ","忑":"ㄊㄜˋ","志":"ㄓˋ","忘":"ㄨㄤˋ","忙":"ㄇㄤˊ","忠":"ㄓㄨㄥ","快":"ㄎㄨㄞˋ","念":"ㄋㄧㄢˋ","忽":"ㄏㄨ","怎":"ㄗㄣˇ","怒":"ㄋㄨˋ","怔":"ㄓㄥ","怕":"ㄆㄚˋ","怖":"ㄅㄨˋ","怜":"ㄌㄧㄢˊ","思":"ㄙ","怠":"ㄉㄞˋ","怡":"ㄧˊ","急":"ㄐㄧˊ","性":"ㄒㄧㄥˋ","怨":"ㄩㄢˋ","怪":"ㄍㄨㄞˋ","怯":"ㄑㄧㄝˋ","恃":"ㄕˋ","恆":"ㄏㄥˊ","恍":"ㄏㄨㄤˇ","恐":"ㄎㄨㄥˇ","恕":"ㄕㄨˋ","恙":"ㄧㄤˋ","恢":"ㄏㄨㄟ","恣":"ㄗˋ","恥":"ㄔˇ","恨":"ㄏㄣˋ","恩":"ㄣ","恫":"ㄉㄨㄥˋ","恬":"ㄊㄧㄢˊ","恭":"ㄍㄨㄥ","息":"ㄒㄧ","恰":"ㄑㄧㄚˋ","恿":"ㄩㄥˇ","悄":"ㄑㄧㄠ","悅":"ㄩㄝˋ","悉":"ㄒㄧ","悔":"ㄏㄨㄟˇ","悚":"ㄙㄨㄥˇ","悟":"ㄨˋ","悠":"ㄧㄡ","患":"ㄏㄨㄢˋ","您":"ㄋㄧㄣˊ","悲":"ㄅㄟ","悴":"ㄘㄨㄟˋ","悶":"ㄇㄣˋ","悻":"ㄒㄧㄥˋ","情":"ㄑㄧㄥˊ","惋":"ㄨㄢˇ","惑":"ㄏㄨㄛˋ","惕":"ㄊㄧˋ","惚":"ㄏㄨ","惜":"ㄒㄧ","惟":"ㄨㄟˊ","惠":"ㄏㄨㄟˋ","惡":"ㄜˋ","惦":"ㄉㄧㄢˋ","惱":"ㄋㄠˇ","想":"ㄒㄧㄤˇ","惶":"ㄏㄨㄤˊ","惹":"ㄖㄜˇ","愁":"ㄔㄡˊ","愈":"ㄩˋ","愉":"ㄩˊ","意":"ㄧˋ","愕":"ㄜˋ","愚":"ㄩˊ","愛":"ㄞˋ","愜":"ㄑㄧㄝˋ","感":"ㄍㄢˇ","愣":"ㄌㄥˋ","愧":"ㄎㄨㄟˋ","慈":"ㄘˊ","態":"ㄊㄞˋ","慌":"ㄏㄨㄤ","慍":"ㄩㄣˋ","慎":"ㄕㄣˋ","慕":"ㄇㄨˋ","慘":"ㄘㄢˇ","慚":"ㄘㄢˊ","慢":"ㄇㄢˋ","慣":"ㄍㄨㄢˋ","慧":"ㄏㄨㄟˋ","慨":"ㄎㄞˇ","慫":"ㄙㄨㄥˇ","慮":"ㄌㄩˋ","慰":"ㄨㄟˋ","慵":"ㄩㄥ","慶":"ㄑㄧㄥˋ","慷":"ㄎㄤ","憂":"ㄧㄡ","憊":"ㄅㄟˋ","憋":"ㄅㄧㄝ","憐":"ㄌㄧㄢˊ","憑":"ㄆㄧㄥˊ","憔":"ㄑㄧㄠˊ","憚":"ㄉㄢˋ","憤":"ㄈㄣˋ","憧":"ㄔㄨㄥ","憬":"ㄐㄧㄥˇ","憶":"ㄧˋ","憾":"ㄏㄢˋ","懂":"ㄉㄨㄥˇ","懇":"ㄎㄣˇ","懈":"ㄒㄧㄝˋ","應":"ㄧㄥ","懊":"ㄠˋ","懦":"ㄋㄨㄛˋ","懨":"ㄧㄢ","懵":"ㄇㄥˇ","懶":"ㄌㄢˇ","懷":"ㄏㄨㄞˊ","懸":"ㄒㄩㄢˊ","懼":"ㄐㄩˋ","懾":"ㄕㄜˋ","懿":"ㄧˋ","戀":"ㄌㄧㄢˋ","戈":"ㄍㄜ","戎":"ㄖㄨㄥˊ","成":"ㄔㄥˊ","我":"ㄨㄛˇ","戒":"ㄐㄧㄝˋ","或":"ㄏㄨㄛˋ","戚":"ㄑㄧ","戛":"ㄐㄧㄚˊ","截":"ㄐㄧㄝˊ","戰":"ㄓㄢˋ","戲":"ㄒㄧˋ","戴":"ㄉㄞˋ","戶":"ㄏㄨˋ","戾":"ㄌㄧˋ","房":"ㄈㄤˊ","所":"ㄙㄨㄛˇ","扁":"ㄅㄧㄢˇ","扇":"ㄕㄢˋ","扉":"ㄈㄟ","手":"ㄕㄡˇ","才":"ㄘㄞˊ","扎":"ㄓㄚ","打":"ㄉㄚˇ","托":"ㄊㄨㄛ","扛":"ㄎㄤˊ","扣":"ㄎㄡˋ","扭":"ㄋㄧㄡˇ","扮":"ㄅㄢˋ","扶":"ㄈㄨˊ","批":"ㄆㄧ","扼":"ㄜˋ","找":"ㄓㄠˇ","承":"ㄔㄥˊ","技":"ㄐㄧˋ","抄":"ㄔㄠ","抉":"ㄐㄩㄝˊ","把":"ㄅㄚˇ","抑":"ㄧˋ","抒":"ㄕㄨ","抓":"ㄓㄨㄚ","投":"ㄊㄡˊ","抖":"ㄉㄡˇ","抗":"ㄎㄤˋ","折":"ㄓㄜˊ","披":"ㄆㄧ","抬":"ㄊㄞˊ","抱":"ㄅㄠˋ","抵":"ㄉㄧˇ","抹":"ㄇㄛˇ","押":"ㄧㄚ","抽":"ㄔㄡ","拂":"ㄈㄨˊ","拆":"ㄔㄞ","拇":"ㄇㄨˇ","拈":"ㄋㄧㄢ","拉":"ㄌㄚ","拋":"ㄆㄠ","拌":"ㄅㄢˋ","拍":"ㄆㄞ","拎":"ㄌㄧㄣ","拏":"ㄋㄚˊ","拒":"ㄐㄩˋ","拓":"ㄊㄨㄛˋ","拔":"ㄅㄚˊ","拖":"ㄊㄨㄛ","拘":"ㄐㄩ","拙":"ㄓㄨㄛ","拚":"ㄆㄢˋ","招":"ㄓㄠ","拜":"ㄅㄞˋ","括":"ㄎㄨㄛˋ","拭":"ㄕˋ","拮":"ㄐㄧㄝˊ","拯":"ㄓㄥˇ","拱":"ㄍㄨㄥˇ","拳":"ㄑㄩㄢˊ","拴":"ㄕㄨㄢ","拼":"ㄆㄧㄣ","拾":"ㄕˊ","拿":"ㄋㄚˊ","持":"ㄔˊ","指":"ㄓˇ","按":"ㄢˋ","挑":"ㄊㄧㄠ","挖":"ㄨㄚ","挨":"ㄞ","挫":"ㄘㄨㄛˋ","振":"ㄓㄣˋ","挺":"ㄊㄧㄥˇ","挽":"ㄨㄢˇ","捉":"ㄓㄨㄛ","捍":"ㄏㄢˋ","捏":"ㄋㄧㄝ","捐":"ㄐㄩㄢ","捕":"ㄅㄨˇ","捧":"ㄆㄥˇ","捨":"ㄕㄜˇ","捭":"ㄅㄞˇ","据":"ㄐㄩˋ","捱":"ㄞˊ","捲":"ㄐㄩㄢˇ","捶":"ㄔㄨㄟˊ","捷":"ㄐㄧㄝˊ","掀":"ㄒㄧㄢ","掃":"ㄙㄠˇ","授":"ㄕㄡˋ","掉":"ㄉㄧㄠˋ","掌":"ㄓㄤˇ","掏":"ㄊㄠ","排":"ㄆㄞˊ","掘":"ㄐㄩㄝˊ","掙":"ㄓㄥ","掛":"ㄍㄨㄚˋ","掠":"ㄌㄩㄝˋ","採":"ㄘㄞˇ","探":"ㄊㄢˋ","掣":"ㄔㄜˋ","接":"ㄐㄧㄝ","控":"ㄎㄨㄥˋ","推":"ㄊㄨㄟ","掩":"ㄧㄢˇ","措":"ㄘㄨㄛˋ","掬":"ㄐㄩ","揀":"ㄐㄧㄢˇ","揄":"ㄩˊ","揉":"ㄖㄡˊ","描":"ㄇㄧㄠˊ","提":"ㄊㄧˊ","插":"ㄔㄚ","揖":"ㄧ","揚":"ㄧㄤˊ","換":"ㄏㄨㄢˋ","握":"ㄨㄛˋ","揣":"ㄔㄨㄞ","揭":"ㄐㄧㄝ","揮":"ㄏㄨㄟ","援":"ㄩㄢˊ","揶":"ㄧㄝˊ","損":"ㄙㄨㄣˇ","搏":"ㄅㄛˊ","搓":"ㄘㄨㄛ","搔":"ㄙㄠ","搖":"ㄧㄠˊ","搗":"ㄉㄠˇ","搜":"ㄙㄡ","搞":"ㄍㄠˇ","搧":"ㄕㄢ","搪":"ㄊㄤˊ","搬":"ㄅㄢ","搭":"ㄉㄚ","搶":"ㄑㄧㄤˇ","摒":"ㄅㄧㄥˇ","摔":"ㄕㄨㄞ","摘":"ㄓㄞ","摟":"ㄌㄡˇ","摩":"ㄇㄛˊ","摯":"ㄓˋ","摸":"ㄇㄛ","摺":"ㄓㄜˊ","摻":"ㄘㄢˋ","撂":"ㄌㄧㄠˋ","撇":"ㄆㄧㄝ","撈":"ㄌㄠ","撐":"ㄔㄥ","撒":"ㄙㄚ","撓":"ㄋㄠˊ","撞":"ㄓㄨㄤˋ","撣":"ㄉㄢˇ","撤":"ㄔㄜˋ","撥":"ㄅㄛ","撫":"ㄈㄨˇ","播":"ㄅㄛ","撰":"ㄓㄨㄢˋ","撲":"ㄆㄨ","撼":"ㄏㄢˋ","撿":"ㄐㄧㄢˇ","擁":"ㄩㄥ","擂":"ㄌㄟˊ","擄":"ㄌㄨˇ","擅":"ㄕㄢˋ","擇":"ㄗㄜˊ","擊":"ㄐㄧ","擋":"ㄉㄤˇ","操":"ㄘㄠ","擎":"ㄑㄧㄥˊ","擒":"ㄑㄧㄣˊ","擔":"ㄉㄢ","據":"ㄐㄩˋ","擠":"ㄐㄧˇ","擢":"ㄓㄨㄛˊ","擤":"ㄒㄧㄥˇ","擦":"ㄘㄚ","擬":"ㄋㄧˇ","擰":"ㄋㄧㄥˊ","擱":"ㄍㄜ","擴":"ㄎㄨㄛˋ","擷":"ㄒㄧㄝˊ","擺":"ㄅㄞˇ","擻":"ㄙㄡˇ","擾":"ㄖㄠˇ","攀":"ㄆㄢ","攏":"ㄌㄨㄥˇ","攔":"ㄌㄢˊ","攘":"ㄖㄤˇ","攙":"ㄔㄢ","攜":"ㄒㄧㄝˊ","攝":"ㄕㄜˋ","攢":"ㄗㄢˇ","攤":"ㄊㄢ","攥":"ㄗㄨㄢˋ","攪":"ㄐㄧㄠˇ","攫":"ㄐㄩㄝˊ","支":"ㄓ","收":"ㄕㄡ","改":"ㄍㄞˇ","攻":"ㄍㄨㄥ","放":"ㄈㄤˋ","政":"ㄓㄥˋ","故":"ㄍㄨˋ","效":"ㄒㄧㄠˋ","敏":"ㄇㄧㄣˇ","救":"ㄐㄧㄡˋ","敖":"ㄠˊ","敗":"ㄅㄞˋ","敘":"ㄒㄩˋ","教":"ㄐㄧㄠˋ","敢":"ㄍㄢˇ","散":"ㄙㄢˋ","敦":"ㄉㄨㄣ","敬":"ㄐㄧㄥˋ","敲":"ㄑㄧㄠ","整":"ㄓㄥˇ","敵":"ㄉㄧˊ","敷":"ㄈㄨ","數":"ㄕㄨˋ","斂":"ㄌㄧㄢˇ","斃":"ㄅㄧˋ","文":"ㄨㄣˊ","斑":"ㄅㄢ","斕":"ㄌㄢˊ","斗":"ㄉㄡˋ","料":"ㄌㄧㄠˋ","斛":"ㄏㄨˊ","斜":"ㄒㄧㄝˊ","斤":"ㄐㄧㄣ","斥":"ㄔˋ","斧":"ㄈㄨˇ","斯":"ㄙ","新":"ㄒㄧㄣ","斷":"ㄉㄨㄢˋ","方":"ㄈㄤ","於":"ㄩˊ","施":"ㄕ","旁":"ㄆㄤˊ","旅":"ㄌㄩˇ","旋":"ㄒㄩㄢˊ","旌":"ㄐㄧㄥ","族":"ㄗㄨˊ","旗":"ㄑㄧˊ","既":"ㄐㄧˋ","日":"ㄖˋ","旦":"ㄉㄢˋ","旨":"ㄓˇ","早":"ㄗㄠˇ","旬":"ㄒㄩㄣˊ","旭":"ㄒㄩˋ","旱":"ㄏㄢˋ","旺":"ㄨㄤˋ","昂":"ㄤˊ","昆":"ㄎㄨㄣ","明":"ㄇㄧㄥˊ","昏":"ㄏㄨㄣ","易":"ㄧˋ","星":"ㄒㄧㄥ","映":"ㄧㄥˋ","春":"ㄔㄨㄣ","昧":"ㄇㄟˋ","昨":"ㄗㄨㄛˊ","是":"ㄕˋ","昳":"ㄉㄧㄝˊ","時":"ㄕˊ","晃":"ㄏㄨㄤˇ","晉":"ㄐㄧㄣˋ","晌":"ㄕㄤˇ","晏":"ㄧㄢˋ","晒":"ㄕㄞˋ","晚":"ㄨㄢˇ","晤":"ㄨˋ","晨":"ㄔㄣˊ","普":"ㄆㄨˇ","景":"ㄐㄧㄥˇ","晰":"ㄒㄧ","晴":"ㄑㄧㄥˊ","晶":"ㄐㄧㄥ","智":"ㄓˋ","晾":"ㄌㄧㄤˋ","暇":"ㄒㄧㄚˊ","暈":"ㄩㄣ","暉":"ㄏㄨㄟ","暑":"ㄕㄨˇ","暖":"ㄋㄨㄢˇ","暗":"ㄢˋ","暝":"ㄇㄧㄥˊ","暢":"ㄔㄤˋ","暫":"ㄗㄢˋ","暮":"ㄇㄨˋ","暴":"ㄅㄠˋ","暾":"ㄊㄨㄣ","曆":"ㄌㄧˋ","曉":"ㄒㄧㄠˇ","曙":"ㄕㄨˇ","曝":"ㄆㄨˋ","曠":"ㄎㄨㄤˋ","曰":"ㄩㄝ","曲":"ㄑㄩ","曳":"ㄧㄝˋ","更":"ㄍㄥˋ","書":"ㄕㄨ","曹":"ㄘㄠˊ","曼":"ㄇㄢˋ","曾":"ㄘㄥˊ","替":"ㄊㄧˋ","最":"ㄗㄨㄟˋ","會":"ㄏㄨㄟˋ","月":"ㄩㄝˋ","有":"ㄧㄡˇ","朋":"ㄆㄥˊ","服":"ㄈㄨˊ","朔":"ㄕㄨㄛˋ","朗":"ㄌㄤˇ","望":"ㄨㄤˋ","朝":"ㄔㄠˊ","期":"ㄑㄧ","朦":"ㄇㄥˊ","朧":"ㄌㄨㄥˊ","木":"ㄇㄨˋ","未":"ㄨㄟˋ","末":"ㄇㄛˋ","本":"ㄅㄣˇ","札":"ㄓㄚˊ","朱":"ㄓㄨ","朵":"ㄉㄨㄛˇ","朽":"ㄒㄧㄡˇ","杆":"ㄍㄢ","杉":"ㄕㄢ","李":"ㄌㄧˇ","杏":"ㄒㄧㄥˋ","材":"ㄘㄞˊ","村":"ㄘㄨㄣ","杖":"ㄓㄤˋ","杜":"ㄉㄨˋ","束":"ㄕㄨˋ","杯":"ㄅㄟ","東":"ㄉㄨㄥ","杵":"ㄔㄨˇ","杷":"ㄆㄚˊ","杼":"ㄓㄨˋ","松":"ㄙㄨㄥ","板":"ㄅㄢˇ","枇":"ㄆㄧˊ","枉":"ㄨㄤˇ","枕":"ㄓㄣˇ","林":"ㄌㄧㄣˊ","枚":"ㄇㄟˊ","果":"ㄍㄨㄛˇ","枝":"ㄓ","枯":"ㄎㄨ","架":"ㄐㄧㄚˋ","枷":"ㄐㄧㄚ","柄":"ㄅㄧㄥˇ","某":"ㄇㄡˇ","染":"ㄖㄢˇ","柔":"ㄖㄡˊ","柙":"ㄒㄧㄚˊ","柢":"ㄉㄧˇ","查":"ㄔㄚˊ","柯":"ㄎㄜ","柱":"ㄓㄨˋ","柳":"ㄌㄧㄡˇ","柴":"ㄔㄞˊ","柵":"ㄕㄢ","柺":"ㄍㄨㄞˇ","栗":"ㄌㄧˋ","校":"ㄒㄧㄠˋ","栩":"ㄒㄩˇ","株":"ㄓㄨ","核":"ㄏㄜˊ","根":"ㄍㄣ","格":"ㄍㄜˊ","栽":"ㄗㄞ","桂":"ㄍㄨㄟˋ","桃":"ㄊㄠˊ","框":"ㄎㄨㄤ","案":"ㄢˋ","桌":"ㄓㄨㄛ","桐":"ㄊㄨㄥˊ","桑":"ㄙㄤ","桶":"ㄊㄨㄥˇ","桿":"ㄍㄢˇ","梁":"ㄌㄧㄤˊ","梅":"ㄇㄟˊ","條":"ㄊㄧㄠˊ","梢":"ㄕㄠ","梧":"ㄨˊ","梨":"ㄌㄧˊ","梭":"ㄙㄨㄛ","梯":"ㄊㄧ","械":"ㄒㄧㄝˋ","梳":"ㄕㄨ","棄":"ㄑㄧˋ","棉":"ㄇㄧㄢˊ","棋":"ㄑㄧˊ","棍":"ㄍㄨㄣˋ","棒":"ㄅㄤˋ","棕":"ㄗㄨㄥ","棘":"ㄐㄧˊ","棚":"ㄆㄥˊ","棟":"ㄉㄨㄥˋ","棧":"ㄓㄢˋ","森":"ㄙㄣ","棲":"ㄑㄧ","棵":"ㄎㄜ","椅":"ㄧˇ","植":"ㄓˊ","椏":"ㄧㄚ","椒":"ㄐㄧㄠ","椰":"ㄧㄝ","楊":"ㄧㄤˊ","楓":"ㄈㄥ","楚":"ㄔㄨˇ","楞":"ㄌㄥˊ","業":"ㄧㄝˋ","極":"ㄐㄧˊ","楷":"ㄎㄞˇ","概":"ㄍㄞˋ","榔":"ㄌㄤˊ","榜":"ㄅㄤˇ","榮":"ㄖㄨㄥˊ","榻":"ㄊㄚˋ","構":"ㄍㄡˋ","槌":"ㄔㄨㄟˊ","槍":"ㄑㄧㄤ","槳":"ㄐㄧㄤˇ","樁":"ㄓㄨㄤ","樂":"ㄌㄜˋ","樊":"ㄈㄢˊ","樓":"ㄌㄡˊ","標":"ㄅㄧㄠ","模":"ㄇㄛˊ","樣":"ㄧㄤˋ","樸":"ㄆㄨˇ","樹":"ㄕㄨˋ","樽":"ㄗㄨㄣ","橇":"ㄑㄧㄠ","橋":"ㄑㄧㄠˊ","橘":"ㄐㄩˊ","橙":"ㄔㄥˊ","機":"ㄐㄧ","橡":"ㄒㄧㄤˋ","橫":"ㄏㄥˊ","檔":"ㄉㄤˋ","檢":"ㄐㄧㄢˇ","檳":"ㄅㄧㄣ","檻":"ㄎㄢˇ","櫃":"ㄍㄨㄟˋ","櫛":"ㄓˋ","櫺":"ㄌㄧㄥˊ","欄":"ㄌㄢˊ","權":"ㄑㄩㄢˊ","欒":"ㄌㄨㄢˊ","欠":"ㄑㄧㄢˋ","次":"ㄘˋ","欣":"ㄒㄧㄣ","欲":"ㄩˋ","欺":"ㄑㄧ","款":"ㄎㄨㄢˇ","歇":"ㄒㄧㄝ","歉":"ㄑㄧㄢˋ","歌":"ㄍㄜ","歐":"ㄡ","歟":"ㄩˊ","歡":"ㄏㄨㄢ","止":"ㄓˇ","正":"ㄓㄥˋ","此":"ㄘˇ","步":"ㄅㄨˋ","武":"ㄨˇ","歧":"ㄑㄧˊ","歪":"ㄨㄞ","歲":"ㄙㄨㄟˋ","歷":"ㄌㄧˋ","歸":"ㄍㄨㄟ","死":"ㄙˇ","歿":"ㄇㄛˋ","殆":"ㄉㄞˋ","殊":"ㄕㄨ","殖":"ㄓˊ","殘":"ㄘㄢˊ","段":"ㄉㄨㄢˋ","殷":"ㄧㄣ","殺":"ㄕㄚ","殼":"ㄎㄜˊ","殿":"ㄉㄧㄢˋ","毀":"ㄏㄨㄟˇ","毅":"ㄧˋ","毋":"ㄨˊ","母":"ㄇㄨˇ","每":"ㄇㄟˇ","毒":"ㄉㄨˊ","比":"ㄅㄧˇ","毛":"ㄇㄠˊ","毫":"ㄏㄠˊ","毯":"ㄊㄢˇ","毳":"ㄘㄨㄟˋ","氅":"ㄔㄤˇ","氈":"ㄓㄢ","氏":"ㄕˋ","民":"ㄇㄧㄣˊ","氓":"ㄇㄤˊ","氛":"ㄈㄣ","氣":"ㄑㄧˋ","氧":"ㄧㄤˇ","水":"ㄕㄨㄟˇ","永":"ㄩㄥˇ","汁":"ㄓ","求":"ㄑㄧㄡˊ","汐":"ㄒㄧ","汗":"ㄏㄢˋ","汙":"ㄨ","汛":"ㄒㄩㄣˋ","江":"ㄐㄧㄤ","池":"ㄔˊ","汰":"ㄊㄞˋ","汲":"ㄐㄧˊ","決":"ㄐㄩㄝˊ","汽":"ㄑㄧˋ","沁":"ㄑㄧㄣˋ","沂":"ㄧˊ","沃":"ㄨㄛˋ","沆":"ㄏㄤˋ","沈":"ㄕㄣˇ","沉":"ㄔㄣˊ","沒":"ㄇㄟˊ","沓":"ㄉㄚˊ","沖":"ㄔㄨㄥ","沙":"ㄕㄚ","沛":"ㄆㄟˋ","沫":"ㄇㄛˋ","沮":"ㄐㄩˇ","沱":"ㄊㄨㄛˊ","河":"ㄏㄜˊ","沸":"ㄈㄟˋ","油":"ㄧㄡˊ","治":"ㄓˋ","沼":"ㄓㄠˇ","沾":"ㄓㄢ","沿":"ㄧㄢˊ","況":"ㄎㄨㄤˋ","泉":"ㄑㄩㄢˊ","泊":"ㄆㄛ","泓":"ㄏㄨㄥˊ","法":"ㄈㄚˇ","泛":"ㄈㄢˋ","泠":"ㄌㄧㄥˊ","泡":"ㄆㄠˋ","波":"ㄅㄛ","泣":"ㄑㄧˋ","泥":"ㄋㄧˊ","注":"ㄓㄨˋ","泫":"ㄒㄩㄢˋ","泰":"ㄊㄞˋ","泳":"ㄩㄥˇ","洄":"ㄏㄨㄟˊ","洋":"ㄧㄤˊ","洗":"ㄒㄧˇ","洛":"ㄌㄨㄛˋ","洞":"ㄉㄨㄥˋ","津":"ㄐㄧㄣ","洪":"ㄏㄨㄥˊ","洲":"ㄓㄡ","洶":"ㄒㄩㄥ","活":"ㄏㄨㄛˊ","派":"ㄆㄞˋ","流":"ㄌㄧㄡˊ","浣":"ㄏㄨㄢˋ","浦":"ㄆㄨˇ","浩":"ㄏㄠˋ","浪":"ㄌㄤˋ","浮":"ㄈㄨˊ","浴":"ㄩˋ","海":"ㄏㄞˇ","浸":"ㄐㄧㄣˋ","浹":"ㄐㄧㄚ","消":"ㄒㄧㄠ","涉":"ㄕㄜˋ","涎":"ㄒㄧㄢˊ","涕":"ㄊㄧˋ","涯":"ㄧㄚˊ","液":"ㄧㄝˋ","涵":"ㄏㄢˊ","涸":"ㄏㄜˊ","涼":"ㄌㄧㄤˊ","淋":"ㄌㄧㄣˊ","淌":"ㄊㄤˇ","淘":"ㄊㄠˊ","淚":"ㄌㄟˋ","淡":"ㄉㄢˋ","淤":"ㄩ","淨":"ㄐㄧㄥˋ","深":"ㄕㄣ","混":"ㄏㄨㄣˋ","淹":"ㄧㄢ","淺":"ㄑㄧㄢˇ","添":"ㄊㄧㄢ","淼":"ㄇㄧㄠˇ","清":"ㄑㄧㄥ","減":"ㄐㄧㄢˇ","渠":"ㄑㄩˊ","渡":"ㄉㄨˋ","測":"ㄘㄜˋ","渭":"ㄨㄟˋ","港":"ㄍㄤˇ","渲":"ㄒㄩㄢˋ","渴":"ㄎㄜˇ","游":"ㄧㄡˊ","渺":"ㄇㄧㄠˇ","渾":"ㄏㄨㄣˊ","湃":"ㄆㄞˋ","湊":"ㄘㄡˋ","湍":"ㄊㄨㄢ","湖":"ㄏㄨˊ","湛":"ㄓㄢˋ","湧":"ㄩㄥˇ","湯":"ㄊㄤ","源":"ㄩㄢˊ","準":"ㄓㄨㄣˇ","溜":"ㄌㄧㄡ","溝":"ㄍㄡ","溢":"ㄧˋ","溪":"ㄒㄧ","溫":"ㄨㄣ","溯":"ㄙㄨˋ","溶":"ㄖㄨㄥˊ","溺":"ㄋㄧˋ","溼":"ㄕ","滂":"ㄆㄤ","滄":"ㄘㄤ","滅":"ㄇㄧㄝˋ","滋":"ㄗ","滑":"ㄏㄨㄚˊ","滔":"ㄊㄠ","滬":"ㄏㄨˋ","滯":"ㄓˋ","滴":"ㄉㄧ","滸":"ㄏㄨˇ","滾":"ㄍㄨㄣˇ","滿":"ㄇㄢˇ","漁":"ㄩˊ","漂":"ㄆㄧㄠ","漆":"ㄑㄧ","漏":"ㄌㄡˋ","漓":"ㄌㄧˊ","演":"ㄧㄢˇ","漠":"ㄇㄛˋ","漢":"ㄏㄢˋ","漣":"ㄌㄧㄢˊ","漥":"ㄨㄚ","漪":"ㄧ","漫":"ㄇㄢˋ","漬":"ㄗˋ","漲":"ㄓㄤˇ","漶":"ㄏㄨㄢˋ","漸":"ㄐㄧㄢˋ","漾":"ㄧㄤˋ","漿":"ㄐㄧㄤ","潑":"ㄆㄛ","潔":"ㄐㄧㄝˊ","潛":"ㄑㄧㄢˊ","潤":"ㄖㄨㄣˋ","潦":"ㄌㄠˇ","潮":"ㄔㄠˊ","潸":"ㄕㄢ","潺":"ㄔㄢˊ","澀":"ㄙㄜˋ","澄":"ㄔㄥˊ","澆":"ㄐㄧㄠ","澈":"ㄔㄜˋ","澎":"ㄆㄥ","澗":"ㄐㄧㄢˋ","澡":"ㄗㄠˇ","澤":"ㄗㄜˊ","澹":"ㄉㄢˋ","激":"ㄐㄧ","濁":"ㄓㄨㄛˊ","濃":"ㄋㄨㄥˊ","濘":"ㄋㄧㄥˋ","濛":"ㄇㄥˊ","濟":"ㄐㄧˋ","濤":"ㄊㄠ","濬":"ㄐㄩㄣˋ","濯":"ㄓㄨㄛˊ","濺":"ㄐㄧㄢˋ","濾":"ㄌㄩˋ","瀉":"ㄒㄧㄝˋ","瀏":"ㄌㄧㄡˊ","瀑":"ㄆㄨˋ","瀕":"ㄅㄧㄣ","瀚":"ㄏㄢˋ","瀟":"ㄒㄧㄠ","瀣":"ㄒㄧㄝˋ","瀰":"ㄇㄧˊ","瀲":"ㄌㄧㄢˋ","瀾":"ㄌㄢˊ","灌":"ㄍㄨㄢˋ","灑":"ㄙㄚˇ","灘":"ㄊㄢ","灣":"ㄨㄢ","灩":"ㄧㄢˋ","火":"ㄏㄨㄛˇ","灰":"ㄏㄨㄟ","灶":"ㄗㄠˋ","災":"ㄗㄞ","炎":"ㄧㄢˊ","炒":"ㄔㄠˇ","炙":"ㄓˋ","炫":"ㄒㄩㄢˋ","炭":"ㄊㄢˋ","炮":"ㄆㄠˋ","炸":"ㄓㄚˋ","為":"ㄨㄟˋ","烈":"ㄌㄧㄝˋ","烊":"ㄧㄤˊ","烏":"ㄨ","烘":"ㄏㄨㄥ","烙":"ㄌㄠˋ","烤":"ㄎㄠˇ","烹":"ㄆㄥ","焉":"ㄧㄢ","焙":"ㄅㄟˋ","焚":"ㄈㄣˊ","無":"ㄨˊ","焦":"ㄐㄧㄠ","焰":"ㄧㄢˋ","然":"ㄖㄢˊ","煉":"ㄌㄧㄢˋ","煎":"ㄐㄧㄢ","煙":"ㄧㄢ","煞":"ㄕㄚ","煤":"ㄇㄟˊ","煥":"ㄏㄨㄢˋ","煦":"ㄒㄩˋ","照":"ㄓㄠˋ","煩":"ㄈㄢˊ","煮":"ㄓㄨˇ","煽":"ㄕㄢ","熄":"ㄒㄧ","熊":"ㄒㄩㄥˊ","熔":"ㄖㄨㄥˊ","熟":"ㄕㄨˊ","熬":"ㄠˊ","熱":"ㄖㄜˋ","熹":"ㄒㄧ","熾":"ㄔˋ","燃":"ㄖㄢˊ","燈":"ㄉㄥ","燎":"ㄌㄧㄠˊ","燒":"ㄕㄠ","燕":"ㄧㄢˋ","燙":"ㄊㄤˋ","營":"ㄧㄥˊ","燥":"ㄗㄠˋ","燦":"ㄘㄢˋ","燭":"ㄓㄨˊ","燴":"ㄏㄨㄟˋ","爆":"ㄅㄠˋ","爐":"ㄌㄨˊ","爛":"ㄌㄢˋ","爪":"ㄓㄠˇ","爬":"ㄆㄚˊ","爭":"ㄓㄥ","父":"ㄈㄨˋ","爸":"ㄅㄚˋ","爺":"ㄧㄝˊ","爽":"ㄕㄨㄤˇ","爾":"ㄦˇ","牆":"ㄑㄧㄤˊ","片":"ㄆㄧㄢˋ","版":"ㄅㄢˇ","牌":"ㄆㄞˊ","牘":"ㄉㄨˊ","牙":"ㄧㄚˊ","牛":"ㄋㄧㄡˊ","牟":"ㄇㄡˊ","牠":"ㄊㄚ","牢":"ㄌㄠˊ","牧":"ㄇㄨˋ","物":"ㄨˋ","牲":"ㄕㄥ","特":"ㄊㄜˋ","牽":"ㄑㄧㄢ","犀":"ㄒㄧ","犁":"ㄌㄧˊ","犧":"ㄒㄧ","犬":"ㄑㄩㄢˇ","犯":"ㄈㄢˋ","狀":"ㄓㄨㄤˋ","狂":"ㄎㄨㄤˊ","狐":"ㄏㄨˊ","狗":"ㄍㄡˇ","狠":"ㄏㄣˇ","狡":"ㄐㄧㄠˇ","狩":"ㄕㄡˋ","狸":"ㄌㄧˊ","狹":"ㄒㄧㄚˊ","狼":"ㄌㄤˊ","猛":"ㄇㄥˇ","猜":"ㄘㄞ","猴":"ㄏㄡˊ","猶":"ㄧㄡˊ","猾":"ㄏㄨㄚˊ","猿":"ㄩㄢˊ","獄":"ㄩˋ","獅":"ㄕ","獎":"ㄐㄧㄤˇ","獨":"ㄉㄨˊ","獰":"ㄋㄧㄥˊ","獲":"ㄏㄨㄛˋ","獵":"ㄌㄧㄝˋ","獷":"ㄍㄨㄤˇ","獸":"ㄕㄡˋ","獻":"ㄒㄧㄢˋ","玄":"ㄒㄩㄢˊ","率":"ㄌㄩˋ","玉":"ㄩˋ","王":"ㄨㄤˊ","玩":"ㄨㄢˊ","玻":"ㄅㄛ","珊":"ㄕㄢ","珍":"ㄓㄣ","珠":"ㄓㄨ","班":"ㄅㄢ","現":"ㄒㄧㄢˋ","球":"ㄑㄧㄡˊ","理":"ㄌㄧˇ","琉":"ㄌㄧㄡˊ","琢":"ㄗㄨㄛˊ","琴":"ㄑㄧㄣˊ","瑕":"ㄒㄧㄚˊ","瑚":"ㄏㄨˊ","瑞":"ㄖㄨㄟˋ","瑟":"ㄙㄜˋ","瑣":"ㄙㄨㄛˇ","瑩":"ㄧㄥˊ","瑪":"ㄇㄚˇ","瑰":"ㄍㄨㄟ","璀":"ㄘㄨㄟˇ","璃":"ㄌㄧˊ","璞":"ㄆㄨˊ","璧":"ㄅㄧˋ","璨":"ㄘㄢˋ","環":"ㄏㄨㄢˊ","瓜":"ㄍㄨㄚ","瓢":"ㄆㄧㄠˊ","瓣":"ㄅㄢˋ","瓦":"ㄨㄚˇ","瓶":"ㄆㄧㄥˊ","甘":"ㄍㄢ","甚":"ㄕㄣˋ","甜":"ㄊㄧㄢˊ","生":"ㄕㄥ","產":"ㄔㄢˇ","甦":"ㄙㄨ","用":"ㄩㄥˋ","甩":"ㄕㄨㄞˇ","甫":"ㄈㄨˇ","田":"ㄊㄧㄢˊ","由":"ㄧㄡˊ","甲":"ㄐㄧㄚˇ","申":"ㄕㄣ","男":"ㄋㄢˊ","甸":"ㄉㄧㄢ","界":"ㄐㄧㄝˋ","畎":"ㄑㄩㄢˇ","畔":"ㄆㄢˋ","留":"ㄌㄧㄡˊ","畝":"ㄇㄨˇ","畢":"ㄅㄧˋ","略":"ㄌㄩㄝˋ","畦":"ㄑㄧˊ","番":"ㄈㄢ","畫":"ㄏㄨㄚˋ","異":"ㄧˋ","當":"ㄉㄤ","疆":"ㄐㄧㄤ","疇":"ㄔㄡˊ","疊":"ㄉㄧㄝˊ","疋":"ㄆㄧˇ","疏":"ㄕㄨ","疑":"ㄧˊ","疤":"ㄅㄚ","疫":"ㄧˋ","疲":"ㄆㄧˊ","疵":"ㄘ","疼":"ㄊㄥˊ","疾":"ㄐㄧˊ","痂":"ㄐㄧㄚ","病":"ㄅㄧㄥˋ","症":"ㄓㄥˋ","痕":"ㄏㄣˊ","痘":"ㄉㄡˋ","痛":"ㄊㄨㄥˋ","痠":"ㄙㄨㄢ","痱":"ㄈㄟˋ","痴":"ㄔ","痺":"ㄅㄧˋ","瘦":"ㄕㄡˋ","瘧":"ㄋㄩㄝˋ","療":"ㄌㄧㄠˊ","癒":"ㄩˋ","癖":"ㄆㄧˇ","癟":"ㄅㄧㄝˇ","癢":"ㄧㄤˇ","登":"ㄉㄥ","發":"ㄈㄚ","白":"ㄅㄞˊ","百":"ㄅㄞˇ","的":"ㄉㄜ˙","皆":"ㄐㄧㄝ","皇":"ㄏㄨㄤˊ","皎":"ㄐㄧㄠˇ","皙":"ㄒㄧ","皮":"ㄆㄧˊ","皺":"ㄓㄡˋ","盃":"ㄅㄟ","盆":"ㄆㄣˊ","盈":"ㄧㄥˊ","益":"ㄧˋ","盎":"ㄤˋ","盒":"ㄏㄜˊ","盔":"ㄎㄨㄟ","盛":"ㄕㄥˋ","盜":"ㄉㄠˋ","盞":"ㄓㄢˇ","盡":"ㄐㄧㄣˇ","監":"ㄐㄧㄢ","盤":"ㄆㄢˊ","盪":"ㄉㄤˋ","目":"ㄇㄨˋ","盯":"ㄉㄧㄥ","盲":"ㄇㄤˊ","直":"ㄓˊ","相":"ㄒㄧㄤ","盹":"ㄉㄨㄣˇ","盼":"ㄆㄢˋ","盾":"ㄉㄨㄣˋ","省":"ㄕㄥˇ","眉":"ㄇㄟˊ","看":"ㄎㄢˋ","真":"ㄓㄣ","眠":"ㄇㄧㄢˊ","眨":"ㄓㄚˇ","眩":"ㄒㄩㄢˋ","眶":"ㄎㄨㄤˋ","眷":"ㄐㄩㄢˋ","眸":"ㄇㄡˊ","眺":"ㄊㄧㄠˋ","眼":"ㄧㄢˇ","眾":"ㄓㄨㄥˋ","睛":"ㄐㄧㄥ","睜":"ㄓㄥ","睡":"ㄕㄨㄟˋ","督":"ㄉㄨ","睥":"ㄆㄧˋ","睨":"ㄋㄧˋ","睬":"ㄘㄞˇ","睹":"ㄉㄨˇ","睽":"ㄎㄨㄟˊ","睿":"ㄖㄨㄟˋ","瞄":"ㄇㄧㄠˊ","瞇":"ㄇㄧ","瞌":"ㄎㄜ","瞞":"ㄇㄢˊ","瞠":"ㄔㄥ","瞥":"ㄆㄧㄝ","瞧":"ㄑㄧㄠˊ","瞪":"ㄉㄥˋ","瞬":"ㄕㄨㄣˋ","瞭":"ㄌㄧㄠˇ","瞰":"ㄎㄢˋ","瞳":"ㄊㄨㄥˊ","瞵":"ㄌㄧㄣˊ","瞻":"ㄓㄢ","矇":"ㄇㄥˊ","矗":"ㄔㄨˋ","矚":"ㄓㄨˇ","矛":"ㄇㄠˊ","矜":"ㄐㄧㄣ","矣":"ㄧˇ","知":"ㄓ","矩":"ㄐㄩˇ","短":"ㄉㄨㄢˇ","矯":"ㄐㄧㄠˇ","石":"ㄕˊ","砂":"ㄕㄚ","砌":"ㄑㄧˋ","砍":"ㄎㄢˇ","研":"ㄧㄢˊ","砧":"ㄓㄣ","砭":"ㄅㄧㄢ","砰":"ㄆㄥ","破":"ㄆㄛˋ","硝":"ㄒㄧㄠ","硬":"ㄧㄥˋ","碌":"ㄌㄨˋ","碎":"ㄙㄨㄟˋ","碑":"ㄅㄟ","碗":"ㄨㄢˇ","碧":"ㄅㄧˋ","碭":"ㄉㄤˋ","碰":"ㄆㄥˋ","碳":"ㄊㄢˋ","確":"ㄑㄩㄝˋ","碼":"ㄇㄚˇ","磁":"ㄘˊ","磅":"ㄅㄤˋ","磊":"ㄌㄟˇ","磋":"ㄘㄨㄛ","磚":"ㄓㄨㄢ","磨":"ㄇㄛˊ","磯":"ㄐㄧ","礁":"ㄐㄧㄠ","礙":"ㄞˋ","礦":"ㄎㄨㄤˋ","礫":"ㄌㄧˋ","礬":"ㄈㄢˊ","礴":"ㄅㄛˊ","示":"ㄕˋ","社":"ㄕㄜˋ","祂":"ㄊㄚ","祇":"ㄑㄧˊ","祈":"ㄑㄧˊ","祕":"ㄇㄧˋ","祖":"ㄗㄨˇ","祗":"ㄓ","祝":"ㄓㄨˋ","神":"ㄕㄣˊ","祥":"ㄒㄧㄤˊ","票":"ㄆㄧㄠˋ","祭":"ㄐㄧˋ","禁":"ㄐㄧㄣˋ","禍":"ㄏㄨㄛˋ","禎":"ㄓㄣ","福":"ㄈㄨˊ","禮":"ㄌㄧˇ","禱":"ㄉㄠˇ","禽":"ㄑㄧㄣˊ","禾":"ㄏㄜˊ","禿":"ㄊㄨ","秀":"ㄒㄧㄡˋ","私":"ㄙ","秉":"ㄅㄧㄥˇ","秋":"ㄑㄧㄡ","科":"ㄎㄜ","秒":"ㄇㄧㄠˇ","秘":"ㄇㄧˋ","租":"ㄗㄨ","秦":"ㄑㄧㄣˊ","秧":"ㄧㄤ","移":"ㄧˊ","稀":"ㄒㄧ","程":"ㄔㄥˊ","稍":"ㄕㄠ","稔":"ㄖㄣˇ","稚":"ㄓˋ","稠":"ㄔㄡˊ","種":"ㄓㄨㄥˇ","稱":"ㄔㄥ","稻":"ㄉㄠˋ","稼":"ㄐㄧㄚˋ","稿":"ㄍㄠˇ","穀":"ㄍㄨˇ","穆":"ㄇㄨˋ","積":"ㄐㄧ","穎":"ㄧㄥˇ","穗":"ㄙㄨㄟˋ","穠":"ㄋㄨㄥˊ","穩":"ㄨㄣˇ","穫":"ㄏㄨㄛˋ","穴":"ㄒㄩㄝˊ","究":"ㄐㄧㄡ","空":"ㄎㄨㄥ","穿":"ㄔㄨㄢ","突":"ㄊㄨ","窄":"ㄓㄞˇ","窈":"ㄧㄠˇ","窕":"ㄊㄧㄠˇ","窗":"ㄔㄨㄤ","窘":"ㄐㄩㄥˇ","窟":"ㄎㄨ","窣":"ㄙㄨ","窩":"ㄨㄛ","窮":"ㄑㄩㄥˊ","窸":"ㄒㄧ","窺":"ㄎㄨㄟ","窿":"ㄌㄨㄥˊ","竄":"ㄘㄨㄢˋ","竅":"ㄑㄧㄠˋ","竊":"ㄑㄧㄝˋ","立":"ㄌㄧˋ","站":"ㄓㄢˋ","竟":"ㄐㄧㄥˋ","章":"ㄓㄤ","童":"ㄊㄨㄥˊ","竭":"ㄐㄧㄝˊ","端":"ㄉㄨㄢ","競":"ㄐㄧㄥˋ","竹":"ㄓㄨˊ","竿":"ㄍㄢ","笆":"ㄅㄚ","笑":"ㄒㄧㄠˋ","笛":"ㄉㄧˊ","笞":"ㄔ","符":"ㄈㄨˊ","笨":"ㄅㄣˋ","第":"ㄉㄧˋ","筆":"ㄅㄧˇ","等":"ㄉㄥˇ","筋":"ㄐㄧㄣ","筍":"ㄙㄨㄣˇ","筏":"ㄈㄚˊ","筒":"ㄊㄨㄥˇ","答":"ㄉㄚˊ","策":"ㄘㄜˋ","筵":"ㄧㄢˊ","筷":"ㄎㄨㄞˋ","箍":"ㄍㄨ","箏":"ㄓㄥ","算":"ㄙㄨㄢˋ","管":"ㄍㄨㄢˇ","箭":"ㄐㄧㄢˋ","箱":"ㄒㄧㄤ","箸":"ㄓㄨˋ","節":"ㄐㄧㄝˊ","範":"ㄈㄢˋ","篇":"ㄆㄧㄢ","築":"ㄓㄨˋ","篝":"ㄍㄡ","篩":"ㄕㄞ","篷":"ㄆㄥˊ","簇":"ㄘㄨˋ","簌":"ㄙㄨˋ","簞":"ㄉㄢ","簡":"ㄐㄧㄢˇ","簣":"ㄎㄨㄟˋ","簧":"ㄏㄨㄤˊ","簸":"ㄅㄛˇ","簽":"ㄑㄧㄢ","簾":"ㄌㄧㄢˊ","簿":"ㄅㄨˋ","籃":"ㄌㄢˊ","籌":"ㄔㄡˊ","籍":"ㄐㄧˊ","籟":"ㄌㄞˋ","籠":"ㄌㄨㄥˊ","籤":"ㄑㄧㄢ","籬":"ㄌㄧˊ","籲":"ㄩˋ","米":"ㄇㄧˇ","籽":"ㄗˇ","粉":"ㄈㄣˇ","粒":"ㄌㄧˋ","粗":"ㄘㄨ","粟":"ㄙㄨˋ","粥":"ㄓㄡ","粲":"ㄘㄢˋ","粹":"ㄘㄨㄟˋ","粼":"ㄌㄧㄣˊ","粽":"ㄗㄨㄥˋ","精":"ㄐㄧㄥ","粿":"ㄍㄨㄛˇ","糊":"ㄏㄨˊ","糕":"ㄍㄠ","糖":"ㄊㄤˊ","糗":"ㄑㄧㄡˇ","糙":"ㄘㄠ","糝":"ㄙㄢˇ","糞":"ㄈㄣˋ","糟":"ㄗㄠ","糧":"ㄌㄧㄤˊ","系":"ㄒㄧˋ","糾":"ㄐㄧㄡ","紀":"ㄐㄧˋ","約":"ㄩㄝ","紅":"ㄏㄨㄥˊ","紈":"ㄨㄢˊ","紋":"ㄨㄣˊ","納":"ㄋㄚˋ","紐":"ㄋㄧㄡˇ","純":"ㄔㄨㄣˊ","紗":"ㄕㄚ","紙":"ㄓˇ","級":"ㄐㄧˊ","紛":"ㄈㄣ","素":"ㄙㄨˋ","紡":"ㄈㄤˇ","索":"ㄙㄨㄛˇ","紫":"ㄗˇ","紮":"ㄗㄚ","累":"ㄌㄟˋ","細":"ㄒㄧˋ","紳":"ㄕㄣ","紹":"ㄕㄠˋ","終":"ㄓㄨㄥ","組":"ㄗㄨˇ","絆":"ㄅㄢˋ","結":"ㄐㄧㄝˊ","絕":"ㄐㄩㄝˊ","絡":"ㄌㄨㄛˋ","絢":"ㄒㄩㄢˋ","給":"ㄍㄟˇ","絨":"ㄖㄨㄥˊ","絮":"ㄒㄩˋ","統":"ㄊㄨㄥˇ","絲":"ㄙ","絹":"ㄐㄩㄢˋ","綁":"ㄅㄤˇ","經":"ㄐㄧㄥ","綠":"ㄌㄩˋ","綢":"ㄔㄡˊ","維":"ㄨㄟˊ","網":"ㄨㄤˇ","綴":"ㄓㄨㄟˋ","綵":"ㄘㄞˇ","綸":"ㄌㄨㄣˊ","綺":"ㄑㄧˇ","綻":"ㄓㄢˋ","綿":"ㄇㄧㄢˊ","緊":"ㄐㄧㄣˇ","緒":"ㄒㄩˋ","緘":"ㄐㄧㄢ","線":"ㄒㄧㄢˋ","緝":"ㄐㄧ","緣":"ㄩㄢˊ","編":"ㄅㄧㄢ","緩":"ㄏㄨㄢˇ","緬":"ㄇㄧㄢˇ","緯":"ㄨㄟˇ","緲":"ㄇㄧㄠˇ","練":"ㄌㄧㄢˋ","縈":"ㄧㄥˊ","縛":"ㄈㄨˋ","縣":"ㄒㄧㄢˋ","縫":"ㄈㄥˋ","縮":"ㄙㄨㄛ","縱":"ㄗㄨㄥˋ","縵":"ㄇㄢˋ","縷":"ㄌㄩˇ","縹":"ㄆㄧㄠˇ","總":"ㄗㄨㄥˇ","績":"ㄐㄧ","繁":"ㄈㄢˊ","繃":"ㄅㄥˇ","繆":"ㄇㄡˊ","織":"ㄓ","繚":"ㄌㄧㄠˊ","繞":"ㄖㄠˋ","繡":"ㄒㄧㄡˋ","繩":"ㄕㄥˊ","繪":"ㄏㄨㄟˋ","繫":"ㄒㄧˋ","繭":"ㄐㄧㄢˇ","繼":"ㄐㄧˋ","繽":"ㄅㄧㄣ","續":"ㄒㄩˋ","纍":"ㄌㄟˊ","纏":"ㄔㄢˊ","纔":"ㄘㄞˊ","纖":"ㄒㄧㄢ","纜":"ㄌㄢˇ","缶":"ㄈㄡˇ","缸":"ㄍㄤ","缺":"ㄑㄩㄝ","缽":"ㄅㄛ","罐":"ㄍㄨㄢˋ","罕":"ㄏㄢˇ","罩":"ㄓㄠˋ","罪":"ㄗㄨㄟˋ","置":"ㄓˋ","罰":"ㄈㄚˊ","署":"ㄕㄨˇ","罵":"ㄇㄚˋ","罷":"ㄅㄚˋ","罹":"ㄌㄧˊ","羅":"ㄌㄨㄛˊ","羈":"ㄐㄧ","羊":"ㄧㄤˊ","美":"ㄇㄟˇ","羞":"ㄒㄧㄡ","群":"ㄑㄩㄣˊ","羨":"ㄒㄧㄢˋ","義":"ㄧˋ","羹":"ㄍㄥ","羽":"ㄩˇ","翁":"ㄨㄥ","翅":"ㄔˋ","翌":"ㄧˋ","習":"ㄒㄧˊ","翔":"ㄒㄧㄤˊ","翠":"ㄘㄨㄟˋ","翩":"ㄆㄧㄢ","翮":"ㄏㄜˊ","翱":"ㄠˊ","翳":"ㄧˋ","翹":"ㄑㄧㄠˋ","翻":"ㄈㄢ","翼":"ㄧˋ","耀":"ㄧㄠˋ","老":"ㄌㄠˇ","考":"ㄎㄠˇ","者":"ㄓㄜˇ","而":"ㄦˊ","耍":"ㄕㄨㄚˇ","耐":"ㄋㄞˋ","耕":"ㄍㄥ","耗":"ㄏㄠˋ","耘":"ㄩㄣˊ","耙":"ㄅㄚˋ","耳":"ㄦˇ","耶":"ㄧㄝˊ","耽":"ㄉㄢ","聆":"ㄌㄧㄥˊ","聊":"ㄌㄧㄠˊ","聖":"ㄕㄥˋ","聚":"ㄐㄩˋ","聞":"ㄨㄣˊ","聯":"ㄌㄧㄢˊ","聰":"ㄘㄨㄥ","聲":"ㄕㄥ","聳":"ㄙㄨㄥˇ","聵":"ㄎㄨㄟˋ","職":"ㄓˊ","聽":"ㄊㄧㄥ","肅":"ㄙㄨˋ","肆":"ㄙˋ","肇":"ㄓㄠˋ","肉":"ㄖㄡˋ","肌":"ㄐㄧ","肖":"ㄒㄧㄠˋ","肚":"ㄉㄨˋ","肝":"ㄍㄢ","股":"ㄍㄨˇ","肢":"ㄓ","肥":"ㄈㄟˊ","肩":"ㄐㄧㄢ","肯":"ㄎㄣˇ","育":"ㄩˋ","肴":"ㄧㄠˊ","肺":"ㄈㄟˋ","胃":"ㄨㄟˋ","背":"ㄅㄟˋ","胎":"ㄊㄞ","胖":"ㄆㄤˋ","胞":"ㄅㄠ","胡":"ㄏㄨˊ","胸":"ㄒㄩㄥ","能":"ㄋㄥˊ","脂":"ㄓ","脅":"ㄒㄧㄝˊ","脆":"ㄘㄨㄟˋ","脈":"ㄇㄞˋ","脖":"ㄅㄛˊ","脣":"ㄔㄨㄣˊ","脩":"ㄒㄧㄡ","脫":"ㄊㄨㄛ","脹":"ㄓㄤˋ","脾":"ㄆㄧˊ","腋":"ㄧㄝˋ","腐":"ㄈㄨˇ","腔":"ㄑㄧㄤ","腕":"ㄨㄢˋ","腥":"ㄒㄧㄥ","腦":"ㄋㄠˇ","腫":"ㄓㄨㄥˇ","腮":"ㄙㄞ","腰":"ㄧㄠ","腳":"ㄐㄧㄠˇ","腴":"ㄩˊ","腸":"ㄔㄤˊ","腹":"ㄈㄨˋ","腿":"ㄊㄨㄟˇ","膀":"ㄅㄤˇ","膊":"ㄅㄛˊ","膏":"ㄍㄠ","膚":"ㄈㄨ","膛":"ㄊㄤˊ","膜":"ㄇㄛˊ","膝":"ㄒㄧ","膠":"ㄐㄧㄠ","膩":"ㄋㄧˋ","膽":"ㄉㄢˇ","膾":"ㄎㄨㄞˋ","臂":"ㄅㄧˋ","臃":"ㄩㄥ","臉":"ㄌㄧㄢˇ","臊":"ㄙㄠ","臍":"ㄑㄧˊ","臘":"ㄌㄚˋ","臟":"ㄗㄤˋ","臣":"ㄔㄣˊ","臥":"ㄨㄛˋ","臨":"ㄌㄧㄣˊ","自":"ㄗˋ","臭":"ㄔㄡˋ","至":"ㄓˋ","致":"ㄓˋ","臺":"ㄊㄞˊ","臼":"ㄐㄧㄡˋ","舀":"ㄧㄠˇ","與":"ㄩˇ","興":"ㄒㄧㄥˋ","舉":"ㄐㄩˇ","舊":"ㄐㄧㄡˋ","舌":"ㄕㄜˊ","舍":"ㄕㄜˇ","舒":"ㄕㄨ","舔":"ㄊㄧㄢˇ","舜":"ㄕㄨㄣˋ","舞":"ㄨˇ","舟":"ㄓㄡ","航":"ㄏㄤˊ","般":"ㄅㄢ","舴":"ㄗㄜˊ","舶":"ㄅㄛˊ","舷":"ㄒㄧㄢˊ","船":"ㄔㄨㄢˊ","艇":"ㄊㄧㄥˇ","艋":"ㄇㄥˇ","艘":"ㄙㄡ","艙":"ㄘㄤ","艦":"ㄐㄧㄢˋ","良":"ㄌㄧㄤˊ","艱":"ㄐㄧㄢ","色":"ㄙㄜˋ","艾":"ㄞˋ","芒":"ㄇㄤˊ","芝":"ㄓ","芥":"ㄐㄧㄝˋ","芬":"ㄈㄣ","芭":"ㄅㄚ","芰":"ㄐㄧˋ","花":"ㄏㄨㄚ","芳":"ㄈㄤ","芽":"ㄧㄚˊ","苔":"ㄊㄞˊ","苗":"ㄇㄧㄠˊ","苛":"ㄎㄜ","苞":"ㄅㄠ","苟":"ㄍㄡˇ","若":"ㄖㄨㄛˋ","苦":"ㄎㄨˇ","英":"ㄧㄥ","茁":"ㄓㄨㄛˊ","茂":"ㄇㄠˋ","茄":"ㄐㄧㄚ","茅":"ㄇㄠˊ","茞":"ㄔㄣˊ","茫":"ㄇㄤˊ","茲":"ㄗ","茶":"ㄔㄚˊ","荇":"ㄒㄧㄥˋ","草":"ㄘㄠˇ","荊":"ㄐㄧㄥ","荒":"ㄏㄨㄤ","荷":"ㄏㄜˊ","荼":"ㄊㄨˊ","莊":"ㄓㄨㄤ","莓":"ㄇㄟˊ","莖":"ㄐㄧㄥ","莫":"ㄇㄛˋ","莽":"ㄇㄤˇ","菇":"ㄍㄨ","菊":"ㄐㄩˊ","菌":"ㄐㄩㄣ","菜":"ㄘㄞˋ","菠":"ㄅㄛ","菩":"ㄆㄨˊ","華":"ㄏㄨㄚˊ","菱":"ㄌㄧㄥˊ","菲":"ㄈㄟ","菸":"ㄧㄢ","萄":"ㄊㄠˊ","萊":"ㄌㄞˊ","萋":"ㄑㄧ","萌":"ㄇㄥˊ","萬":"ㄨㄢˋ","落":"ㄌㄨㄛˋ","葉":"ㄧㄝˋ","著":"ㄓㄨˋ","葛":"ㄍㄜˊ","葡":"ㄆㄨˊ","葦":"ㄨㄟˇ","葬":"ㄗㄤˋ","葵":"ㄎㄨㄟˊ","蒂":"ㄉㄧˋ","蒐":"ㄙㄡ","蒙":"ㄇㄥˊ","蒜":"ㄙㄨㄢˋ","蒲":"ㄆㄨˊ","蒸":"ㄓㄥ","蒼":"ㄘㄤ","蓀":"ㄙㄨㄣ","蓆":"ㄒㄧˊ","蓊":"ㄨㄥˇ","蓋":"ㄍㄞˋ","蓓":"ㄅㄟˋ","蓬":"ㄆㄥˊ","蓮":"ㄌㄧㄢˊ","蔑":"ㄇㄧㄝˋ","蔓":"ㄇㄢˋ","蔔":"ㄅㄛˊ","蔚":"ㄨㄟˋ","蔥":"ㄘㄨㄥ","蔬":"ㄕㄨ","蔭":"ㄧㄣ","蔽":"ㄅㄧˋ","蕃":"ㄈㄢ","蕉":"ㄐㄧㄠ","蕙":"ㄏㄨㄟˋ","蕨":"ㄐㄩㄝˊ","蕩":"ㄉㄤˋ","蕭":"ㄒㄧㄠ","蕾":"ㄌㄟˇ","薄":"ㄅㄠˊ","薇":"ㄨㄟ","薊":"ㄐㄧˋ","薑":"ㄐㄧㄤ","薔":"ㄑㄧㄤˊ","薩":"ㄙㄚˋ","薯":"ㄕㄨˇ","薰":"ㄒㄩㄣ","藉":"ㄐㄧˊ","藍":"ㄌㄢˊ","藏":"ㄘㄤˊ","藐":"ㄇㄧㄠˇ","藝":"ㄧˋ","藤":"ㄊㄥˊ","藥":"ㄧㄠˋ","藹":"ㄞˇ","藻":"ㄗㄠˇ","蘆":"ㄌㄨˊ","蘇":"ㄙㄨ","蘊":"ㄩㄣˋ","蘋":"ㄆㄧㄥˊ","蘑":"ㄇㄛˊ","蘢":"ㄌㄨㄥˊ","蘭":"ㄌㄢˊ","蘿":"ㄌㄨㄛˊ","虎":"ㄏㄨˇ","虐":"ㄋㄩㄝˋ","虔":"ㄑㄧㄢˊ","處":"ㄔㄨˋ","虛":"ㄒㄩ","號":"ㄏㄠˋ","虧":"ㄎㄨㄟ","虹":"ㄏㄨㄥˊ","蚊":"ㄨㄣˊ","蚋":"ㄖㄨㄟˋ","蚌":"ㄅㄤˋ","蚪":"ㄉㄡˇ","蚵":"ㄏㄜˊ","蛇":"ㄕㄜˊ","蛋":"ㄉㄢˋ","蛙":"ㄨㄚ","蛛":"ㄓㄨ","蛹":"ㄩㄥˇ","蛻":"ㄊㄨㄟˋ","蜀":"ㄕㄨˇ","蜂":"ㄈㄥ","蜃":"ㄕㄣˋ","蜒":"ㄧㄢˊ","蜘":"ㄓ","蜜":"ㄇㄧˋ","蜷":"ㄑㄩㄢˊ","蜿":"ㄨㄢ","蝌":"ㄎㄜ","蝕":"ㄕˊ","蝟":"ㄨㄟˋ","蝦":"ㄒㄧㄚ","蝴":"ㄏㄨˊ","蝶":"ㄉㄧㄝˊ","蝸":"ㄨㄛ","螃":"ㄆㄤˊ","融":"ㄖㄨㄥˊ","螞":"ㄇㄚˇ","螢":"ㄧㄥˊ","螺":"ㄌㄨㄛˊ","蟄":"ㄓㄜˊ","蟲":"ㄔㄨㄥˊ","蟹":"ㄒㄧㄝˋ","蟻":"ㄧˇ","蠕":"ㄖㄨˊ","蠢":"ㄔㄨㄣˇ","血":"ㄒㄩㄝˋ","行":"ㄒㄧㄥˊ","衍":"ㄧㄢˇ","術":"ㄕㄨˋ","街":"ㄐㄧㄝ","衛":"ㄨㄟˋ","衝":"ㄔㄨㄥ","衡":"ㄏㄥˊ","衣":"ㄧ","表":"ㄅㄧㄠˇ","衫":"ㄕㄢ","衰":"ㄕㄨㄞ","衷":"ㄓㄨㄥ","袋":"ㄉㄞˋ","袍":"ㄆㄠˊ","袖":"ㄒㄧㄡˋ","被":"ㄅㄟˋ","袱":"ㄈㄨˊ","裁":"ㄘㄞˊ","裂":"ㄌㄧㄝˋ","裊":"ㄋㄧㄠˇ","裕":"ㄩˋ","裘":"ㄑㄧㄡˊ","裙":"ㄑㄩㄣˊ","補":"ㄅㄨˇ","裝":"ㄓㄨㄤ","裡":"ㄌㄧˇ","裳":"ㄕㄤ˙","裸":"ㄌㄨㄛˇ","裹":"ㄍㄨㄛˇ","製":"ㄓˋ","褂":"ㄍㄨㄚˋ","複":"ㄈㄨˋ","褐":"ㄏㄜˋ","褲":"ㄎㄨˋ","褶":"ㄓㄜˇ","褻":"ㄒㄧㄝˋ","襟":"ㄐㄧㄣ","襬":"ㄅㄞˇ","襯":"ㄔㄣˋ","襲":"ㄒㄧˊ","西":"ㄒㄧ","要":"ㄧㄠˋ","覆":"ㄈㄨˋ","見":"ㄐㄧㄢˋ","規":"ㄍㄨㄟ","覓":"ㄇㄧˋ","視":"ㄕˋ","覦":"ㄩˊ","親":"ㄑㄧㄣ","覬":"ㄐㄧˋ","覷":"ㄑㄩˋ","覺":"ㄐㄩㄝˊ","覽":"ㄌㄢˇ","觀":"ㄍㄨㄢ","角":"ㄐㄧㄠˇ","解":"ㄐㄧㄝˇ","觴":"ㄕㄤ","觸":"ㄔㄨˋ","言":"ㄧㄢˊ","訂":"ㄉㄧㄥˋ","計":"ㄐㄧˋ","訊":"ㄒㄩㄣˋ","討":"ㄊㄠˇ","訓":"ㄒㄩㄣˋ","訕":"ㄕㄢˋ","訖":"ㄑㄧˋ","託":"ㄊㄨㄛ","記":"ㄐㄧˋ","訛":"ㄜˊ","訝":"ㄧㄚˋ","訣":"ㄐㄩㄝˊ","訪":"ㄈㄤˇ","設":"ㄕㄜˋ","許":"ㄒㄩˇ","訴":"ㄙㄨˋ","診":"ㄓㄣˇ","註":"ㄓㄨˋ","詐":"ㄓㄚˋ","評":"ㄆㄧㄥˊ","詛":"ㄗㄨˇ","詞":"ㄘˊ","詠":"ㄩㄥˇ","詢":"ㄒㄩㄣˊ","詣":"ㄧˋ","試":"ㄕˋ","詩":"ㄕ","詫":"ㄔㄚˋ","詭":"ㄍㄨㄟˇ","詮":"ㄑㄩㄢˊ","話":"ㄏㄨㄚˋ","該":"ㄍㄞ","詳":"ㄒㄧㄤˊ","詼":"ㄏㄨㄟ","誅":"ㄓㄨ","誇":"ㄎㄨㄚ","誌":"ㄓˋ","認":"ㄖㄣˋ","誓":"ㄕˋ","誕":"ㄉㄢˋ","誘":"ㄧㄡˋ","語":"ㄩˇ","誠":"ㄔㄥˊ","誣":"ㄨ","誤":"ㄨˋ","誦":"ㄙㄨㄥˋ","誨":"ㄏㄨㄟˋ","說":"ㄕㄨㄛ","誰":"ㄕㄨㄟˊ","課":"ㄎㄜˋ","誼":"ㄧˋ","調":"ㄉㄧㄠˋ","諄":"ㄓㄨㄣ","談":"ㄊㄢˊ","請":"ㄑㄧㄥˇ","諍":"ㄓㄥˋ","諒":"ㄌㄧㄤˋ","論":"ㄌㄨㄣˋ","諛":"ㄩˊ","諧":"ㄒㄧㄝˊ","諫":"ㄐㄧㄢˋ","諱":"ㄏㄨㄟˋ","諷":"ㄈㄥˇ","諸":"ㄓㄨ","諺":"ㄧㄢˋ","謀":"ㄇㄡˊ","謂":"ㄨㄟˋ","謄":"ㄊㄥˊ","謊":"ㄏㄨㄤˇ","謎":"ㄇㄧˊ","謐":"ㄇㄧˋ","謔":"ㄒㄩㄝˋ","謗":"ㄅㄤˋ","謙":"ㄑㄧㄢ","講":"ㄐㄧㄤˇ","謝":"ㄒㄧㄝˋ","謠":"ㄧㄠˊ","謬":"ㄇㄧㄡˋ","謹":"ㄐㄧㄣˇ","譁":"ㄏㄨㄚˊ","證":"ㄓㄥˋ","譎":"ㄐㄩㄝˊ","識":"ㄕˊ","譜":"ㄆㄨˇ","譟":"ㄗㄠˋ","警":"ㄐㄧㄥˇ","譬":"ㄆㄧˋ","譯":"ㄧˋ","議":"ㄧˋ","護":"ㄏㄨˋ","譽":"ㄩˋ","讀":"ㄉㄨˊ","變":"ㄅㄧㄢˋ","讓":"ㄖㄤˋ","讚":"ㄗㄢˋ","谷":"ㄍㄨˇ","豁":"ㄏㄨㄛ","豆":"ㄉㄡˋ","豎":"ㄕㄨˋ","豐":"ㄈㄥ","豔":"ㄧㄢˋ","豚":"ㄊㄨㄣˊ","象":"ㄒㄧㄤˋ","豪":"ㄏㄠˊ","豫":"ㄩˋ","豬":"ㄓㄨ","豹":"ㄅㄠˋ","貌":"ㄇㄠˋ","貓":"ㄇㄠ","貝":"ㄅㄟˋ","負":"ㄈㄨˋ","財":"ㄘㄞˊ","貧":"ㄆㄧㄣˊ","貨":"ㄏㄨㄛˋ","販":"ㄈㄢˋ","貪":"ㄊㄢ","貫":"ㄍㄨㄢˋ","責":"ㄗㄜˊ","貴":"ㄍㄨㄟˋ","貶":"ㄅㄧㄢˇ","買":"ㄇㄞˇ","貸":"ㄉㄞˋ","費":"ㄈㄟˋ","貼":"ㄊㄧㄝ","賀":"ㄏㄜˋ","賅":"ㄍㄞ","資":"ㄗ","賈":"ㄐㄧㄚˇ","賊":"ㄗㄟˊ","賓":"ㄅㄧㄣ","賜":"ㄘˋ","賞":"ㄕㄤˇ","賠":"ㄆㄟˊ","賢":"ㄒㄧㄢˊ","賣":"ㄇㄞˋ","賦":"ㄈㄨˋ","質":"ㄓˋ","賴":"ㄌㄞˋ","賺":"ㄓㄨㄢˋ","購":"ㄍㄡˋ","賽":"ㄙㄞˋ","贅":"ㄓㄨㄟˋ","贈":"ㄗㄥˋ","贊":"ㄗㄢˋ","贏":"ㄧㄥˊ","贖":"ㄕㄨˊ","赋":"ㄈㄨˋ","赤":"ㄔˋ","赦":"ㄕㄜˋ","赧":"ㄋㄢˇ","赫":"ㄏㄜˋ","赭":"ㄓㄜˇ","走":"ㄗㄡˇ","赴":"ㄈㄨˋ","起":"ㄑㄧˇ","趁":"ㄔㄣˋ","超":"ㄔㄠ","越":"ㄩㄝˋ","趕":"ㄍㄢˇ","趟":"ㄊㄤˋ","趣":"ㄑㄩˋ","足":"ㄗㄨˊ","趴":"ㄆㄚ","跆":"ㄊㄞˊ","跋":"ㄅㄚˊ","跌":"ㄉㄧㄝ","跑":"ㄆㄠˇ","跚":"ㄕㄢ","距":"ㄐㄩˋ","跟":"ㄍㄣ","跡":"ㄐㄧ","跤":"ㄐㄧㄠ","跨":"ㄎㄨㄚˋ","跪":"ㄍㄨㄟˋ","路":"ㄌㄨˋ","跳":"ㄊㄧㄠˋ","跺":"ㄉㄨㄛˋ","踉":"ㄌㄧㄤˊ","踏":"ㄊㄚˋ","踐":"ㄐㄧㄢˋ","踝":"ㄏㄨㄞˊ","踞":"ㄐㄩˋ","踢":"ㄊㄧ","踩":"ㄘㄞˇ","踮":"ㄉㄧㄢˇ","踴":"ㄩㄥˇ","蹇":"ㄐㄧㄢˇ","蹈":"ㄉㄠˇ","蹋":"ㄊㄚˋ","蹌":"ㄑㄧㄤ","蹓":"ㄌㄧㄡ","蹕":"ㄅㄧˋ","蹙":"ㄘㄨˋ","蹟":"ㄐㄧ","蹣":"ㄆㄢˊ","蹤":"ㄗㄨㄥ","蹦":"ㄅㄥˋ","蹧":"ㄗㄠ","蹲":"ㄉㄨㄣ","躁":"ㄗㄠˋ","躂":"ㄉㄚˊ","躅":"ㄓㄨˊ","躇":"ㄔㄨˊ","躊":"ㄔㄡˊ","躍":"ㄩㄝˋ","躑":"ㄓˊ","躡":"ㄋㄧㄝˋ","身":"ㄕㄣ","躬":"ㄍㄨㄥ","躲":"ㄉㄨㄛˇ","躺":"ㄊㄤˇ","車":"ㄔㄜ","軋":"ㄧㄚˋ","軌":"ㄍㄨㄟˇ","軍":"ㄐㄩㄣ","軒":"ㄒㄩㄢ","軟":"ㄖㄨㄢˇ","軸":"ㄓㄡˊ","軼":"ㄧˋ","較":"ㄐㄧㄠˋ","載":"ㄗㄞˋ","輒":"ㄓㄜˊ","輔":"ㄈㄨˇ","輕":"ㄑㄧㄥ","輛":"ㄌㄧㄤˋ","輝":"ㄏㄨㄟ","輟":"ㄔㄨㄛˋ","輩":"ㄅㄟˋ","輪":"ㄌㄨㄣˊ","輯":"ㄐㄧˊ","輸":"ㄕㄨ","輾":"ㄓㄢˇ","輿":"ㄩˊ","轄":"ㄒㄧㄚˊ","轉":"ㄓㄨㄢˇ","轎":"ㄐㄧㄠˋ","轟":"ㄏㄨㄥ","辛":"ㄒㄧㄣ","辜":"ㄍㄨ","辟":"ㄆㄧˋ","辣":"ㄌㄚˋ","辦":"ㄅㄢˋ","辨":"ㄅㄧㄢˋ","辭":"ㄘˊ","辮":"ㄅㄧㄢˋ","辯":"ㄅㄧㄢˋ","辰":"ㄔㄣˊ","辱":"ㄖㄨˇ","農":"ㄋㄨㄥˊ","迂":"ㄩ","迄":"ㄑㄧˋ","迅":"ㄒㄩㄣˋ","迎":"ㄧㄥˊ","近":"ㄐㄧㄣˋ","迓":"ㄧㄚˋ","返":"ㄈㄢˇ","迢":"ㄊㄧㄠˊ","迥":"ㄐㄩㄥˇ","迪":"ㄉㄧˊ","迫":"ㄆㄛˋ","迭":"ㄉㄧㄝˊ","述":"ㄕㄨˋ","迴":"ㄏㄨㄟˊ","迷":"ㄇㄧˊ","追":"ㄓㄨㄟ","退":"ㄊㄨㄟˋ","送":"ㄙㄨㄥˋ","逃":"ㄊㄠˊ","逅":"ㄏㄡˋ","逆":"ㄋㄧˋ","透":"ㄊㄡˋ","逐":"ㄓㄨˊ","途":"ㄊㄨˊ","逕":"ㄐㄧㄥˋ","逗":"ㄉㄡˋ","這":"ㄓㄜˋ","通":"ㄊㄨㄥ","逛":"ㄍㄨㄤˋ","逝":"ㄕˋ","逞":"ㄔㄥˇ","速":"ㄙㄨˋ","造":"ㄗㄠˋ","逢":"ㄈㄥˊ","連":"ㄌㄧㄢˊ","逮":"ㄉㄞˇ","週":"ㄓㄡ","進":"ㄐㄧㄣˋ","逸":"ㄧˋ","逼":"ㄅㄧ","逾":"ㄩˊ","遁":"ㄉㄨㄣˋ","遂":"ㄙㄨㄟˋ","遇":"ㄩˋ","遊":"ㄧㄡˊ","運":"ㄩㄣˋ","遍":"ㄅㄧㄢˋ","過":"ㄍㄨㄛˋ","遏":"ㄜˋ","遐":"ㄒㄧㄚˊ","遑":"ㄏㄨㄤˊ","道":"ㄉㄠˋ","達":"ㄉㄚˊ","違":"ㄨㄟˊ","遙":"ㄧㄠˊ","遛":"ㄌㄧㄡˊ","遜":"ㄒㄩㄣˋ","遞":"ㄉㄧˋ","遠":"ㄩㄢˇ","遢":"ㄊㄚˋ","遣":"ㄑㄧㄢˇ","遨":"ㄠˊ","適":"ㄕˋ","遭":"ㄗㄠ","遮":"ㄓㄜ","遲":"ㄔˊ","遵":"ㄗㄨㄣ","遷":"ㄑㄧㄢ","選":"ㄒㄩㄢˇ","遺":"ㄧˊ","避":"ㄅㄧˋ","邀":"ㄧㄠ","邁":"ㄇㄞˋ","邂":"ㄒㄧㄝˋ","邃":"ㄙㄨㄟˋ","還":"ㄏㄞˊ","邇":"ㄦˇ","邈":"ㄇㄧㄠˇ","邊":"ㄅㄧㄢ","邋":"ㄌㄚ","邏":"ㄌㄨㄛˊ","那":"ㄋㄚˋ","邦":"ㄅㄤ","邸":"ㄉㄧˇ","郁":"ㄩˋ","郊":"ㄐㄧㄠ","郎":"ㄌㄤˊ","部":"ㄅㄨˋ","郭":"ㄍㄨㄛ","郵":"ㄧㄡˊ","都":"ㄉㄡ","鄉":"ㄒㄧㄤ","鄒":"ㄗㄡ","鄙":"ㄅㄧˇ","鄭":"ㄓㄥˋ","鄰":"ㄌㄧㄣˊ","配":"ㄆㄟˋ","酒":"ㄐㄧㄡˇ","酗":"ㄒㄩˋ","酣":"ㄏㄢ","酥":"ㄙㄨ","酪":"ㄌㄠˋ","酬":"ㄔㄡˊ","酵":"ㄐㄧㄠˋ","酷":"ㄎㄨˋ","酸":"ㄙㄨㄢ","醃":"ㄧㄢ","醅":"ㄆㄟ","醇":"ㄔㄨㄣˊ","醉":"ㄗㄨㄟˋ","醋":"ㄘㄨˋ","醒":"ㄒㄧㄥˇ","醜":"ㄔㄡˇ","醫":"ㄧ","醬":"ㄐㄧㄤˋ","釀":"ㄋㄧㄤˋ","采":"ㄘㄞˇ","釉":"ㄧㄡˋ","釋":"ㄕˋ","里":"ㄌㄧˇ","重":"ㄓㄨㄥˋ","野":"ㄧㄝˇ","量":"ㄌㄧㄤˋ","釐":"ㄌㄧˊ","金":"ㄐㄧㄣ","釘":"ㄉㄧㄥ","釜":"ㄈㄨˇ","針":"ㄓㄣ","釣":"ㄉㄧㄠˋ","鈔":"ㄔㄠ","鈞":"ㄐㄩㄣ","鈴":"ㄌㄧㄥˊ","鉅":"ㄐㄩˋ","鉛":"ㄑㄧㄢ","鉤":"ㄍㄡ","銀":"ㄧㄣˊ","銅":"ㄊㄨㄥˊ","銜":"ㄒㄧㄢˊ","銬":"ㄎㄠˋ","銳":"ㄖㄨㄟˋ","銷":"ㄒㄧㄠ","鋁":"ㄌㄩˇ","鋒":"ㄈㄥ","鋤":"ㄔㄨˊ","鋪":"ㄆㄨˋ","鋸":"ㄐㄩˋ","鋼":"ㄍㄤ","錄":"ㄌㄨˋ","錢":"ㄑㄧㄢˊ","錦":"ㄐㄧㄣˇ","錨":"ㄇㄠˊ","錮":"ㄍㄨˋ","錯":"ㄘㄨㄛˋ","錶":"ㄅㄧㄠˇ","鍊":"ㄌㄧㄢˋ","鍋":"ㄍㄨㄛ","鍛":"ㄉㄨㄢˋ","鍥":"ㄑㄧㄝˋ","鍪":"ㄇㄡˊ","鍵":"ㄐㄧㄢˋ","鍾":"ㄓㄨㄥ","鎂":"ㄇㄟˇ","鎖":"ㄙㄨㄛˇ","鎗":"ㄑㄧㄤ","鎮":"ㄓㄣˋ","鏈":"ㄌㄧㄢˋ","鏗":"ㄎㄥ","鏘":"ㄑㄧㄤ","鏟":"ㄔㄢˇ","鏡":"ㄐㄧㄥˋ","鏢":"ㄅㄧㄠ","鏤":"ㄌㄡˋ","鏽":"ㄒㄧㄡˋ","鐐":"ㄌㄧㄠˊ","鐘":"ㄓㄨㄥ","鐫":"ㄐㄩㄢ","鐵":"ㄊㄧㄝˇ","鑄":"ㄓㄨˋ","鑑":"ㄐㄧㄢˋ","鑰":"ㄧㄠˋ","鑲":"ㄒㄧㄤ","鑼":"ㄌㄨㄛˊ","鑽":"ㄗㄨㄢ","鑿":"ㄗㄠˊ","長":"ㄓㄤˇ","門":"ㄇㄣˊ","閃":"ㄕㄢˇ","閉":"ㄅㄧˋ","開":"ㄎㄞ","閑":"ㄒㄧㄢˊ","閒":"ㄒㄧㄢˊ","間":"ㄐㄧㄢ","閣":"ㄍㄜˊ","閨":"ㄍㄨㄟ","閱":"ㄩㄝˋ","闆":"ㄅㄢˇ","闊":"ㄎㄨㄛˋ","闌":"ㄌㄢˊ","闔":"ㄏㄜˊ","闖":"ㄔㄨㄤˇ","關":"ㄍㄨㄢ","闢":"ㄆㄧˋ","阜":"ㄈㄨˋ","阱":"ㄐㄧㄥˇ","防":"ㄈㄤˊ","阻":"ㄗㄨˇ","阿":"ㄚ","陀":"ㄊㄨㄛˊ","附":"ㄈㄨˋ","陋":"ㄌㄡˋ","陌":"ㄇㄛˋ","降":"ㄐㄧㄤˋ","限":"ㄒㄧㄢˋ","陛":"ㄅㄧˋ","陡":"ㄉㄡˇ","院":"ㄩㄢˋ","陣":"ㄓㄣˋ","除":"ㄔㄨˊ","陪":"ㄆㄟˊ","陰":"ㄧㄣ","陳":"ㄔㄣˊ","陵":"ㄌㄧㄥˊ","陶":"ㄊㄠˊ","陷":"ㄒㄧㄢˋ","陸":"ㄌㄨˋ","陽":"ㄧㄤˊ","隅":"ㄩˊ","隆":"ㄌㄨㄥˊ","隊":"ㄉㄨㄟˋ","階":"ㄐㄧㄝ","隔":"ㄍㄜˊ","隕":"ㄩㄣˇ","隙":"ㄒㄧˋ","際":"ㄐㄧˋ","障":"ㄓㄤˋ","隧":"ㄙㄨㄟˋ","隨":"ㄙㄨㄟˊ","險":"ㄒㄧㄢˇ","隱":"ㄧㄣˇ","隸":"ㄌㄧˋ","隻":"ㄓ","隼":"ㄙㄨㄣˇ","雀":"ㄑㄩㄝˋ","雄":"ㄒㄩㄥˊ","雅":"ㄧㄚˇ","集":"ㄐㄧˊ","雋":"ㄐㄩㄢˋ","雍":"ㄩㄥ","雕":"ㄉㄧㄠ","雖":"ㄙㄨㄟ","雙":"ㄕㄨㄤ","雛":"ㄔㄨˊ","雜":"ㄗㄚˊ","雞":"ㄐㄧ","離":"ㄌㄧˊ","難":"ㄋㄢˊ","雨":"ㄩˇ","雩":"ㄩˊ","雪":"ㄒㄩㄝˇ","雲":"ㄩㄣˊ","零":"ㄌㄧㄥˊ","雷":"ㄌㄟˊ","電":"ㄉㄧㄢˋ","需":"ㄒㄩ","霄":"ㄒㄧㄠ","霆":"ㄊㄧㄥˊ","震":"ㄓㄣˋ","霍":"ㄏㄨㄛˋ","霎":"ㄕㄚˋ","霜":"ㄕㄨㄤ","霞":"ㄒㄧㄚˊ","霧":"ㄨˋ","露":"ㄌㄨˋ","霸":"ㄅㄚˋ","霹":"ㄆㄧ","霾":"ㄇㄞˊ","靂":"ㄌㄧˋ","靈":"ㄌㄧㄥˊ","青":"ㄑㄧㄥ","靜":"ㄐㄧㄥˋ","非":"ㄈㄟ","靠":"ㄎㄠˋ","靡":"ㄇㄧˊ","面":"ㄇㄧㄢˋ","革":"ㄍㄜˊ","靶":"ㄅㄚˇ","鞋":"ㄒㄧㄝˊ","鞍":"ㄢ","鞏":"ㄍㄨㄥˇ","鞠":"ㄐㄩ","鞭":"ㄅㄧㄢ","韌":"ㄖㄣˋ","韓":"ㄏㄢˊ","音":"ㄧㄣ","響":"ㄒㄧㄤˇ","頁":"ㄧㄝˋ","頂":"ㄉㄧㄥˇ","頃":"ㄑㄧㄥˇ","項":"ㄒㄧㄤˋ","順":"ㄕㄨㄣˋ","須":"ㄒㄩ","預":"ㄩˋ","頑":"ㄨㄢˊ","頒":"ㄅㄢ","頓":"ㄉㄨㄣˋ","領":"ㄌㄧㄥˇ","頤":"ㄧˊ","頦":"ㄏㄞˊ","頭":"ㄊㄡˊ","頰":"ㄐㄧㄚˊ","頷":"ㄏㄢˋ","頸":"ㄐㄧㄥˇ","頹":"ㄊㄨㄟˊ","顆":"ㄎㄜ","題":"ㄊㄧˊ","額":"ㄜˊ","顏":"ㄧㄢˊ","願":"ㄩㄢˋ","顛":"ㄉㄧㄢ","類":"ㄌㄟˋ","顧":"ㄍㄨˋ","顫":"ㄔㄢˋ","顯":"ㄒㄧㄢˇ","風":"ㄈㄥ","颱":"ㄊㄞˊ","颳":"ㄍㄨㄚ","飄":"ㄆㄧㄠ","飆":"ㄅㄧㄠ","飛":"ㄈㄟ","食":"ㄕˊ","飢":"ㄐㄧ","飧":"ㄙㄨㄣ","飯":"ㄈㄢˋ","飲":"ㄧㄣˇ","飽":"ㄅㄠˇ","飾":"ㄕˋ","餅":"ㄅㄧㄥˇ","餉":"ㄒㄧㄤˇ","養":"ㄧㄤˇ","餐":"ㄘㄢ","餒":"ㄋㄟˇ","餓":"ㄜˋ","餘":"ㄩˊ","館":"ㄍㄨㄢˇ","餮":"ㄊㄧㄝˋ","餵":"ㄨㄟˋ","饈":"ㄒㄧㄡ","饑":"ㄐㄧ","饒":"ㄖㄠˊ","饕":"ㄊㄠ","饗":"ㄒㄧㄤˇ","首":"ㄕㄡˇ","香":"ㄒㄧㄤ","馨":"ㄒㄧㄣ","馬":"ㄇㄚˇ","馱":"ㄊㄨㄛˊ","馳":"ㄔˊ","馴":"ㄒㄩㄣˊ","駁":"ㄅㄛˊ","駐":"ㄓㄨˋ","駕":"ㄐㄧㄚˋ","駛":"ㄕˇ","駝":"ㄊㄨㄛˊ","駭":"ㄏㄞˋ","駱":"ㄌㄨㄛˋ","駿":"ㄐㄩㄣˋ","騁":"ㄔㄥˇ","騎":"ㄑㄧˊ","騖":"ㄨˋ","騙":"ㄆㄧㄢˋ","騰":"ㄊㄥˊ","騷":"ㄙㄠ","驅":"ㄑㄩ","驕":"ㄐㄧㄠ","驗":"ㄧㄢˋ","驚":"ㄐㄧㄥ","驟":"ㄓㄡˋ","驢":"ㄌㄩˊ","驪":"ㄌㄧˊ","骨":"ㄍㄨˇ","骸":"ㄏㄞˊ","髒":"ㄗㄤ","體":"ㄊㄧˇ","高":"ㄍㄠ","髮":"ㄈㄚˋ","鬆":"ㄙㄨㄥ","鬍":"ㄏㄨˊ","鬚":"ㄒㄩ","鬟":"ㄏㄨㄢˊ","鬢":"ㄅㄧㄣˋ","鬥":"ㄉㄡˋ","鬧":"ㄋㄠˋ","鬱":"ㄩˋ","鬲":"ㄍㄜˊ","鬼":"ㄍㄨㄟˇ","魁":"ㄎㄨㄟˊ","魂":"ㄏㄨㄣˊ","魅":"ㄇㄟˋ","魍":"ㄨㄤˇ","魎":"ㄌㄧㄤˇ","魏":"ㄨㄟˋ","魑":"ㄔ","魔":"ㄇㄛˊ","魚":"ㄩˊ","魯":"ㄌㄨˇ","魷":"ㄧㄡˊ","鮑":"ㄅㄠˋ","鮭":"ㄍㄨㄟ","鮮":"ㄒㄧㄢ","鯉":"ㄌㄧˇ","鯊":"ㄕㄚ","鯓":"ㄕㄣ","鯤":"ㄎㄨㄣ","鯨":"ㄐㄧㄥ","鰭":"ㄑㄧˊ","鰲":"ㄠˊ","鱗":"ㄌㄧㄣˊ","鳥":"ㄋㄧㄠˇ","鳳":"ㄈㄥˋ","鳴":"ㄇㄧㄥˊ","鳶":"ㄩㄢ","鴉":"ㄧㄚ","鴨":"ㄧㄚ","鴻":"ㄏㄨㄥˊ","鴿":"ㄍㄜ","鵑":"ㄐㄩㄢ","鵝":"ㄜˊ","鵡":"ㄨˇ","鵰":"ㄉㄧㄠ","鶴":"ㄏㄜˋ","鷗":"ㄡ","鷸":"ㄩˋ","鷹":"ㄧㄥ","鷺":"ㄌㄨˋ","鸚":"ㄧㄥ","鹹":"ㄒㄧㄢˊ","鹽":"ㄧㄢˊ","鹿":"ㄌㄨˋ","麈":"ㄓㄨˇ","麗":"ㄌㄧˋ","麥":"ㄇㄞˋ","麴":"ㄑㄩ","麵":"ㄇㄧㄢˋ","麻":"ㄇㄚˊ","麼":"ㄇㄜ˙","黃":"ㄏㄨㄤˊ","黍":"ㄕㄨˇ","黎":"ㄌㄧˊ","黏":"ㄋㄧㄢˊ","黑":"ㄏㄟ","黔":"ㄑㄧㄢˊ","默":"ㄇㄛˋ","黛":"ㄉㄞˋ","黝":"ㄧㄡˇ","點":"ㄉㄧㄢˇ","黧":"ㄌㄧˊ","黯":"ㄢˋ","鼎":"ㄉㄧㄥˇ","鼓":"ㄍㄨˇ","鼠":"ㄕㄨˇ","鼻":"ㄅㄧˊ","齊":"ㄑㄧˊ","齒":"ㄔˇ","齡":"ㄌㄧㄥˊ","龍":"ㄌㄨㄥˊ","龐":"ㄆㄤˊ"};
+
+// 年級排序:國小 1→6 國中 1→3
+function sortGrades(grades) {
+  return grades.slice().sort((a, b) => {
+    const rank = x => (x.startsWith('國小') ? 0 : 100) + parseInt(x.match(/\d+/)[0]);
+    return rank(a) - rank(b);
+  });
+}
+
+let state = {
+  pub: null, grade: null, lesson: null,
+  chars: [], charIdx: 0, writer: null,
+  game: {
+    pubs: new Set(), grades: new Set(),
+    lessonFilter: 'all',
+    count: 5,
+    queue: [], results: [], curIdx: 0,
+    mistakes: 0, revealed: false, writer: null
+  }
+};
+
+function loadCharData(ch, onOk, onErr) {
+  fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${ch}.json`)
+    .then(r => { if (!r.ok) throw new Error('not found'); return r.json(); })
+    .then(onOk)
+    .catch(onErr);
+}
+
+function initBrowse() {
+  const pubs = Object.keys(DATA);
+  document.getElementById('pub-buttons').innerHTML =
+    pubs.map(p => `<button class="btn pub-btn" data-pub="${p}">${p}</button>`).join('');
+  document.querySelectorAll('.pub-btn').forEach(b => {
+    b.onclick = () => selectPub(b.dataset.pub);
+  });
+  selectPub(pubs[0]);
+}
+
+function selectPub(pub) {
+  state.pub = pub;
+  document.querySelectorAll('.pub-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.pub === pub);
+  });
+  const grades = sortGrades(Object.keys(DATA[pub]));
+  document.getElementById('grade-buttons').innerHTML =
+    grades.map(g => `<button class="btn grade-btn" data-g="${g}">${g}</button>`).join('');
+  document.querySelectorAll('.grade-btn').forEach(b => {
+    b.onclick = () => selectGrade(b.dataset.g);
+  });
+  selectGrade(grades[0]);
+}
+
+function selectGrade(g) {
+  state.grade = g;
+  document.querySelectorAll('.grade-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.g === g);
+  });
+  renderLessons();
+}
+
+function renderLessons() {
+  const lessons = DATA[state.pub][state.grade] || [];
+  document.getElementById('lessons').innerHTML = lessons.map((l, i) => `
+    <div class="lesson-card" onclick="showLesson(${i})">
+      <div class="lesson-meta">第 ${l.lesson} 課 · ${l.sem}學期 · 第 ${l.book} 冊</div>
+      <div class="lesson-name">${l.name}</div>
+      <div class="lesson-count"><span class="dot"></span>共 ${l.chars.length} 字</div>
+    </div>
+  `).join('');
+}
+
+function showLesson(idx) {
+  const lesson = DATA[state.pub][state.grade][idx];
+  state.chars = lesson.chars;
+  state.lesson = lesson;
+  state.charIdx = 0;
+  document.getElementById('chars-title').innerHTML =
+    `<span class="crumb">${state.pub} · ${state.grade} · 第 ${lesson.lesson} 課</span>
+     <span class="name-part">《${lesson.name}》</span>`;
+  document.getElementById('char-grid').innerHTML =
+    lesson.chars.map((c, i) => `<div class="char-item" onclick="showChar(${i})">${c}</div>`).join('');
+  switchView('chars-view');
+}
+
+function backToChars() {
+  if (state.lesson && state.chars.length > 1) switchView('chars-view');
+  else switchView('browse-view');
+}
+
+function showChar(idx) {
+  if (idx !== undefined) state.charIdx = idx;
+  const ch = state.chars[state.charIdx];
+  const info = state.lesson
+    ? `《${state.lesson.name}》<span class="idx"> · 第 ${state.charIdx+1} / ${state.chars.length} 字</span>`
+    : `查詢字`;
+  document.getElementById('char-info').innerHTML = info;
+  document.getElementById('char-zhuyin-display').innerHTML =
+    ZHUYIN[ch] ? `<span class="label">注音</span>${ZHUYIN[ch]}` : '';
+
+  document.getElementById('prev-btn').disabled = state.charIdx <= 0;
+  document.getElementById('next-btn').disabled = state.charIdx >= state.chars.length - 1;
+
+  const target = document.getElementById('writer-target');
+  target.innerHTML = '';
+  try {
+    state.writer = HanziWriter.create('writer-target', ch, {
+      width: 320, height: 320, padding: 10,
+      strokeAnimationSpeed: 1.2, delayBetweenStrokes: 180,
+      strokeColor: '#2B2620', radicalColor: '#B23A2F',
+      drawingColor: '#3F5B89', outlineColor: '#E8E2D5',
+      showCharacter: true, showOutline: true,
+      charDataLoader: (c, onC, onE) => {
+        loadCharData(c, onC, e => {
+          onE && onE({message: `找不到「${c}」的筆順資料`});
+          target.innerHTML = `<div class="error-msg">找不到「${c}」的筆順資料<br><small>字庫涵蓋 9,000+ 個常用繁體字</small></div>`;
+        });
+      }
+    });
+  } catch(e) {
+    target.innerHTML = `<div class="error-msg">載入失敗:${e.message}</div>`;
+  }
+  switchView('char-view');
+}
+
+function resetChar() { showChar(); }
+function playAnimation() {
+  if (state.writer) { state.writer.showCharacter(); setTimeout(()=>state.writer.animateCharacter(),100); }
+}
+function startQuiz() {
+  if (state.writer) {
+    state.writer.cancelQuiz && state.writer.cancelQuiz();
+    state.writer.hideCharacter();
+    state.writer.quiz({
+      showHintAfterMisses: 3,
+      onComplete: () => flashCelebration('太 棒 了')
+    });
+  }
+}
+function prevChar() { if (state.charIdx > 0) { state.charIdx--; showChar(); } }
+function nextChar() { if (state.charIdx < state.chars.length - 1) { state.charIdx++; showChar(); } }
+
+function searchChar() {
+  const v = document.getElementById('search-input').value.trim();
+  if (!v) return;
+  const ch = v[0];
+  if (!(ch >= '一' && ch <= '鿿')) { alert('請輸入一個中文字'); return; }
+  state.chars = [ch]; state.charIdx = 0; state.lesson = null;
+  showChar(0);
+}
+
+function switchMode(mode) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
+  document.getElementById('mode-browse').style.display = mode === 'browse' ? 'block' : 'none';
+  document.getElementById('mode-game').style.display = mode === 'game' ? 'block' : 'none';
+}
+function switchView(id) {
+  const parent = document.getElementById(id).parentElement;
+  parent.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function initGame() {
+  const pubs = Object.keys(DATA);
+  state.game.pubs = new Set(pubs);
+  document.getElementById('g-pub-buttons').innerHTML =
+    `<button class="btn g-pub-btn active" data-pub="__all__">全部</button>` +
+    pubs.map(p => `<button class="btn g-pub-btn active" data-pub="${p}">${p}</button>`).join('');
+  document.querySelectorAll('.g-pub-btn').forEach(b => {
+    b.onclick = () => toggleGamePub(b.dataset.pub, b);
+  });
+
+  const allGrades = new Set();
+  pubs.forEach(p => Object.keys(DATA[p]).forEach(g => allGrades.add(g)));
+  const gradeList = sortGrades(Array.from(allGrades));
+  state.game.grades = new Set(gradeList);
+  document.getElementById('g-grade-buttons').innerHTML =
+    `<button class="btn g-grade-btn active" data-g="__all__">全部</button>` +
+    gradeList.map(g => `<button class="btn g-grade-btn active" data-g="${g}">${g}</button>`).join('');
+  document.querySelectorAll('.g-grade-btn').forEach(b => {
+    b.onclick = () => toggleGameGrade(b.dataset.g, b);
+  });
+
+  document.getElementById('g-lesson-buttons').innerHTML = `
+    <button class="btn g-lesson-btn active" data-f="all">全部課別</button>
+    <button class="btn g-lesson-btn" data-f="first">只取第 1~5 課</button>
+    <button class="btn g-lesson-btn" data-f="last">只取第 6 課以後</button>
+  `;
+  document.querySelectorAll('.g-lesson-btn').forEach(b => {
+    b.onclick = () => {
+      state.game.lessonFilter = b.dataset.f;
+      document.querySelectorAll('.g-lesson-btn').forEach(x => x.classList.toggle('active', x === b));
+      updatePoolInfo();
+    };
+  });
+
+  document.querySelectorAll('.count-btn').forEach(b => {
+    b.onclick = () => {
+      state.game.count = parseInt(b.dataset.count);
+      document.querySelectorAll('.count-btn').forEach(x => x.classList.toggle('active', x === b));
+      updatePoolInfo();
+    };
+  });
+
+  updatePoolInfo();
+}
+
+function toggleGamePub(pub, btn) {
+  if (pub === '__all__') {
+    const allPubs = Object.keys(DATA);
+    state.game.pubs = new Set(allPubs);
+    document.querySelectorAll('.g-pub-btn').forEach(x => x.classList.add('active'));
+  } else {
+    const allBtn = document.querySelector('.g-pub-btn[data-pub="__all__"]');
+    if (state.game.pubs.has(pub)) { state.game.pubs.delete(pub); btn.classList.remove('active'); }
+    else { state.game.pubs.add(pub); btn.classList.add('active'); }
+    const allOn = Object.keys(DATA).every(p => state.game.pubs.has(p));
+    allBtn.classList.toggle('active', allOn);
+  }
+  updatePoolInfo();
+}
+
+function toggleGameGrade(g, btn) {
+  const allGrades = sortGrades(Array.from(new Set(Object.keys(DATA).flatMap(p => Object.keys(DATA[p])))));
+  if (g === '__all__') {
+    state.game.grades = new Set(allGrades);
+    document.querySelectorAll('.g-grade-btn').forEach(x => x.classList.add('active'));
+  } else {
+    const allBtn = document.querySelector('.g-grade-btn[data-g="__all__"]');
+    if (state.game.grades.has(g)) { state.game.grades.delete(g); btn.classList.remove('active'); }
+    else { state.game.grades.add(g); btn.classList.add('active'); }
+    const allOn = allGrades.every(x => state.game.grades.has(x));
+    allBtn.classList.toggle('active', allOn);
+  }
+  updatePoolInfo();
+}
+
+function getGamePool() {
+  const pool = new Set();
+  for (const pub of state.game.pubs) {
+    if (!DATA[pub]) continue;
+    for (const g of Object.keys(DATA[pub])) {
+      if (!state.game.grades.has(g)) continue;
+      for (const lesson of DATA[pub][g]) {
+        if (state.game.lessonFilter === 'first' && lesson.lesson > 5) continue;
+        if (state.game.lessonFilter === 'last' && lesson.lesson <= 5) continue;
+        for (const ch of lesson.chars) pool.add(ch);
+      }
+    }
+  }
+  return Array.from(pool);
+}
+
+function updatePoolInfo() {
+  const pool = getGamePool();
+  document.getElementById('g-pool-count').textContent = pool.length;
+  const btn = document.getElementById('g-start-btn');
+  btn.disabled = pool.length < 1;
+  if (pool.length < state.game.count) {
+    btn.textContent = pool.length > 0 ? `開始(只有 ${pool.length} 題可出)` : '沒有符合條件的字';
+  } else {
+    btn.textContent = `開始闖關 · ${state.game.count} 題`;
+  }
+}
+
+function startGame() {
+  const pool = getGamePool();
+  if (pool.length === 0) return;
+  const shuffled = pool.slice().sort(() => Math.random() - 0.5);
+  const n = Math.min(state.game.count, pool.length);
+  state.game.queue = shuffled.slice(0, n);
+  state.game.results = [];
+  state.game.curIdx = 0;
+  document.getElementById('g-total').textContent = n;
+  showGameQuestion();
+  switchView('game-play-view');
+}
+
+function updateGameProgress() {
+  const total = state.game.queue.length;
+  const pct = total > 0 ? (state.game.curIdx / total) * 100 : 0;
+  document.getElementById('g-progress-fill').style.width = pct + '%';
+}
+
+function showGameQuestion() {
+  const ch = state.game.queue[state.game.curIdx];
+  state.game.mistakes = 0;
+  state.game.revealed = false;
+  document.getElementById('g-current').textContent = state.game.curIdx + 1;
+  document.getElementById('g-score').textContent =
+    state.game.results.filter(r => r.ok && !r.peeked).length;
+  document.getElementById('g-zhuyin').textContent = ZHUYIN[ch] || '(無注音)';
+  updateGameProgress();
+
+  const target = document.getElementById('game-writer-target');
+  target.innerHTML = '';
+  try {
+    state.game.writer = HanziWriter.create('game-writer-target', ch, {
+      width: 320, height: 320, padding: 10,
+      strokeAnimationSpeed: 1.0, delayBetweenStrokes: 150,
+      strokeColor: '#2B2620', radicalColor: '#B23A2F',
+      drawingColor: '#5F8463', outlineColor: '#E8E2D5',
+      showCharacter: false, showOutline: true,
+      charDataLoader: (c, onC, onE) => {
+        loadCharData(c, onC, e => {
+          onE && onE({message: 'not found'});
+          state.game.results.push({ch:c, ok:false, skip:true, notfound:true});
+          setTimeout(nextGameQuestion, 300);
+          target.innerHTML = `<div class="error-msg">「${c}」沒有筆順資料,自動跳過</div>`;
+        });
+      },
+      onLoadCharDataSuccess: () => {
+        state.game.writer.quiz({
+          showHintAfterMisses: 3,
+          onMistake: info => { state.game.mistakes = info.totalMistakes; },
+          onComplete: info => {
+            const perfect = info.totalMistakes === 0;
+            state.game.results.push({ ch, ok: true, skip: false, mistakes: info.totalMistakes });
+            flashCelebration(perfect ? '一 次 通 過' : '答 對 了');
+            setTimeout(nextGameQuestion, 900);
+          }
+        });
+      }
+    });
+  } catch(e) {
+    target.innerHTML = `<div class="error-msg">載入失敗</div>`;
+  }
+}
+
+function peekAnswer() {
+  if (state.game.writer) {
+    state.game.writer.cancelQuiz && state.game.writer.cancelQuiz();
+    state.game.writer.showCharacter();
+    state.game.revealed = true;
+    setTimeout(() => {
+      state.game.writer.hideCharacter();
+      state.game.writer.quiz({
+        showHintAfterMisses: 3,
+        onComplete: () => {
+          state.game.results.push({ ch: state.game.queue[state.game.curIdx], ok: true, skip: false, peeked: true });
+          flashCelebration('完 成');
+          setTimeout(nextGameQuestion, 700);
+        }
+      });
+    }, 2500);
+  }
+}
+
+function skipQuestion() {
+  if (!confirm('確定跳過這一題嗎?')) return;
+  state.game.writer && state.game.writer.cancelQuiz && state.game.writer.cancelQuiz();
+  state.game.results.push({ ch: state.game.queue[state.game.curIdx], ok: false, skip: true });
+  nextGameQuestion();
+}
+
+function nextGameQuestion() {
+  state.game.curIdx++;
+  if (state.game.curIdx >= state.game.queue.length) {
+    updateGameProgress();
+    document.getElementById('g-progress-fill').style.width = '100%';
+    showGameResult();
+  } else {
+    showGameQuestion();
+  }
+}
+
+function showGameResult() {
+  const results = state.game.results;
+  const correct = results.filter(r => r.ok && !r.peeked).length;
+  const peeked = results.filter(r => r.peeked).length;
+  const wrong = results.filter(r => !r.ok).length;
+  const total = results.length;
+  const pct = total > 0 ? Math.round(correct / total * 100) : 0;
+
+  // 以傳統評等印章顯示結果
+  let sealCls, sealChar, title;
+  if (pct === 100)     { sealCls = 'seal-top';       sealChar = '甲'; title = '滿分 · 一等'; }
+  else if (pct >= 80)  { sealCls = 'seal-excellent'; sealChar = '優'; title = '表現優異'; }
+  else if (pct >= 60)  { sealCls = 'seal-good';      sealChar = '良'; title = '成績良好'; }
+  else if (pct >= 40)  { sealCls = 'seal-ok';        sealChar = '可'; title = '繼續加油'; }
+  else                 { sealCls = 'seal-practice';  sealChar = '勤'; title = '多多練習'; }
+
+  const seal = document.getElementById('g-seal');
+  seal.className = 'result-seal ' + sealCls;
+  document.getElementById('g-seal-char').textContent = sealChar;
+  document.getElementById('g-result-title').textContent = title;
+  document.getElementById('g-correct').textContent = correct;
+  document.getElementById('g-of').textContent = total;
+  let pctText = `答對率 ${pct}%`;
+  if (peeked > 0) pctText += `   看答案 ${peeked} 題`;
+  if (wrong > 0) pctText += `   跳過 ${wrong} 題`;
+  document.getElementById('g-percentage').textContent = pctText;
+
+  document.getElementById('g-result-list').innerHTML = results.map(r => {
+    let cls, badge;
+    if (r.peeked) { cls = 'skip'; badge = '助'; }        // 看過答案
+    else if (r.ok) { cls = 'ok'; badge = r.mistakes === 0 ? '甲' : '通'; } // 完美 / 通過
+    else { cls = 'wrong'; badge = '過'; }                 // 跳過
+    return `<div class="result-item ${cls}">${r.ch}<span class="badge">${badge}</span></div>`;
+  }).join('');
+
+  switchView('game-result-view');
+}
+
+function restartGame() { startGame(); }
+function backToSetup() { switchView('game-setup-view'); updatePoolInfo(); }
+
+function flashCelebration(text) {
+  const el = document.getElementById('celebration');
+  el.textContent = text;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 1200);
+}
+
+initBrowse();
+initGame();
+</script>
+</body>
+</html>
