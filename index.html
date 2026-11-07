@@ -2,8 +2,16 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>生字筆順練習 · 闖關遊戲</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>生字筆順練習</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="生字練習">
+<meta name="theme-color" content="#B23A2F">
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' fill='%23B23A2F' rx='36'/><text x='90' y='132' font-size='120' text-anchor='middle' fill='white' font-family='serif' font-weight='bold'>字</text></svg>">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23B23A2F' rx='12'/><text x='32' y='48' font-size='42' text-anchor='middle' fill='white' font-family='serif' font-weight='bold'>字</text></svg>">
+<link rel="manifest" href='data:application/manifest+json;charset=utf-8,{"name":"%E7%94%9F%E5%AD%97%E7%AD%86%E9%A0%86%E7%B7%B4%E7%BF%92","short_name":"%E7%94%9F%E5%AD%97%E7%B7%B4%E7%BF%92","display":"standalone","orientation":"portrait","background_color":"%23FBF6EC","theme_color":"%23B23A2F","start_url":"./","icons":[{"src":"data:image/svg%2Bxml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20192%20192%27%3E%3Crect%20width%3D%27192%27%20height%3D%27192%27%20fill%3D%27%23B23A2F%27%20rx%3D%2740%27%2F%3E%3Ctext%20x%3D%2796%27%20y%3D%27140%27%20font-size%3D%27128%27%20text-anchor%3D%27middle%27%20fill%3D%27white%27%20font-family%3D%27serif%27%20font-weight%3D%27bold%27%3E%E5%AD%97%3C%2Ftext%3E%3C%2Fsvg%3E","sizes":"192x192","type":"image/svg+xml"}]}'>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -52,7 +60,7 @@
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overscroll-behavior: none; }
   body {
     font-family: var(--font-ui);
     background:
@@ -62,9 +70,10 @@
     background-attachment: fixed;
     color: var(--ink);
     min-height: 100vh;
+    overscroll-behavior: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    padding: 24px 16px 60px;
+    padding: max(24px, env(safe-area-inset-top)) 16px max(60px, env(safe-area-inset-bottom));
     line-height: 1.5;
   }
   .container { max-width: 1040px; margin: 0 auto; }
@@ -282,9 +291,17 @@
     padding: 20px; border-radius: var(--r-xl);
     box-shadow: var(--sh-lg); margin-bottom: 24px;
     border: 1px solid var(--line-soft);
+    touch-action: none;
   }
   #writer-target, #game-writer-target {
     display: block; margin: 0 auto; border-radius: var(--r-md);
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  #writer-target svg, #game-writer-target svg {
+    touch-action: none;
+    -webkit-touch-callout: none;
   }
 
   .controls {
@@ -467,25 +484,69 @@
     font-size: 72px; margin-bottom: 8px;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.08));
   }
+  .result-big-pct {
+    font-family: var(--font-ui);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 2px;
+    letter-spacing: -2px;
+  }
+  .result-pct-num {
+    font-size: 96px;
+    background: linear-gradient(135deg, var(--sage) 0%, #7AAB7F 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .result-pct-sym {
+    font-size: 48px;
+    color: var(--ink-mute);
+    font-weight: 500;
+    margin-left: 4px;
+    vertical-align: 24px;
+  }
+  .result-pct-label {
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: var(--gold-dark);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
   .result-title {
     font-size: 26px; font-weight: 900; color: var(--ink);
     margin-bottom: 8px; letter-spacing: 2px;
   }
-  .result-score { font-size: 16px; color: var(--ink-soft); margin-bottom: 8px; }
+  .result-score {
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
   .result-score .big {
-    font-size: 60px; font-weight: 900;
-    background: linear-gradient(135deg, var(--sage) 0%, #7AAB7F 100%);
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 0 4px; font-family: var(--font-ui);
-    line-height: 1; display: inline-block; vertical-align: middle;
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--primary);
+    margin: 0 4px;
+    font-family: var(--font-ui);
+    letter-spacing: 0;
   }
-  .result-percentage {
+  .result-score .big-mute {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    margin: 0 4px;
+    font-family: var(--font-ui);
+  }
+  .result-extra {
     font-size: 13px; color: var(--ink-mute); letter-spacing: 1px;
-    margin: 12px 0 24px; padding: 10px;
-    background: var(--paper-tint); border-radius: var(--r-md);
-    display: inline-block; min-width: 280px;
+    margin: 10px auto 24px;
+    padding: 8px 14px;
+    background: var(--paper-tint); border-radius: var(--r-pill);
+    display: inline-block;
+    min-height: 1em;
   }
+  .result-extra:empty { display: none; }
   .result-divider {
     text-align: center; color: var(--ink-mute); font-size: 12px;
     letter-spacing: 3px; margin: 4px 0 18px;
@@ -613,8 +674,422 @@
     vertical-align: 2px;
   }
 
+  /* ─── 使用者 Profile Bar ─── */
+  .profile-bar {
+    max-width: 1040px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--paper);
+    padding: 12px 16px;
+    border-radius: var(--r-pill);
+    box-shadow: var(--sh-sm);
+    border: 1px solid var(--line-soft);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .profile-bar::-webkit-scrollbar { display: none; }
+
+  .profile-bar-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-right: 4px;
+  }
+  .profile-list {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+  }
+  .avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    border: 2.5px solid transparent;
+    user-select: none;
+    letter-spacing: 0;
+    position: relative;
+  }
+  .avatar.active {
+    border-color: var(--primary);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .avatar:not(.active):hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sh-sm);
+  }
+  .avatar-add {
+    background: var(--paper-tint);
+    color: var(--ink-mute);
+    border: 2px dashed var(--line);
+    font-weight: 300;
+    font-family: var(--font-ui);
+    font-size: 24px;
+  }
+  .avatar-add:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--primary-tint);
+  }
+
+  .profile-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: 2px;
+    font-family: var(--font-display);
+    letter-spacing: 1px;
+  }
+  .profile-menu-btn {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 50%;
+    color: var(--ink-mute);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .profile-menu-btn:hover { background: var(--paper-tint); color: var(--primary); }
+
+  /* 建立新帳號對話框 */
+  .modal-mask {
+    position: fixed; inset: 0;
+    background: rgba(43, 38, 32, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 200;
+    padding: 20px;
+  }
+  .modal-mask.show { display: flex; animation: fadeIn 0.2s ease; }
+  .modal {
+    background: var(--paper);
+    border-radius: var(--r-xl);
+    padding: 28px 24px;
+    max-width: 380px;
+    width: 100%;
+    box-shadow: var(--sh-lg);
+    border: 1px solid var(--line-soft);
+  }
+  .modal h3 {
+    color: var(--primary);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .modal-field { margin-bottom: 14px; }
+  .modal-field label {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .modal-field input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 16px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--r-md);
+    outline: none;
+    font-family: var(--font-ui);
+    background: var(--paper-tint);
+    color: var(--ink);
+  }
+  .modal-field input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-tint);
+  }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .modal-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: var(--r-pill);
+    border: none;
+    font-family: var(--font-ui);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+  }
+  .modal-btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-soft) 100%);
+    color: white;
+  }
+  .modal-btn-primary:hover { transform: translateY(-1px); box-shadow: var(--sh-md); }
+  .modal-btn-ghost {
+    background: var(--paper-tint);
+    color: var(--ink-soft);
+    border: 1.5px solid var(--line);
+  }
+  .modal-btn-ghost:hover { background: var(--primary-tint); color: var(--primary); }
+  .modal-btn-danger {
+    background: #FBE2DE;
+    color: #922B21;
+  }
+  .modal-btn-danger:hover { background: #F5C7C0; }
+
+  /* 個人紀錄頁 */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: var(--paper);
+    border-radius: var(--r-lg);
+    padding: 18px 20px;
+    box-shadow: var(--sh-sm);
+    border: 1px solid var(--line-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--gold);
+  }
+  .stat-card.accent::before { background: var(--sage); }
+  .stat-card.danger::before { background: var(--primary); }
+  .stat-label {
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1;
+    font-family: var(--font-ui);
+  }
+  .stat-value .unit {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-mute);
+    margin-left: 3px;
+    letter-spacing: 1px;
+  }
+
+  .stats-section {
+    background: var(--paper);
+    border-radius: var(--r-lg);
+    padding: 20px 22px;
+    margin-bottom: 18px;
+    box-shadow: var(--sh-sm);
+    border: 1px solid var(--line-soft);
+  }
+  .stats-section h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .stats-section h3 .count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px; height: 24px; padding: 0 8px;
+    border-radius: var(--r-pill);
+    font-size: 12px;
+    font-weight: 900;
+    background: var(--gold-tint);
+    color: var(--gold-dark);
+  }
+  .stats-section.accent h3 .count { background: var(--sage-tint); color: #2D5733; }
+  .stats-section.danger h3 .count { background: var(--primary-tint); color: var(--primary-dark); }
+
+  .empty-state {
+    text-align: center;
+    color: var(--ink-mute);
+    padding: 20px 10px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    grid-column: 1 / -1;
+  }
+
+  /* ─── 家族排行榜 ─── */
+  .family-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 10px;
+  }
+  .family-member {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--paper-tint);
+    border-radius: var(--r-md);
+    border: 1.5px solid var(--line);
+  }
+  .family-member.self {
+    background: linear-gradient(135deg, var(--primary-tint) 0%, #FBF3F1 100%);
+    border-color: var(--primary);
+  }
+  .family-member .avatar {
+    width: 38px; height: 38px;
+    font-size: 17px;
+    cursor: default;
+    flex-shrink: 0;
+  }
+  .family-member-info { flex: 1; min-width: 0; }
+  .family-member-name {
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
+    font-family: var(--font-display);
+    letter-spacing: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .family-member-info .meta {
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+  .family-member-info .meta strong {
+    color: var(--sage);
+    font-size: 14px;
+    font-weight: 900;
+    margin: 0 2px;
+  }
+  .family-member-info .meta .you {
+    color: var(--primary);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-left: 4px;
+  }
+
+  /* 同步狀態標籤 */
+  .sync-status-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .sync-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: var(--r-pill);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    border: none;
+    font-family: var(--font-ui);
+  }
+  .sync-status.on {
+    background: var(--sage-tint);
+    color: #2D5733;
+  }
+  .sync-status.off {
+    background: var(--paper-tint);
+    color: var(--ink-mute);
+    border: 1px solid var(--line);
+  }
+  .sync-status .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s infinite;
+  }
+  .sync-status.off .dot { animation: none; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* 同步設定對話框內的文字區 */
+  .modal-field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 12px;
+    border: 1.5px solid var(--line);
+    border-radius: var(--r-md);
+    outline: none;
+    font-family: Menlo, Consolas, monospace;
+    background: var(--paper-tint);
+    color: var(--ink);
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.5;
+  }
+  .modal-field textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-tint);
+  }
+  .modal-help {
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.3px;
+    line-height: 1.7;
+    padding: 12px 14px;
+    background: var(--gold-tint);
+    border-radius: var(--r-md);
+    margin-bottom: 14px;
+  }
+  .modal-help a {
+    color: var(--gold-dark);
+    font-weight: 700;
+  }
+  .modal-help ol { padding-left: 20px; margin: 6px 0; }
+  .modal-help li { margin-bottom: 4px; }
+
   @media (max-width: 560px) {
-    body { padding: 18px 12px 50px; }
+    body { padding: max(18px, env(safe-area-inset-top)) 12px max(50px, env(safe-area-inset-bottom)); }
+    .profile-bar { padding: 10px 12px; }
+    .avatar { width: 38px; height: 38px; font-size: 18px; }
+    .profile-bar-label { display: none; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .stat-value { font-size: 26px; }
     h1 { font-size: 26px; letter-spacing: 3px; }
     .subtitle { font-size: 11px; }
     .tab { padding: 8px 16px; font-size: 13px; }
@@ -630,9 +1105,10 @@
     .zhuyin-clue { font-size: 40px; letter-spacing: 5px; }
     .zhuyin-card { padding: 18px 14px; }
     .game-setup { padding: 24px 18px; }
-    .result-emoji { font-size: 56px; }
+    .result-pct-num { font-size: 76px; }
+    .result-pct-sym { font-size: 38px; vertical-align: 20px; }
     .result-title { font-size: 20px; }
-    .result-score .big { font-size: 46px; }
+    .result-score .big { font-size: 22px; }
     .result-item { font-size: 26px; }
     .result-list { grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); }
     .control-btn { padding: 10px 18px; font-size: 14px; }
@@ -641,6 +1117,15 @@
 </style>
 </head>
 <body>
+<div class="profile-bar" id="profile-bar">
+  <span class="profile-bar-label">帳號</span>
+  <div class="profile-list" id="profile-list"></div>
+  <span class="profile-name" id="profile-name-text"></span>
+  <button class="profile-menu-btn" id="profile-menu-btn" onclick="openProfileMenu()" aria-label="帳號設定">
+    <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+  </button>
+</div>
+
 <div class="container">
   <header>
     <div class="ornament"><span>Chinese Characters</span></div>
@@ -657,6 +1142,10 @@
       <button class="tab" data-mode="game" onclick="switchMode('game')">
         <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="12" rx="3"/><path d="M8 11v2M7 12h2M15 12h.01M17 14h.01"/></svg>
         闖關遊戲
+      </button>
+      <button class="tab" data-mode="stats" onclick="switchMode('stats')">
+        <svg class="ico" viewBox="0 0 24 24"><path d="M9 11l3 3 7-7"/><path d="M21 12v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h11"/></svg>
+        我的紀錄
       </button>
     </div>
   </div>
@@ -749,12 +1238,21 @@
         </div>
 
         <div class="setup-section">
-          <div class="setup-label"><span class="num">3</span>課別範圍</div>
+          <div class="setup-label"><span class="num">3</span>學期 <span class="setup-hint-text">(可複選)</span></div>
+          <div id="g-sem-buttons" class="btn-row">
+            <button class="btn g-sem-btn active" data-s="__all__">全部</button>
+            <button class="btn g-sem-btn active" data-s="上">上學期</button>
+            <button class="btn g-sem-btn active" data-s="下">下學期</button>
+          </div>
+        </div>
+
+        <div class="setup-section">
+          <div class="setup-label"><span class="num">4</span>課別範圍</div>
           <div id="g-lesson-buttons" class="btn-row"></div>
         </div>
 
         <div class="setup-section">
-          <div class="setup-label"><span class="num">4</span>題數</div>
+          <div class="setup-label"><span class="num">5</span>題數</div>
           <div class="btn-row" id="g-count-buttons">
             <button class="btn count-btn active" data-count="5">5 題</button>
             <button class="btn count-btn" data-count="10">10 題</button>
@@ -804,11 +1302,13 @@
 
     <div id="game-result-view" class="view">
       <div class="game-result">
-        <div class="result-seal seal-good" id="g-seal"><span class="seal-char" id="g-seal-char">良</span></div>
-        <div class="result-title" id="g-result-title">完成了</div>
-        <div class="result-score">答對 <span class="big" id="g-correct">0</span> / <span id="g-of">0</span> 題</div>
-        <div class="result-percentage" id="g-percentage">答對率 0%</div>
-        <div class="result-divider">各題結果</div>
+        <div class="result-big-pct">
+          <span class="result-pct-num" id="g-pct-num">0</span><span class="result-pct-sym">%</span>
+        </div>
+        <div class="result-pct-label">通過率</div>
+        <div class="result-score">答對 <span class="big" id="g-correct">0</span> 題 / 挑戰 <span class="big-mute" id="g-of">0</span> 題</div>
+        <div class="result-extra" id="g-percentage"></div>
+        <div class="result-divider">每題結果</div>
         <div class="result-list" id="g-result-list"></div>
         <div class="result-actions">
           <button class="control-btn btn-reset" onclick="restartGame()">
@@ -821,6 +1321,119 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ========== 我的紀錄模式 ========== -->
+  <div id="mode-stats" class="mode-view" style="display:none;">
+    <div id="stats-view" class="view active">
+      <div class="sync-status-wrap">
+        <button class="sync-status off" id="sync-status-btn" onclick="openSyncSettings()">
+          <span class="dot"></span><span id="sync-status-text">尚未啟用同步</span>
+        </button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card accent">
+          <div class="stat-label">累計答對</div>
+          <div class="stat-value" id="stat-correct">0<span class="unit">次</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">練習過的字</div>
+          <div class="stat-value" id="stat-practiced">0<span class="unit">字</span></div>
+        </div>
+        <div class="stat-card accent">
+          <div class="stat-label">已熟悉</div>
+          <div class="stat-value" id="stat-mastered">0<span class="unit">字</span></div>
+        </div>
+        <div class="stat-card danger">
+          <div class="stat-label">待加強</div>
+          <div class="stat-value" id="stat-practice">0<span class="unit">字</span></div>
+        </div>
+      </div>
+
+      <div class="stats-section" id="family-section" style="display:none;">
+        <h3>家族成員 <span class="count" id="count-family">0</span></h3>
+        <div class="family-board" id="family-board"></div>
+      </div>
+
+      <div class="stats-section accent">
+        <h3>已經熟悉的字 <span class="count" id="count-mastered">0</span></h3>
+        <div id="list-mastered" class="char-grid"></div>
+      </div>
+
+      <div class="stats-section danger">
+        <h3>需要再練習 <span class="count" id="count-practice">0</span></h3>
+        <div id="list-practice" class="char-grid"></div>
+      </div>
+
+      <div class="stats-section">
+        <h3>全部練習過的字 <span class="count" id="count-all">0</span></h3>
+        <div id="list-all" class="char-grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Profile 選單對話框 -->
+<div class="modal-mask" id="profile-modal">
+  <div class="modal">
+    <h3 id="profile-modal-title">帳號管理</h3>
+    <div id="profile-modal-body"></div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-ghost" onclick="closeProfileMenu()">關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- 新增/編輯 Profile 對話框 -->
+<div class="modal-mask" id="edit-modal">
+  <div class="modal">
+    <h3 id="edit-modal-title">新增帳號</h3>
+    <div class="modal-field">
+      <label>名字</label>
+      <input type="text" id="edit-name" maxlength="20" placeholder="孩子的名字 (最多 20 字)">
+    </div>
+    <div class="modal-field">
+      <label>Gmail (選填)</label>
+      <input type="email" id="edit-email" maxlength="80" placeholder="example@gmail.com">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-ghost" onclick="closeEditModal()">取消</button>
+      <button class="modal-btn modal-btn-danger" id="edit-delete-btn" onclick="deleteProfile()" style="display:none;">刪除</button>
+      <button class="modal-btn modal-btn-primary" onclick="saveProfile()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 同步設定對話框 -->
+<div class="modal-mask" id="sync-modal">
+  <div class="modal" style="max-width:440px">
+    <h3>多裝置同步設定</h3>
+    <div class="modal-help">
+      設定後,全家每個裝置輸入相同的「家族碼」就能同步練習紀錄。
+      需要先建立免費的 Firebase 資料庫:
+      <ol>
+        <li>前往 <a href="https://console.firebase.google.com/" target="_blank">console.firebase.google.com</a> 用 Gmail 登入</li>
+        <li>「新增專案」(名字隨意)</li>
+        <li>左側 Build → Realtime Database → 建立資料庫(選亞洲 asia-southeast1)→ 以「測試模式」啟動</li>
+        <li>複製資料庫網址(開頭 https://)貼到下方</li>
+        <li>自訂一個「家族碼」(至少 8 字,例如 chen2026)讓全家裝置輸入同一組</li>
+      </ol>
+    </div>
+    <div class="modal-field">
+      <label>Firebase 資料庫網址</label>
+      <input type="url" id="sync-url" placeholder="https://your-project-default-rtdb.asia-southeast1.firebasedatabase.app">
+    </div>
+    <div class="modal-field">
+      <label>家族碼(8 碼以上)</label>
+      <input type="text" id="sync-code" maxlength="40" placeholder="chen2026a7">
+      <div style="font-size:12px;color:#888;margin-top:4px;">至少 8 個字,全家裝置輸入同一組即可同步</div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-ghost" onclick="closeSyncSettings()">取消</button>
+      <button class="modal-btn modal-btn-danger" id="sync-off-btn" onclick="disableSync()" style="display:none;">停用同步</button>
+      <button class="modal-btn modal-btn-primary" onclick="saveSyncSettings()">啟用同步</button>
     </div>
   </div>
 </div>
@@ -844,13 +1457,551 @@ let state = {
   pub: null, grade: null, lesson: null,
   chars: [], charIdx: 0, writer: null,
   game: {
-    pubs: new Set(), grades: new Set(),
+    pubs: new Set(), grades: new Set(), sems: new Set(['上','下']),
     lessonFilter: 'all',
     count: 5,
     queue: [], results: [], curIdx: 0,
     mistakes: 0, revealed: false, writer: null
-  }
+  },
+  profiles: {},
+  currentProfileId: null,
+  editingProfileId: null
 };
+
+// ============================================
+// Profile 管理(帳號系統)
+// ============================================
+const PROFILE_KEY = 'strokePracticeProfiles_v1';
+const CURRENT_KEY = 'strokePracticeCurrent_v1';
+const AVATAR_COLORS = [
+  '#B23A2F', '#BE9552', '#5F8463', '#3F5B89',
+  '#8E6BA6', '#D88F3D', '#4A8B8B', '#B8558E',
+  '#7A6EB0', '#C06B46'
+];
+
+function loadProfiles() {
+  try {
+    const raw = localStorage.getItem(PROFILE_KEY);
+    state.profiles = raw ? JSON.parse(raw) : {};
+  } catch(e) { state.profiles = {}; }
+  try {
+    state.currentProfileId = localStorage.getItem(CURRENT_KEY) || null;
+  } catch(e) { state.currentProfileId = null; }
+  // 檢查 current 是否仍有效
+  if (state.currentProfileId && !state.profiles[state.currentProfileId]) {
+    state.currentProfileId = null;
+  }
+}
+
+function saveProfiles(pushId) {
+  // pushId = 要特別推送的 profile id (若未指定,預設推目前使用中的)
+  try { localStorage.setItem(PROFILE_KEY, JSON.stringify(state.profiles)); } catch(e) {}
+  try {
+    if (state.currentProfileId) localStorage.setItem(CURRENT_KEY, state.currentProfileId);
+    else localStorage.removeItem(CURRENT_KEY);
+  } catch(e) {}
+  // 同步到 Firebase
+  if (typeof FB !== 'undefined' && FB.ready) {
+    const id = pushId !== undefined ? pushId : state.currentProfileId;
+    if (id) schedulePush(id);
+  }
+}
+
+function getProfileCount() { return Object.keys(state.profiles).length; }
+function getCurrentProfile() { return state.currentProfileId ? state.profiles[state.currentProfileId] : null; }
+function newProfileId() { return 'p_' + Date.now() + '_' + Math.random().toString(36).slice(2,6); }
+
+function getAvatarChar(name) {
+  if (!name) return '?';
+  const first = [...name][0];
+  return first;
+}
+function getAvatarColor(id) {
+  // 用 id 字串 hash 挑色
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) | 0;
+  return AVATAR_COLORS[Math.abs(h) % AVATAR_COLORS.length];
+}
+
+function renderProfileBar() {
+  const list = document.getElementById('profile-list');
+  const nameText = document.getElementById('profile-name-text');
+  const menuBtn = document.getElementById('profile-menu-btn');
+
+  const ids = Object.keys(state.profiles);
+  let html = '';
+  for (const id of ids) {
+    const p = state.profiles[id];
+    const active = id === state.currentProfileId ? ' active' : '';
+    const color = getAvatarColor(id);
+    html += `<div class="avatar${active}" style="background:${color}" onclick="switchProfile('${id}')" title="${p.name}">${getAvatarChar(p.name)}</div>`;
+  }
+  if (ids.length < 10) {
+    html += `<div class="avatar avatar-add" onclick="openAddProfile()" title="新增帳號">+</div>`;
+  }
+  list.innerHTML = html;
+
+  const cur = getCurrentProfile();
+  if (cur) {
+    nameText.textContent = cur.name;
+    nameText.style.display = '';
+    menuBtn.style.display = '';
+  } else {
+    nameText.textContent = ids.length === 0 ? '尚未建立帳號' : '請選擇帳號';
+    nameText.style.display = '';
+    menuBtn.style.display = ids.length ? '' : 'none';
+  }
+}
+
+function switchProfile(id) {
+  if (!state.profiles[id]) return;
+  state.currentProfileId = id;
+  saveProfiles();
+  renderProfileBar();
+  // 如果在紀錄頁,重新渲染
+  if (document.getElementById('mode-stats').style.display !== 'none') renderStats();
+}
+
+function openAddProfile() {
+  if (getProfileCount() >= 10) {
+    alert('最多可建立 10 個帳號');
+    return;
+  }
+  state.editingProfileId = null;
+  document.getElementById('edit-modal-title').textContent = '新增帳號';
+  document.getElementById('edit-name').value = '';
+  document.getElementById('edit-email').value = '';
+  document.getElementById('edit-delete-btn').style.display = 'none';
+  document.getElementById('edit-modal').classList.add('show');
+  setTimeout(() => document.getElementById('edit-name').focus(), 100);
+}
+
+function openEditProfile(id) {
+  const p = state.profiles[id];
+  if (!p) return;
+  state.editingProfileId = id;
+  document.getElementById('edit-modal-title').textContent = '編輯帳號';
+  document.getElementById('edit-name').value = p.name;
+  document.getElementById('edit-email').value = p.email || '';
+  document.getElementById('edit-delete-btn').style.display = '';
+  closeProfileMenu();
+  document.getElementById('edit-modal').classList.add('show');
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').classList.remove('show');
+}
+
+function saveProfile() {
+  const name = document.getElementById('edit-name').value.trim();
+  const email = document.getElementById('edit-email').value.trim();
+  if (!name) { alert('請輸入名字'); return; }
+
+  if (state.editingProfileId && state.profiles[state.editingProfileId]) {
+    state.profiles[state.editingProfileId].name = name;
+    state.profiles[state.editingProfileId].email = email;
+  } else {
+    const id = newProfileId();
+    state.profiles[id] = {
+      name, email,
+      createdAt: Date.now(),
+      stats: {}, // char -> { attempts, correct, perfect, peeked, skipped, lastTime, lastResult }
+      totals: { attempts: 0, correct: 0, perfect: 0 }
+    };
+    state.currentProfileId = id;
+  }
+  saveProfiles();
+  closeEditModal();
+  renderProfileBar();
+  if (document.getElementById('mode-stats').style.display !== 'none') renderStats();
+}
+
+function deleteProfile() {
+  const id = state.editingProfileId;
+  if (!id) return;
+  const p = state.profiles[id];
+  if (!confirm(`確定要刪除「${p.name}」的帳號和所有練習紀錄嗎?`)) return;
+  delete state.profiles[id];
+  if (state.currentProfileId === id) {
+    const remaining = Object.keys(state.profiles);
+    state.currentProfileId = remaining[0] || null;
+  }
+  saveProfiles();
+  closeEditModal();
+  renderProfileBar();
+  if (document.getElementById('mode-stats').style.display !== 'none') renderStats();
+}
+
+function openProfileMenu() {
+  const ids = Object.keys(state.profiles);
+  if (ids.length === 0) { openAddProfile(); return; }
+  let html = '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px;">';
+  for (const id of ids) {
+    const p = state.profiles[id];
+    const color = getAvatarColor(id);
+    const isCur = id === state.currentProfileId;
+    html += `
+      <div style="display:flex;align-items:center;gap:12px;padding:10px;background:${isCur ? 'var(--primary-tint)' : 'var(--paper-tint)'};border-radius:var(--r-md);border:1.5px solid ${isCur ? 'var(--primary)' : 'var(--line)'}">
+        <div class="avatar" style="background:${color};width:38px;height:38px;font-size:18px;flex-shrink:0;cursor:default">${getAvatarChar(p.name)}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;color:var(--ink);font-family:var(--font-display);letter-spacing:1px">${p.name}${isCur ? '  <span style=\'font-size:10px;color:var(--primary);letter-spacing:2px\'>目前使用中</span>' : ''}</div>
+          ${p.email ? `<div style="font-size:11px;color:var(--ink-mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.email}</div>` : ''}
+        </div>
+        <button class="modal-btn modal-btn-ghost" style="padding:6px 12px;font-size:12px;flex:0;letter-spacing:0" onclick="openEditProfile('${id}')">編輯</button>
+      </div>
+    `;
+  }
+  html += '</div>';
+  if (ids.length < 10) {
+    html += `<button class="modal-btn modal-btn-primary" style="width:100%;letter-spacing:1px;margin-bottom:10px" onclick="closeProfileMenu();openAddProfile()">+ 新增帳號</button>`;
+  }
+  const syncLabel = FB.ready ? `多裝置同步 · ${FB.code}` : '設定多裝置同步';
+  html += `<button class="modal-btn modal-btn-ghost" style="width:100%;letter-spacing:1px" onclick="openSyncSettings()">${syncLabel}</button>`;
+  document.getElementById('profile-modal-body').innerHTML = html;
+  document.getElementById('profile-modal').classList.add('show');
+}
+
+function closeProfileMenu() {
+  document.getElementById('profile-modal').classList.remove('show');
+}
+
+// ============================================
+// 紀錄練習結果
+// ============================================
+function recordAttempt(ch, result) {
+  // result: 'perfect' | 'passed' | 'peeked' | 'skipped'
+  const p = getCurrentProfile();
+  if (!p) return;
+  if (!p.stats) p.stats = {};
+  if (!p.totals) p.totals = { attempts:0, correct:0, perfect:0 };
+  if (!p.stats[ch]) p.stats[ch] = { attempts:0, correct:0, perfect:0, peeked:0, skipped:0, lastTime:0, lastResult:null };
+  const s = p.stats[ch];
+  s.attempts++;
+  p.totals.attempts++;
+  if (result === 'perfect') { s.perfect++; s.correct++; p.totals.perfect++; p.totals.correct++; }
+  else if (result === 'passed') { s.correct++; p.totals.correct++; }
+  else if (result === 'peeked') { s.peeked++; }
+  else if (result === 'skipped') { s.skipped++; }
+  s.lastTime = Date.now();
+  s.lastResult = result;
+  saveProfiles();
+}
+
+function renderStats() {
+  renderSyncStatus();
+  renderFamilyBoard();
+  const p = getCurrentProfile();
+  if (!p) {
+    document.getElementById('stat-correct').innerHTML = '0<span class="unit">次</span>';
+    document.getElementById('stat-practiced').innerHTML = '0<span class="unit">字</span>';
+    document.getElementById('stat-mastered').innerHTML = '0<span class="unit">字</span>';
+    document.getElementById('stat-practice').innerHTML = '0<span class="unit">字</span>';
+    document.getElementById('list-mastered').innerHTML = '<div class="empty-state">請先選擇或建立帳號</div>';
+    document.getElementById('list-practice').innerHTML = '';
+    document.getElementById('list-all').innerHTML = '';
+    document.getElementById('count-mastered').textContent = '0';
+    document.getElementById('count-practice').textContent = '0';
+    document.getElementById('count-all').textContent = '0';
+    return;
+  }
+  const stats = p.stats || {};
+  const chars = Object.keys(stats);
+  const mastered = [];      // 答對 ≥ 3 次 且 最近一次不是 skipped/peeked
+  const needPractice = [];  // 最近一次 skipped 或 連續看答案
+
+  for (const ch of chars) {
+    const s = stats[ch];
+    const isGood = s.correct >= 3 && (s.lastResult === 'perfect' || s.lastResult === 'passed');
+    const needs = s.lastResult === 'skipped' || s.lastResult === 'peeked' || (s.attempts >= 2 && s.correct / s.attempts < 0.5);
+    if (isGood) mastered.push({ch, s});
+    else if (needs) needPractice.push({ch, s});
+  }
+
+  // 按最近練習時間排序
+  mastered.sort((a,b) => b.s.lastTime - a.s.lastTime);
+  needPractice.sort((a,b) => b.s.lastTime - a.s.lastTime);
+  const all = chars.map(ch => ({ch, s: stats[ch]})).sort((a,b) => b.s.lastTime - a.s.lastTime);
+
+  document.getElementById('stat-correct').innerHTML = `${p.totals.correct || 0}<span class="unit">次</span>`;
+  document.getElementById('stat-practiced').innerHTML = `${chars.length}<span class="unit">字</span>`;
+  document.getElementById('stat-mastered').innerHTML = `${mastered.length}<span class="unit">字</span>`;
+  document.getElementById('stat-practice').innerHTML = `${needPractice.length}<span class="unit">字</span>`;
+  document.getElementById('count-mastered').textContent = mastered.length;
+  document.getElementById('count-practice').textContent = needPractice.length;
+  document.getElementById('count-all').textContent = chars.length;
+
+  const renderList = (arr, emptyMsg) => {
+    if (arr.length === 0) return `<div class="empty-state">${emptyMsg}</div>`;
+    return arr.map(x => `<div class="char-item" onclick="showStatsChar('${x.ch}')">${x.ch}</div>`).join('');
+  };
+  document.getElementById('list-mastered').innerHTML = renderList(mastered, '累積寫對 3 次就會進來這裡');
+  document.getElementById('list-practice').innerHTML = renderList(needPractice, '目前沒有需要加強的字');
+  document.getElementById('list-all').innerHTML = renderList(all, '還沒有練習紀錄,去闖關吧!');
+}
+
+function showStatsChar(ch) {
+  state.chars = [ch];
+  state.charIdx = 0;
+  state.lesson = null;
+  switchMode('browse');
+  showChar(0);
+}
+
+// ============================================
+// 家族排行榜
+// ============================================
+function renderFamilyBoard() {
+  const section = document.getElementById('family-section');
+  const board = document.getElementById('family-board');
+  const countEl = document.getElementById('count-family');
+
+  const ids = Object.keys(state.profiles);
+  // 同步未啟用時仍顯示(多個 local 帳號時)
+  if (ids.length <= 1 && !FB.ready) {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = '';
+  countEl.textContent = ids.length;
+
+  // 按累計答對次數排序
+  const members = ids.map(id => {
+    const p = state.profiles[id];
+    const correct = (p.totals && p.totals.correct) || 0;
+    const chars = p.stats ? Object.keys(p.stats).length : 0;
+    return { id, p, correct, chars };
+  }).sort((a,b) => b.correct - a.correct);
+
+  board.innerHTML = members.map(m => {
+    const isSelf = m.id === state.currentProfileId;
+    const color = getAvatarColor(m.id);
+    const youLabel = isSelf ? '<span class="you">(自己)</span>' : '';
+    return `
+      <div class="family-member${isSelf ? ' self' : ''}" onclick="switchProfile('${m.id}')">
+        <div class="avatar" style="background:${color}">${getAvatarChar(m.p.name)}</div>
+        <div class="family-member-info">
+          <div class="family-member-name">${m.p.name}${youLabel}</div>
+          <div class="meta">答對 <strong>${m.correct}</strong> 次 · 練過 <strong>${m.chars}</strong> 字</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ============================================
+// 多裝置同步(Firebase Realtime DB REST + SSE)
+// ============================================
+const FB = {
+  url: null,
+  code: null,
+  es: null,
+  ready: false,
+  initialPullDone: false
+};
+const SYNC_URL_KEY = 'strokePracticeSyncUrl_v1';
+const SYNC_CODE_KEY = 'strokePracticeSyncCode_v1';
+
+function loadSyncConfig() {
+  try {
+    FB.url = localStorage.getItem(SYNC_URL_KEY) || null;
+    FB.code = localStorage.getItem(SYNC_CODE_KEY) || null;
+  } catch(e) {}
+  FB.ready = !!(FB.url && FB.code);
+}
+
+function saveSyncConfig(url, code) {
+  try {
+    if (url) localStorage.setItem(SYNC_URL_KEY, url);
+    if (code) localStorage.setItem(SYNC_CODE_KEY, code);
+  } catch(e) {}
+}
+
+function clearSyncConfig() {
+  try {
+    localStorage.removeItem(SYNC_URL_KEY);
+    localStorage.removeItem(SYNC_CODE_KEY);
+  } catch(e) {}
+  FB.url = null; FB.code = null; FB.ready = false;
+  if (FB.es) { try { FB.es.close(); } catch(e){} FB.es = null; }
+}
+
+function fbFamilyUrl(sub) {
+  const base = FB.url.replace(/\/+$/, '');
+  const path = `families/${encodeURIComponent(FB.code)}/profiles${sub || ''}.json`;
+  return `${base}/${path}`;
+}
+
+async function fbPullAll() {
+  if (!FB.ready) return;
+  try {
+    const r = await fetch(fbFamilyUrl(''), { cache: 'no-store' });
+    if (!r.ok) return;
+    const remote = await r.json() || {};
+    let changed = false;
+    for (const [id, rp] of Object.entries(remote || {})) {
+      if (!rp) continue;
+      const local = state.profiles[id];
+      if (!local || (rp._mod || 0) > (local._mod || 0)) {
+        state.profiles[id] = rp;
+        changed = true;
+      }
+    }
+    if (changed) {
+      saveLocalOnly();
+      renderProfileBar();
+      if (document.getElementById('mode-stats').style.display !== 'none') renderStats();
+    }
+    FB.initialPullDone = true;
+  } catch(e) { console.warn('pull failed', e); }
+}
+
+const pushTimers = {};
+function schedulePush(id) {
+  if (!FB.ready) return;
+  clearTimeout(pushTimers[id]);
+  pushTimers[id] = setTimeout(() => fbPushProfile(id), 700);
+}
+
+async function fbPushProfile(id) {
+  if (!FB.ready) return;
+  const p = state.profiles[id];
+  if (!p) {
+    // 已被刪除
+    try { await fetch(fbFamilyUrl('/' + encodeURIComponent(id)), { method: 'DELETE' }); } catch(e){}
+    return;
+  }
+  p._mod = Date.now();
+  try {
+    await fetch(fbFamilyUrl('/' + encodeURIComponent(id)), {
+      method: 'PUT',
+      body: JSON.stringify(p),
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch(e) { console.warn('push failed', e); }
+}
+
+function fbPushAllOnce() {
+  if (!FB.ready) return;
+  for (const id of Object.keys(state.profiles)) schedulePush(id);
+}
+
+function startFbListener() {
+  if (!FB.ready) return;
+  if (FB.es) { try { FB.es.close(); } catch(e){} }
+  try {
+    FB.es = new EventSource(fbFamilyUrl(''));
+    const applyRemote = (path, data) => {
+      if (path === '/') {
+        // 整批資料
+        const remote = data || {};
+        let changed = false;
+        for (const [id, rp] of Object.entries(remote)) {
+          if (!rp) continue;
+          const local = state.profiles[id];
+          if (!local || (rp._mod || 0) > (local._mod || 0)) {
+            state.profiles[id] = rp;
+            changed = true;
+          }
+        }
+        if (changed) afterRemoteChange();
+      } else {
+        // path: /xxxx 代表 profile id
+        const m = path.match(/^\/([^\/]+)$/);
+        if (!m) return;
+        const id = m[1];
+        if (data === null) {
+          if (state.profiles[id]) { delete state.profiles[id]; afterRemoteChange(); }
+        } else if (data && typeof data === 'object') {
+          const local = state.profiles[id];
+          if (!local || (data._mod || 0) >= (local._mod || 0)) {
+            state.profiles[id] = data;
+            afterRemoteChange();
+          }
+        }
+      }
+    };
+    const onEvent = e => {
+      try {
+        const msg = JSON.parse(e.data);
+        if (msg && typeof msg.path !== 'undefined') applyRemote(msg.path, msg.data);
+      } catch(err) {}
+    };
+    FB.es.addEventListener('put', onEvent);
+    FB.es.addEventListener('patch', onEvent);
+    FB.es.onerror = () => { /* 會自動重連 */ };
+  } catch(e) { console.warn('SSE init failed', e); }
+}
+
+function afterRemoteChange() {
+  saveLocalOnly();
+  renderProfileBar();
+  renderSyncStatus();
+  if (document.getElementById('mode-stats').style.display !== 'none') renderStats();
+}
+
+function renderSyncStatus() {
+  const btn = document.getElementById('sync-status-btn');
+  const txt = document.getElementById('sync-status-text');
+  if (!btn || !txt) return;
+  if (FB.ready) {
+    btn.className = 'sync-status on';
+    txt.textContent = `同步中 · ${FB.code}`;
+  } else {
+    btn.className = 'sync-status off';
+    txt.textContent = '點此啟用多裝置同步';
+  }
+}
+
+function openSyncSettings() {
+  document.getElementById('sync-url').value = FB.url || '';
+  document.getElementById('sync-code').value = FB.code || '';
+  document.getElementById('sync-off-btn').style.display = FB.ready ? '' : 'none';
+  closeProfileMenu();
+  document.getElementById('sync-modal').classList.add('show');
+}
+
+function closeSyncSettings() {
+  document.getElementById('sync-modal').classList.remove('show');
+}
+
+async function saveSyncSettings() {
+  let url = document.getElementById('sync-url').value.trim();
+  const code = document.getElementById('sync-code').value.trim();
+  if (!url || !code) { alert('請填寫 Firebase 網址和家族碼'); return; }
+  if (code.length < 8) { alert('家族碼至少要 8 個字(為了安全)'); return; }
+  // 簡單驗證 URL
+  url = url.replace(/\/+$/, '');
+  if (!/^https:\/\/[-a-z0-9]+\.firebaseio\.com$|^https:\/\/[-a-z0-9]+\.[a-z0-9-]+\.firebasedatabase\.app$/i.test(url)) {
+    if (!confirm('這網址不像標準的 Firebase 網址,仍要繼續嗎?')) return;
+  }
+  saveSyncConfig(url, code);
+  FB.url = url; FB.code = code; FB.ready = true;
+  closeSyncSettings();
+  renderSyncStatus();
+  // 先推送本地資料,再拉取遠端合併
+  fbPushAllOnce();
+  await fbPullAll();
+  startFbListener();
+  renderProfileBar();
+  if (document.getElementById('mode-stats').style.display !== 'none') renderStats();
+  alert('同步已啟用!在其他裝置輸入同樣的網址和家族碼就能同步。');
+}
+
+function disableSync() {
+  if (!confirm('停用後只會保留本機資料,其他裝置的更新將不會同步過來。確定嗎?')) return;
+  clearSyncConfig();
+  closeSyncSettings();
+  renderSyncStatus();
+}
+
+// 內部:只存本機,不推遠端(避免 SSE 回聲)
+function saveLocalOnly() {
+  try { localStorage.setItem(PROFILE_KEY, JSON.stringify(state.profiles)); } catch(e) {}
+  try {
+    if (state.currentProfileId) localStorage.setItem(CURRENT_KEY, state.currentProfileId);
+    else localStorage.removeItem(CURRENT_KEY);
+  } catch(e) {}
+}
 
 function loadCharData(ch, onOk, onErr) {
   fetch(`https://cdn.jsdelivr.net/npm/hanzi-writer-data@2.0/${ch}.json`)
@@ -961,11 +2112,15 @@ function playAnimation() {
 }
 function startQuiz() {
   if (state.writer) {
+    const ch = state.chars[state.charIdx];
     state.writer.cancelQuiz && state.writer.cancelQuiz();
     state.writer.hideCharacter();
     state.writer.quiz({
       showHintAfterMisses: 3,
-      onComplete: () => flashCelebration('太 棒 了')
+      onComplete: info => {
+        recordAttempt(ch, info.totalMistakes === 0 ? 'perfect' : 'passed');
+        flashCelebration('太 棒 了');
+      }
     });
   }
 }
@@ -985,6 +2140,8 @@ function switchMode(mode) {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.mode === mode));
   document.getElementById('mode-browse').style.display = mode === 'browse' ? 'block' : 'none';
   document.getElementById('mode-game').style.display = mode === 'game' ? 'block' : 'none';
+  document.getElementById('mode-stats').style.display = mode === 'stats' ? 'block' : 'none';
+  if (mode === 'stats') renderStats();
 }
 function switchView(id) {
   const parent = document.getElementById(id).parentElement;
@@ -1014,10 +2171,17 @@ function initGame() {
     b.onclick = () => toggleGameGrade(b.dataset.g, b);
   });
 
+  // 學期(複選)
+  state.game.sems = new Set(['上','下']);
+  document.querySelectorAll('.g-sem-btn').forEach(b => {
+    b.onclick = () => toggleGameSem(b.dataset.s, b);
+  });
+
   document.getElementById('g-lesson-buttons').innerHTML = `
     <button class="btn g-lesson-btn active" data-f="all">全部課別</button>
-    <button class="btn g-lesson-btn" data-f="first">只取第 1~5 課</button>
-    <button class="btn g-lesson-btn" data-f="last">只取第 6 課以後</button>
+    <button class="btn g-lesson-btn" data-f="1-5">第 1~5 課</button>
+    <button class="btn g-lesson-btn" data-f="6-10">第 6~10 課</button>
+    <button class="btn g-lesson-btn" data-f="11+">第 11 課以後</button>
   `;
   document.querySelectorAll('.g-lesson-btn').forEach(b => {
     b.onclick = () => {
@@ -1035,6 +2199,21 @@ function initGame() {
     };
   });
 
+  updatePoolInfo();
+}
+
+function toggleGameSem(s, btn) {
+  const allSems = ['上','下'];
+  if (s === '__all__') {
+    state.game.sems = new Set(allSems);
+    document.querySelectorAll('.g-sem-btn').forEach(x => x.classList.add('active'));
+  } else {
+    const allBtn = document.querySelector('.g-sem-btn[data-s="__all__"]');
+    if (state.game.sems.has(s)) { state.game.sems.delete(s); btn.classList.remove('active'); }
+    else { state.game.sems.add(s); btn.classList.add('active'); }
+    const allOn = allSems.every(x => state.game.sems.has(x));
+    allBtn.classList.toggle('active', allOn);
+  }
   updatePoolInfo();
 }
 
@@ -1070,13 +2249,19 @@ function toggleGameGrade(g, btn) {
 
 function getGamePool() {
   const pool = new Set();
+  const lf = state.game.lessonFilter;
   for (const pub of state.game.pubs) {
     if (!DATA[pub]) continue;
     for (const g of Object.keys(DATA[pub])) {
       if (!state.game.grades.has(g)) continue;
       for (const lesson of DATA[pub][g]) {
-        if (state.game.lessonFilter === 'first' && lesson.lesson > 5) continue;
-        if (state.game.lessonFilter === 'last' && lesson.lesson <= 5) continue;
+        // 學期過濾
+        if (!state.game.sems.has(lesson.sem)) continue;
+        // 課別過濾
+        const ln = lesson.lesson;
+        if (lf === '1-5' && (ln < 1 || ln > 5)) continue;
+        if (lf === '6-10' && (ln < 6 || ln > 10)) continue;
+        if (lf === '11+' && ln < 11) continue;
         for (const ch of lesson.chars) pool.add(ch);
       }
     }
@@ -1149,6 +2334,7 @@ function showGameQuestion() {
           onComplete: info => {
             const perfect = info.totalMistakes === 0;
             state.game.results.push({ ch, ok: true, skip: false, mistakes: info.totalMistakes });
+            recordAttempt(ch, perfect ? 'perfect' : 'passed');
             flashCelebration(perfect ? '一 次 通 過' : '答 對 了');
             setTimeout(nextGameQuestion, 900);
           }
@@ -1170,7 +2356,9 @@ function peekAnswer() {
       state.game.writer.quiz({
         showHintAfterMisses: 3,
         onComplete: () => {
-          state.game.results.push({ ch: state.game.queue[state.game.curIdx], ok: true, skip: false, peeked: true });
+          const ch = state.game.queue[state.game.curIdx];
+          state.game.results.push({ ch, ok: true, skip: false, peeked: true });
+          recordAttempt(ch, 'peeked');
           flashCelebration('完 成');
           setTimeout(nextGameQuestion, 700);
         }
@@ -1182,7 +2370,9 @@ function peekAnswer() {
 function skipQuestion() {
   if (!confirm('確定跳過這一題嗎?')) return;
   state.game.writer && state.game.writer.cancelQuiz && state.game.writer.cancelQuiz();
-  state.game.results.push({ ch: state.game.queue[state.game.curIdx], ok: false, skip: true });
+  const ch = state.game.queue[state.game.curIdx];
+  state.game.results.push({ ch, ok: false, skip: true });
+  recordAttempt(ch, 'skipped');
   nextGameQuestion();
 }
 
@@ -1205,30 +2395,20 @@ function showGameResult() {
   const total = results.length;
   const pct = total > 0 ? Math.round(correct / total * 100) : 0;
 
-  // 以傳統評等印章顯示結果
-  let sealCls, sealChar, title;
-  if (pct === 100)     { sealCls = 'seal-top';       sealChar = '甲'; title = '滿分 · 一等'; }
-  else if (pct >= 80)  { sealCls = 'seal-excellent'; sealChar = '優'; title = '表現優異'; }
-  else if (pct >= 60)  { sealCls = 'seal-good';      sealChar = '良'; title = '成績良好'; }
-  else if (pct >= 40)  { sealCls = 'seal-ok';        sealChar = '可'; title = '繼續加油'; }
-  else                 { sealCls = 'seal-practice';  sealChar = '勤'; title = '多多練習'; }
-
-  const seal = document.getElementById('g-seal');
-  seal.className = 'result-seal ' + sealCls;
-  document.getElementById('g-seal-char').textContent = sealChar;
-  document.getElementById('g-result-title').textContent = title;
+  document.getElementById('g-pct-num').textContent = pct;
   document.getElementById('g-correct').textContent = correct;
   document.getElementById('g-of').textContent = total;
-  let pctText = `答對率 ${pct}%`;
-  if (peeked > 0) pctText += `   看答案 ${peeked} 題`;
-  if (wrong > 0) pctText += `   跳過 ${wrong} 題`;
-  document.getElementById('g-percentage').textContent = pctText;
+
+  let extra = '';
+  if (peeked > 0) extra += `看答案 ${peeked} 題`;
+  if (wrong > 0) { if (extra) extra += ' · '; extra += `跳過 ${wrong} 題`; }
+  document.getElementById('g-percentage').textContent = extra;
 
   document.getElementById('g-result-list').innerHTML = results.map(r => {
     let cls, badge;
-    if (r.peeked) { cls = 'skip'; badge = '助'; }        // 看過答案
-    else if (r.ok) { cls = 'ok'; badge = r.mistakes === 0 ? '甲' : '通'; } // 完美 / 通過
-    else { cls = 'wrong'; badge = '過'; }                 // 跳過
+    if (r.peeked) { cls = 'skip'; badge = '○'; }
+    else if (r.ok) { cls = 'ok'; badge = r.mistakes === 0 ? '✓' : '✓'; }
+    else { cls = 'wrong'; badge = '✗'; }
     return `<div class="result-item ${cls}">${r.ch}<span class="badge">${badge}</span></div>`;
   }).join('');
 
@@ -1245,8 +2425,44 @@ function flashCelebration(text) {
   setTimeout(() => el.classList.remove('show'), 1200);
 }
 
+// 關閉 modal when click mask
+document.querySelectorAll('.modal-mask').forEach(m => {
+  m.addEventListener('click', e => {
+    if (e.target === m) m.classList.remove('show');
+  });
+});
+
+// 防止 iOS 雙指縮放
+document.addEventListener('gesturestart', e => e.preventDefault());
+
+loadProfiles();
+renderProfileBar();
 initBrowse();
 initGame();
+
+// 載入同步設定, 若已設定則立即連線
+loadSyncConfig();
+if (FB.ready) {
+  fbPullAll().then(() => startFbListener()).catch(err => console.warn('初始同步失敗', err));
+}
+
+// 網路恢復時重新同步
+window.addEventListener('online', () => {
+  if (FB.ready) {
+    fbPullAll().then(() => {
+      if (!FB.es) startFbListener();
+    }).catch(() => {});
+  }
+});
+window.addEventListener('offline', () => {
+  if (FB.es) { FB.es.close(); FB.es = null; }
+  renderSyncStatus();
+});
+
+// 若無任何帳號,自動彈出新增
+if (getProfileCount() === 0) {
+  setTimeout(openAddProfile, 400);
+}
 </script>
 </body>
 </html>
