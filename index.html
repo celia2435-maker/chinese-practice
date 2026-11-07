@@ -1620,17 +1620,23 @@ function deleteProfile() {
   const id = state.editingProfileId;
   if (!id) return;
   const p = state.profiles[id];
-  if (!confirm(`確定要刪除「${p.name}」的帳號和所有練習紀錄嗎?`)) return;
+  if (!confirm(`確定要刪除「${p.name}」的帳號和所有練習紀錄嗎?此動作會同步到所有裝置。`)) return;
   delete state.profiles[id];
   if (state.currentProfileId === id) {
     const remaining = Object.keys(state.profiles);
     state.currentProfileId = remaining[0] || null;
   }
-  saveProfiles();
+  // 記錄刪除的 id, 阻擋 SSE 回聲重建
+  recentlyDeleted[id] = Date.now();
+  saveProfiles(id); // 傳入刪除的 id, 推送 DELETE 到 Firebase
   closeEditModal();
   renderProfileBar();
   if (document.getElementById('mode-stats').style.display !== 'none') renderStats();
 }
+
+// 最近刪除的 id → 時間戳, 用來阻擋 SSE 把它推回來
+const recentlyDeleted = {};
+const DELETE_GRACE_MS = 30000; // 30 秒內收到遠端 PUT 同 id 就忽略
 
 function openProfileMenu() {
   const ids = Object.keys(state.profiles);
@@ -1840,6 +1846,11 @@ async function fbPullAll() {
     let changed = false;
     for (const [id, rp] of Object.entries(remote || {})) {
       if (!rp) continue;
+      // 剛剛本機刪過的 id 若還在遠端, 主動 DELETE 掉遠端, 不恢復本機
+      if (recentlyDeleted[id] && Date.now() - recentlyDeleted[id] < DELETE_GRACE_MS) {
+        fetch(fbFamilyUrl('/' + encodeURIComponent(id)), { method: 'DELETE' }).catch(() => {});
+        continue;
+      }
       const local = state.profiles[id];
       if (!local || (rp._mod || 0) > (local._mod || 0)) {
         state.profiles[id] = rp;
@@ -1911,7 +1922,14 @@ function startFbListener() {
         const id = m[1];
         if (data === null) {
           if (state.profiles[id]) { delete state.profiles[id]; afterRemoteChange(); }
+          // 遠端已刪除, 清掉 grace 記錄
+          delete recentlyDeleted[id];
         } else if (data && typeof data === 'object') {
+          // 剛剛本機刪過這個 id, 若是其他裝置還沒收到 SSE 而把它推回來, 忽略並主動 DELETE 掉遠端
+          if (recentlyDeleted[id] && Date.now() - recentlyDeleted[id] < DELETE_GRACE_MS) {
+            fetch(fbFamilyUrl('/' + encodeURIComponent(id)), { method: 'DELETE' }).catch(() => {});
+            return;
+          }
           const local = state.profiles[id];
           if (!local || (data._mod || 0) >= (local._mod || 0)) {
             state.profiles[id] = data;
